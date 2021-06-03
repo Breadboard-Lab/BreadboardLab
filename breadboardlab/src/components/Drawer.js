@@ -5,6 +5,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
 import Parts from "./Parts"
+import CategorySelect from "./CategorySelect";
 
 const drawerWidth = 281;
 
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        marginTop: 48
     },
     drawerPaperClose: {
         overflowX: 'hidden',
@@ -65,9 +67,16 @@ const Drawer = props => {
         >
             { /* Shows < icon whilst drawer is open. Closers drawer on click. */}
             <div className={classes.toolbarIcon}>
-                <IconButton onClick={props.handleDrawerClose}>
-                    <ChevronLeftIcon/>
-                </IconButton>
+                { /* Drawer Header */ }
+                <div className={classes.toolbarIcon}>
+                    <CategorySelect/>
+                    <IconButton
+                        onClick={props.handleDrawerClose}
+                        aria-label="close drawer"
+                    >
+                        <ChevronLeftIcon/>
+                    </IconButton>
+                </div>
             </div>
             <Divider/>
             { /* Drawer Content */ }

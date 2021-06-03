@@ -25,7 +25,7 @@ import theme from './components/theme';
 import InputBase from '@material-ui/core/InputBase';
 import './AppSVG'
 
-const drawerWidth = 240;
+const drawerWidth = 281;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        marginTop: 48
     },
     appBarShift: {
         width: `calc(100% - ${drawerWidth}px)`,
@@ -57,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
         height: '100vh',
         overflow: 'auto',
     },
+    title: {
+        flexGrow: 1,
+    }
 }));
 
 const BootstrapInput = withStyles((theme) => ({
@@ -70,7 +74,7 @@ const BootstrapInput = withStyles((theme) => ({
 
 function App() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [toolOpen, setToolOpen] = React.useState(false);
     const [wireColor, setWireColor] = React.useState("green");
 
@@ -95,20 +99,41 @@ function App() {
             <div className={classes.root}>
                 <CssBaseline/>
 
+
+                { /* Header Appbar */}
+                <AppBar
+                    position="fixed"
+                    color='secondary'
+                >
+                    <Toolbar variant="dense">
+                        <Typography variant='h4' className={classes.title}>
+                            CircuitSim
+                        </Typography>
+                        <Tooltip title="Share">
+                            <Button
+                                aria-label='Share'
+                            >
+                                Share
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title="Export">
+                            <Button
+                                aria-label='Export'
+                            >
+                                Export
+                            </Button>
+                        </Tooltip>
+
+                    </Toolbar>
+                </AppBar>
+
+                { /* Tools Menu Appbar */ }
                 <AppBar
                     position="fixed"
                     className={clsx(classes.appBar, {
-                        [classes.appBar]: open,
+                        [classes.appBarShift]: open,
                     })}
                 >
-                    { /* Header Toolbar */ }
-                    <Toolbar variant="dense">
-                        <Typography variant='h4'>
-                            CircuitSim
-                        </Typography>
-                    </Toolbar>
-
-                    { /* Tools Menu Toolbar */ }
                     <Toolbar variant="dense">
                         <Tooltip title="Open Drawer">
                             <IconButton
@@ -116,7 +141,7 @@ function App() {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                className={classes.menuButton}
+                                className={open && classes.menuHide}
                             >
                                 <MenuIcon/>
                             </IconButton>
@@ -184,7 +209,7 @@ function App() {
                                     </ListItemIcon>
                                 </MenuItem>
                             </Select>
-                        </Tooltip>                            
+                        </Tooltip>
                         <Divider orientation="vertical" variant="middle" light flexItem/>
                         <Tooltip title="Start Simulation">
                             <Button
@@ -220,7 +245,7 @@ function App() {
                               <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                             </pattern>
                           </defs>
-                          
+
                           <rect width="100%" height="100%" fill="url(#grid)" />
                         </svg>
                         <script src="AppSVG.js"></script>
