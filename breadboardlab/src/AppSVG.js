@@ -1,6 +1,7 @@
 import interact from "interactjs";
 
 window.addEventListener('load', () => {
+	console.log("Loaded")
 	interact(".part-container").draggable({
 		manualStart: true,
 		listeners: {
@@ -11,6 +12,7 @@ window.addEventListener('load', () => {
 	}).on("move", function(event) {
 		const { currentTarget, interaction } = event;
 		let element = currentTarget.querySelector(".part");
+		console.log(element)
 	
 		if (interaction.pointerIsDown && !interaction.interacting() && currentTarget.style.transform === "") {
 			element = currentTarget.querySelector(".part").cloneNode(true) || currentTarget.cloneNode(true);

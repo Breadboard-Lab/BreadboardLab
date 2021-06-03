@@ -6,7 +6,7 @@ import {
     CssBaseline,
     Divider,
     IconButton, ListItemIcon,
-    makeStyles, MenuItem, Select,
+    makeStyles, withStyles, MenuItem, Select,
     Toolbar, Tooltip, Typography,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
@@ -22,6 +22,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './components/Drawer';
 import {blue, green, red} from "@material-ui/core/colors";
 import theme from './components/theme';
+import InputBase from '@material-ui/core/InputBase';
+import './AppSVG'
 
 const drawerWidth = 240;
 
@@ -57,26 +59,46 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const BootstrapInput = withStyles((theme) => ({
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    padding: '10px 0px 7px 16px'
+  },
+}))(InputBase);
+
 function App() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [toolOpen, setToolOpen] = React.useState(false);
+    const [wireColor, setWireColor] = React.useState("green");
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    const selectWire = (event) => {
+      setWireColor(event.target.value)
+    }
+    const openToolTip = () => {
+      setToolOpen(true)
+    }
+    const closeToolTip = () => {
+      setToolOpen(false)
+    }
 
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
                 <CssBaseline/>
 
-                { /* TODO separate first toolbar from second so drawer doesnt push both to the side. */}
                 <AppBar
                     position="fixed"
                     className={clsx(classes.appBar, {
-                        [classes.appBarShift]: open,
+                        [classes.appBar]: open,
                     })}
                 >
                     { /* Header Toolbar */ }
@@ -94,7 +116,7 @@ function App() {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                className={clsx(classes.menuButton, open && classes.menuHide)}
+                                className={classes.menuButton}
                             >
                                 <MenuIcon/>
                             </IconButton>
@@ -143,20 +165,20 @@ function App() {
                                 <LinearScaleIcon/>
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title="Select Wire Colour">
+                        <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen} title="Select Wire Colour">
                             { /* TODO form control, default value, aria-labels, fix tooltip (stays too long/. */ }
-                            <Select>
-                                <MenuItem>
+                            <Select input={<BootstrapInput />} onMouseDown={closeToolTip} value={wireColor} onChange={selectWire}>
+                                <MenuItem value={"green"}>
                                     <ListItemIcon>
                                         <LinearScaleIcon style={{color: green[500]}}/>
                                     </ListItemIcon>
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem value={"red"}>
                                     <ListItemIcon>
                                         <LinearScaleIcon style={{color: red[500]}}/>
                                     </ListItemIcon>
                                 </MenuItem>
-                                <MenuItem>
+                                <MenuItem value={"blue"}>
                                     <ListItemIcon>
                                         <LinearScaleIcon style={{color: blue[500]}}/>
                                     </ListItemIcon>
@@ -184,9 +206,24 @@ function App() {
 
                 { /* Canvas */}
                 <div className={classes.canvas}>
-                    <div className={classes.appBarSpacer}>
+                    <div className={classes.appBarSpacer} style={{width: "100%", height: "100%", position: "absolute", left: 0, right: 0}}>
                         { /* Content */}
-                        { /* TODO create visual grid. */ }
+                        <svg xmlns="http://www.w3.org/2000/svg" id="AppSVG" width="100%" height="100%">
+                          {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
+                          <defs>
+                            <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+                              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
+                            </pattern>
+
+                            <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                              <rect width="100" height="100" fill="url(#smallGrid)"/>
+                              <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
+                            </pattern>
+                          </defs>
+                          
+                          <rect width="100%" height="100%" fill="url(#grid)" />
+                        </svg>
+                        <script src="AppSVG.js"></script>
                     </div>
                 </div>
 

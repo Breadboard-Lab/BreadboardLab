@@ -4,8 +4,9 @@ import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
+import Parts from "./Parts"
 
-const drawerWidth = 240;
+const drawerWidth = 281;
 
 const useStyles = makeStyles((theme) => ({
     toolbarIcon: {
@@ -29,8 +30,25 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
+    category: {
+        display: 'flex',
+        alignContent: 'flex-start',
+        flexWrap: 'wrap',
+        padding: '5px',
+    },
+    partContainer: {
+        width: '125px',
+        height: '125px',
+        backgroundColor: 'white',
+        borderRadius: '5px',
+        margin: '5px',
+        cursor: 'pointer',
+    },
+    part: {
+        width: '100%',
+        height: '100%',
+    },
 }));
-
 
 const Drawer = props => {
     const classes = useStyles();
@@ -56,8 +74,28 @@ const Drawer = props => {
             { /* TODO category select menu */ }
             { /* TODO search bar */ }
             { /* TODO components list */ }
+            <div className={classes.category}>
+                <Part part={<Parts.Circle/>} name={"Circle"} />
+                <Part part={<Parts.Triangle/>} name={"Triangle"} />
+                <Part part={<Parts.Path/>} name={"Path"} />
+            </div>
         </MUIDrawer>
     );
 };
+
+const Part = (props) => {
+    const classes = useStyles();
+    
+    return(
+        <div className={clsx(classes.partContainer, "part-container")}>
+            <svg style={{width: "100%", height: "100%"}}>
+                <g className={clsx(classes.part, "part")}>
+                    {props.part}
+                </g>
+                <text textAnchor="middle" x="50%" y="90%">{props.name}</text>
+            </svg>
+        </div>
+    );
+}
 
 export default Drawer;
