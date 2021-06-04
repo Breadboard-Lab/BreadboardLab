@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
-        marginTop: 48
+        marginTop: 48,
+        height: 'calc(100% - 48px)'
     },
     drawerPaperClose: {
         overflowX: 'hidden',

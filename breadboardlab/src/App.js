@@ -46,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
     },
-    appBarSpacer: theme.mixins.toolbar,
+    appBarSpacer: {
+        minHeight: 48
+    },
     menuButton: {
         marginRight: theme.spacing(2),
     },
@@ -255,9 +257,13 @@ function App() {
                     handleDrawerClose={handleDrawerClose}
                 />
 
+
                 { /* Canvas */}
                 <div className={classes.canvas}>
-                    <div className={classes.appBarSpacer}/>
+                    { /* Appbar spacing */}
+                    <Toolbar variant="dense"/>
+                    <Toolbar variant="dense"/>
+
                     { /* Content */}
                     <svg xmlns="http://www.w3.org/2000/svg" id="AppSVG" width="100%" height="100%">
                         {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
