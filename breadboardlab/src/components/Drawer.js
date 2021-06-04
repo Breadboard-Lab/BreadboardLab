@@ -70,18 +70,15 @@ const Drawer = props => {
                 }
             }
         >
-            { /* Shows < icon whilst drawer is open. Closers drawer on click. */}
+            { /* Drawer Header */ }
             <div className={classes.toolbarIcon}>
-                { /* Drawer Header */ }
-                <div className={classes.toolbarIcon}>
-                    <CategorySelect/>
-                    <IconButton
-                        onClick={props.handleDrawerClose}
-                        aria-label="close drawer"
-                    >
-                        <ChevronLeftIcon/>
-                    </IconButton>
-                </div>
+                <CategorySelect/>
+                <IconButton
+                    onClick={props.handleDrawerClose}
+                    aria-label="close drawer"
+                >
+                    <ChevronLeftIcon/>
+                </IconButton>
             </div>
             <Divider/>
 
