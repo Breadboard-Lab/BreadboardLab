@@ -107,7 +107,7 @@ function App() {
                 >
                     <Toolbar variant="dense">
                         <Typography variant='h4' className={classes.title}>
-                            CircuitSim
+                            Breadboard Lab
                         </Typography>
                         <Tooltip title="Share">
                             <Button

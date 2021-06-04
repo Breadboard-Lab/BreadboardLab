@@ -4,7 +4,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
-import Parts from "./Parts"
+import Parts from "./Parts";
+import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
 
 const drawerWidth = 281;
@@ -87,6 +88,7 @@ const Drawer = props => {
                 <Part part={<Parts.Circle/>} name={"Circle"} />
                 <Part part={<Parts.Triangle/>} name={"Triangle"} />
                 <Part part={<Parts.Path/>} name={"Path"} />
+                <Part part={<Breadboard/>} name={'Breadboard'} />
             </div>
         </MUIDrawer>
     );
