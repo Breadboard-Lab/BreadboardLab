@@ -64,12 +64,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BootstrapInput = withStyles((theme) => ({
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.background.paper,
-    padding: '10px 0px 7px 16px'
-  },
+    input: {
+        borderRadius: 4,
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+        padding: '10px 0px 7px 16px'
+    },
 }))(InputBase);
 
 function App() {
@@ -85,13 +85,13 @@ function App() {
         setOpen(false);
     };
     const selectWire = (event) => {
-      setWireColor(event.target.value)
+        setWireColor(event.target.value)
     }
     const openToolTip = () => {
-      setToolOpen(true)
+        setToolOpen(true)
     }
     const closeToolTip = () => {
-      setToolOpen(false)
+        setToolOpen(false)
     }
 
     return (
@@ -127,7 +127,7 @@ function App() {
                     </Toolbar>
                 </AppBar>
 
-                { /* Tools Menu Appbar */ }
+                { /* Tools Menu Appbar */}
                 <AppBar
                     position="fixed"
                     className={clsx(classes.appBar, {
@@ -155,10 +155,10 @@ function App() {
                         </Tooltip>
                         <Tooltip title="Rotate">
                             <IconButton
-                            color="inherit"
-                            aria-label="rotate">
-                            <RotateRightIcon/>
-                        </IconButton>
+                                color="inherit"
+                                aria-label="rotate">
+                                <RotateRightIcon/>
+                            </IconButton>
                         </Tooltip>
                         <Divider orientation="vertical" variant="middle" light flexItem/>
                         <Tooltip title="Delete">
@@ -190,9 +190,10 @@ function App() {
                                 <LinearScaleIcon/>
                             </IconButton>
                         </Tooltip>
-                        <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen} title="Select Wire Colour">
+                        <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen}
+                                 title="Select Wire Colour">
                             <Select
-                                input={<BootstrapInput />}
+                                input={<BootstrapInput/>}
                                 onMouseDown={closeToolTip}
                                 value={wireColor}
                                 onChange={selectWire}
@@ -256,25 +257,24 @@ function App() {
 
                 { /* Canvas */}
                 <div className={classes.canvas}>
-                    <div className={classes.appBarSpacer} style={{width: "100%", height: "100%", position: "absolute", left: 0, right: 0}}>
-                        { /* Content */}
-                        <svg xmlns="http://www.w3.org/2000/svg" id="AppSVG" width="100%" height="100%">
-                          {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
-                          <defs>
+                    <div className={classes.appBarSpacer}/>
+                    { /* Content */}
+                    <svg xmlns="http://www.w3.org/2000/svg" id="AppSVG" width="100%" height="100%">
+                        {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
+                        <defs>
                             <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-                              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
+                                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
                             </pattern>
 
                             <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
-                              <rect width="100" height="100" fill="url(#smallGrid)"/>
-                              <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
+                                <rect width="100" height="100" fill="url(#smallGrid)"/>
+                                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                             </pattern>
-                          </defs>
+                        </defs>
 
-                          <rect width="100%" height="100%" fill="url(#grid)" />
-                        </svg>
-                        <script src="AppSVG.js"></script>
-                    </div>
+                        <rect width="100%" height="100%" fill="url(#grid)"/>
+                    </svg>
+                    <script src="AppSVG.js"></script>
                 </div>
 
             </div>

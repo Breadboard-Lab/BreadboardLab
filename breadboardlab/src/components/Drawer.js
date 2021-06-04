@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        width: 0,
     },
     category: {
         display: 'flex',
