@@ -20,7 +20,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './components/Drawer';
-import {blue, green, red} from "@material-ui/core/colors";
+import {blue, green, grey, red, yellow} from "@material-ui/core/colors";
 import theme from './components/theme';
 import InputBase from '@material-ui/core/InputBase';
 import './AppSVG'
@@ -191,11 +191,26 @@ function App() {
                             </IconButton>
                         </Tooltip>
                         <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen} title="Select Wire Colour">
-                            { /* TODO form control, default value, aria-labels, fix tooltip (stays too long/. */ }
-                            <Select input={<BootstrapInput />} onMouseDown={closeToolTip} value={wireColor} onChange={selectWire}>
-                                <MenuItem value={"green"}>
+                            <Select
+                                input={<BootstrapInput />}
+                                onMouseDown={closeToolTip}
+                                value={wireColor}
+                                onChange={selectWire}
+                                MenuProps={{
+                                    anchorOrigin: {
+                                        vertical: "bottom",
+                                        horizontal: "center"
+                                    },
+                                    transformOrigin: {
+                                        vertical: "top",
+                                        horizontal: "center"
+                                    },
+                                    getContentAnchorEl: null
+                                }}
+                            >
+                                <MenuItem value={"black"}>
                                     <ListItemIcon>
-                                        <LinearScaleIcon style={{color: green[500]}}/>
+                                        <LinearScaleIcon style={{color: grey[800]}}/>
                                     </ListItemIcon>
                                 </MenuItem>
                                 <MenuItem value={"red"}>
@@ -203,9 +218,19 @@ function App() {
                                         <LinearScaleIcon style={{color: red[500]}}/>
                                     </ListItemIcon>
                                 </MenuItem>
+                                <MenuItem value={"green"}>
+                                    <ListItemIcon>
+                                        <LinearScaleIcon style={{color: green[500]}}/>
+                                    </ListItemIcon>
+                                </MenuItem>
                                 <MenuItem value={"blue"}>
                                     <ListItemIcon>
                                         <LinearScaleIcon style={{color: blue[500]}}/>
+                                    </ListItemIcon>
+                                </MenuItem>
+                                <MenuItem value={"yellow"}>
+                                    <ListItemIcon>
+                                        <LinearScaleIcon style={{color: yellow[500]}}/>
                                     </ListItemIcon>
                                 </MenuItem>
                             </Select>
