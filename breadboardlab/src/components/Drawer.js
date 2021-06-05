@@ -7,7 +7,8 @@ import clsx from "clsx";
 import Parts from "./Parts";
 import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
-import SearchIcon from "@material-ui/icons/Search"
+import SearchIcon from "@material-ui/icons/Search";
+import SideBarPart from "./SideBarPart"
 
 const drawerWidth = 281;
 
@@ -42,18 +43,6 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         padding: '5px',
     },
-    partContainer: {
-        width: '125px',
-        height: '125px',
-        backgroundColor: 'white',
-        borderRadius: '5px',
-        margin: '5px',
-        cursor: 'pointer',
-    },
-    part: {
-        width: '100%',
-        height: '100%',
-    },
     searchBar: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
@@ -62,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Drawer = props => {
     const classes = useStyles();
+    
     return (
         <MUIDrawer
             variant="persistent"
@@ -99,31 +89,15 @@ const Drawer = props => {
                     </Grid>
                 </Grid>
             </div>
-
             { /* Components List */ }
             <div className={classes.category}>
-                <Part part={<Parts.Circle/>} name={"Circle"} />
-                <Part part={<Parts.Triangle/>} name={"Triangle"} />
-                <Part part={<Parts.Path/>} name={"Path"} />
-                <Part part={<Breadboard/>} name={'Breadboard'} />
+                <SideBarPart ondrag={props.addPart} part={<Parts.Circle/>} name={"Circle"} />
+                <SideBarPart ondrag={props.addPart} part={<Parts.Triangle/>} name={"Triangle"} />
+                <SideBarPart ondrag={props.addPart} part={<Parts.Path/>} name={"Path"} />
+                <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"} />
             </div>
         </MUIDrawer>
     );
 };
-
-const Part = (props) => {
-    const classes = useStyles();
-    
-    return(
-        <div className={clsx(classes.partContainer, "part-container")}>
-            <svg style={{width: "100%", height: "100%"}}>
-                <g className={clsx(classes.part, "part")}>
-                    {props.part}
-                </g>
-                <text textAnchor="middle" x="50%" y="90%">{props.name}</text>
-            </svg>
-        </div>
-    );
-}
 
 export default Drawer;
