@@ -1,0 +1,25 @@
+<svg>
+    <g transform="translate(100,100), scale(200,150)">
+        <!-- main shape -->
+        <path d="M0.1,0.05 C0.17,0.05 0.2,0.2 0.25,0.2 L0.33,0.2 Q0.37,0.18 0.39,0.18 L0.59,0.18 L0.71,0.18 Q0.75,0.2 0.77,0.2 L0.85,0.2 C0.9,0.2 0.93,0.05 1,0.05 L1,-0.05
+                C0.93,-0.05 0.9,-0.2 0.85,-0.2 L0.77,-0.2 Q0.75,-0.2 0.71,-0.18 L0.37,-0.18 Q0.37,-0.18 0.33,-0.2 L0.25,-0.2 C0.2,-0.2 0.17,-0.05 0.1,-0.05"  
+            fill="#A08968" stroke="black" stroke-width="0" />
+    
+        <!-- first band - brown -->
+        <path d="M0.25,0.2 Q0.29,0.22 0.33,0.2 L0.33,-0.2 Q0.29,-0.22 0.25,-0.2"
+            fill="#754f3d" stroke="black" stroke-width="0" />
+    
+        <!-- second band - black -->
+        <path d="M0.44,0.18 L0.51,0.18 L0.51,-0.18 L0.44,-0.18"
+            fill="#0b050f" stroke="black" stroke-width="0" />
+            
+        <!-- third band - red -->
+        <path d="M0.59,0.18 L0.66,0.18 L0.66,-0.18 L0.59,-0.18"
+            fill="#6c403a" stroke="black" stroke-width="0" />
+    
+        <!-- fourth band - gold -->
+        <path d="M0.77,0.2 Q0.81,0.22 0.85,0.2 L0.85,-0.2 Q0.81,-0.22 0.77,-0.2"
+            fill="#856e4f" stroke="black" stroke-width="0" />
+    </g>
+    
+</svg>    
