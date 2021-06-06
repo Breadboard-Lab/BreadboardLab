@@ -20,11 +20,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const dragMoveListener = (event) => {
-    const regex = /translate\(([\d]+)px, ([\d]+)px\)/i;
+    const regex = /translate\((([\d]+)(\.[\d]+)?)px, (([\d]+)(\.[\d]+)?)px\)/i;
     const transform = regex.exec(event.target.style.transform);
 
     if (transform && transform.length > 1) {
-        event.target.style.transform = `translate(${Number(transform[1]) + event.dx}px, ${Number(transform[2]) + event.dy}px)`;
+        event.target.style.transform = `translate(${Number(transform[1]) + event.dx}px, ${Number(transform[4]) + event.dy}px)`;
     } else {
         document.getElementById("AppSVG").addEventListener('mousemove', logKey);
 
@@ -52,10 +52,30 @@ let index = 0;
 let setChildRef = index => el => childrenRefs[index] = el;
 
 class CanvasPart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleDoubleClick = this.handleDoubleClick.bind(this);
+    }
+
+    handleDoubleClick() {
+        let element = ReactDOM.findDOMNode(this);
+        console.log("Name: " + this.props.name);
+        console.log("X-coor: " + element.getBoundingClientRect().x);
+        console.log("Y-coor: " + element.getBoundingClientRect().y);
+    }
+
+    draggableOptions = {
+        listeners: {
+            move(event) {
+                dragMoveListener(event);
+            }
+        }
+    }
+
     render() {
         return(
-            <Interactable draggable={true} draggableOptions={{listeners: {move(event) {dragMoveListener(event)}}}}>
-                <g onDoubleClick={this.handleDoubleClick} className={"part"}>
+            <Interactable draggable={true} draggableOptions={this.draggableOptions}>
+                <g onDoubleClick={() => {this.handleDoubleClick()}} className={"part"}>
                     { React.Children.toArray(this.props.children).map((c, index) => React.cloneElement(
                         c,
                         {ref: setChildRef(index)},
@@ -69,16 +89,16 @@ class CanvasPart extends React.Component {
 function RenderSideBarPart(props) {
     const classes = useStyles();
     
-    const part = <CanvasPart>{props.part}</CanvasPart>
+    const part = <CanvasPart key={index} index={index} name={props.name}>{props.part}</CanvasPart>
 
     const onmove = (event) => {
         const { currentTarget, interaction } = event;	
 		if (interaction.pointerIsDown && !interaction.interacting() && currentTarget.style.transform === "") {
-            let newPart = React.cloneElement(part, {ref: setChildRef(index)});
+            index += 1;
+            let newPart = React.cloneElement(part, {ref: setChildRef(index), key: index});
             props.ondrag(newPart);
 		}
 		interaction.start({ name: "drag" }, event.interactable, ReactDOM.findDOMNode(childrenRefs[index]));
-        index += 1;
     }
     
     return(

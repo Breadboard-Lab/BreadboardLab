@@ -8,7 +8,7 @@ import Parts from "./Parts";
 import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
-import SideBarPart from "./SideBarPart"
+import SideBarPart from "./SideBarPart";
 
 const drawerWidth = 281;
 
