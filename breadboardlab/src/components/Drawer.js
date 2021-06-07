@@ -1,14 +1,19 @@
 import React from "react";
-import {Drawer as MUIDrawer, Divider, Grid, TextField} from "@material-ui/core";
+import {
+    Drawer as MUIDrawer,
+    Divider,
+    Grid,
+    TextField
+} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
-import Parts from "./Parts";
 import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import SideBarPart from "./SideBarPart";
+import {ReactComponent as Resistor} from "../assets/parts/resistor.svg";
 
 const drawerWidth = 281;
 
@@ -63,7 +68,7 @@ const Drawer = props => {
                 }
             }
         >
-            { /* Drawer Header */ }
+            { /* Drawer Header */}
             <div className={classes.toolbarIcon}>
                 <CategorySelect/>
                 <IconButton
@@ -75,27 +80,28 @@ const Drawer = props => {
             </div>
             <Divider/>
 
-            { /* Searchbar Content */ }
+            { /* Searchbar Content */}
             <div className={classes.searchBar}>
                 <Grid
                     container
                     alignItems="flex-end"
                 >
                     <Grid item xs>
-                        <SearchIcon />
+                        <SearchIcon/>
                     </Grid>
                     <Grid item xs={10}>
-                        <TextField id="search" label="Search" />
+                        <TextField id="search" label="Search"/>
                     </Grid>
                 </Grid>
             </div>
             { /* Components List */ }
             <div className={classes.category}>
-                <SideBarPart ondrag={props.addPart} part={<Parts.Circle/>} name={"Circle"} />
-                <SideBarPart ondrag={props.addPart} part={<Parts.Triangle/>} name={"Triangle"} />
-                <SideBarPart ondrag={props.addPart} part={<Parts.Path/>} name={"Path"} />
                 <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"} />
+                <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"} />
             </div>
+
+            { /* New Possible Components List */}
+            
         </MUIDrawer>
     );
 };
