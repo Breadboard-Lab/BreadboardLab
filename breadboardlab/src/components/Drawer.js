@@ -1,5 +1,14 @@
 import React from "react";
-import {Drawer as MUIDrawer, Divider, Grid, TextField} from "@material-ui/core";
+import {
+    Drawer as MUIDrawer,
+    Divider,
+    Grid,
+    TextField,
+    SvgIcon,
+    ListItem,
+    List,
+    ListItemAvatar, ListItemText, ListItemSecondaryAction
+} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,6 +17,8 @@ import Parts from "./Parts";
 import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search"
+import {ReactComponent as Resistor} from "../assets/parts/resistor.svg"
+import InfoIcon from '@material-ui/icons/Info';
 
 const drawerWidth = 281;
 
@@ -73,7 +84,7 @@ const Drawer = props => {
                 }
             }
         >
-            { /* Drawer Header */ }
+            { /* Drawer Header */}
             <div className={classes.toolbarIcon}>
                 <CategorySelect/>
                 <IconButton
@@ -85,27 +96,49 @@ const Drawer = props => {
             </div>
             <Divider/>
 
-            { /* Searchbar Content */ }
+            { /* Searchbar Content */}
             <div className={classes.searchBar}>
                 <Grid
                     container
                     alignItems="flex-end"
                 >
                     <Grid item xs>
-                        <SearchIcon />
+                        <SearchIcon/>
                     </Grid>
                     <Grid item xs={10}>
-                        <TextField id="search" label="Search" />
+                        <TextField id="search" label="Search"/>
                     </Grid>
                 </Grid>
             </div>
 
-            { /* Components List */ }
+            { /* New Possible Components List */}
+            <div>
+                <List dense>
+                    <ListItem button>
+                        <ListItemAvatar>
+                            <SvgIcon viewBox='0 0 64 64' fontSize='large'>
+                                <Resistor/>
+                            </SvgIcon>
+                        </ListItemAvatar>
+                        <ListItemText
+                            primary="Resistor"
+                            secondary='Lorem Ipsum'
+                        />
+                        <ListItemSecondaryAction>
+                            <IconButton edge="end" aria-label="delete">
+                                <InfoIcon/>
+                            </IconButton>
+                        </ListItemSecondaryAction>
+                    </ListItem>
+                </List>
+            </div>
+
+            { /* Components List */}
             <div className={classes.category}>
-                <Part part={<Parts.Circle/>} name={"Circle"} />
-                <Part part={<Parts.Triangle/>} name={"Triangle"} />
-                <Part part={<Parts.Path/>} name={"Path"} />
-                <Part part={<Breadboard/>} name={'Breadboard'} />
+                <Part part={<Parts.Circle/>} name={"Circle"}/>
+                <Part part={<Parts.Triangle/>} name={"Triangle"}/>
+                <Part part={<Parts.Path/>} name={"Path"}/>
+                <Part part={<Breadboard/>} name={'Breadboard'}/>
             </div>
         </MUIDrawer>
     );
@@ -113,8 +146,8 @@ const Drawer = props => {
 
 const Part = (props) => {
     const classes = useStyles();
-    
-    return(
+
+    return (
         <div className={clsx(classes.partContainer, "part-container")}>
             <svg style={{width: "100%", height: "100%"}}>
                 <g className={clsx(classes.part, "part")}>
