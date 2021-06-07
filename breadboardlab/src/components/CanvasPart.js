@@ -18,11 +18,11 @@ export default class CanvasPart extends React.Component {
     draggableOptions = {
         listeners: {
             move(event) {
-                const regex = /translate\((([\d]+)(\.[\d]+)?)px, (([\d]+)(\.[\d]+)?)px\)/i;
-                const transform = regex.exec(event.target.style.transform);
+                const regex = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+                const transform = regex.exec(event.target.getAttribute("transform"));
 
                 if (transform && transform.length > 1) {
-                    event.target.style.transform = `translate(${Number(transform[1]) + event.dx}px, ${Number(transform[4]) + event.dy}px)`;
+                    event.target.setAttribute("transform", `translate(${Number(transform[1]) + event.dx}, ${Number(transform[5]) + event.dy})`);
                 }
             }
         }

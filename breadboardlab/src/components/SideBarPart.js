@@ -23,21 +23,22 @@ export default class SideBarPart extends React.Component {
         manualStart: true,
         listeners: {
             move(event) {
-                const regex = /translate\((([\d]+)(\.[\d]+)?)px, (([\d]+)(\.[\d]+)?)px\)/i;
-                const transform = regex.exec(event.target.style.transform);
+                let element = event.target.getElementsByTagName('g')[0];
+                const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+                const regexScale = /scale\((([\d]+)?(\.[\d]+)?),?[\s]?(([\d]+)?(\.[\d]+)?)\)/i;
+                const scale = regexScale.exec(element.getAttribute("transform"));
 
-                if (transform && transform.length > 1) {
-                    event.target.style.transform = `translate(${Number(transform[1]) + event.dx}px, ${Number(transform[4]) + event.dy}px)`;
-                } else {
-                    document.getElementById("AppSVG").addEventListener('mousemove', logKey);
-
-                    function logKey(e) {
-                        document.getElementById("AppSVG").removeEventListener('mousemove', logKey);
-                        const rect = event.target.getBoundingClientRect();
-                        let xPos = e.clientX - rect.width / 2;
-                        let yPos = e.clientY - rect.height / 2;
-                        event.target.style.transform = `translate(${xPos}px, ${yPos}px)`;
-                    }
+                document.getElementById("AppSVG").addEventListener('mousemove', logKey);
+                let transform = element.getAttribute("transform");
+                element.setAttribute("transform", transform.replace(regexTranslate, `translate(${Number(scale[1]) / 2}, ${Number(scale[4]) / 2})`))
+                
+                // Get cursor location
+                function logKey(e) {
+                    document.getElementById("AppSVG").removeEventListener('mousemove', logKey);
+                    const rect = event.target.getBoundingClientRect();
+                    let xPos = e.clientX - rect.width / 2;
+                    let yPos = e.clientY - rect.height / 2;
+                    event.target.setAttribute("transform", `translate(${xPos}, ${yPos})`);
                 }
             }
         }
