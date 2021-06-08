@@ -42,12 +42,6 @@ const useStyles = makeStyles((theme) => ({
         }),
         width: 0,
     },
-    category: {
-        display: 'flex',
-        alignContent: 'flex-start',
-        flexWrap: 'wrap',
-        padding: '5px',
-    },
     searchBar: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
@@ -95,7 +89,7 @@ const Drawer = props => {
                 </Grid>
             </div>
             { /* Components List */ }
-            <div className={classes.category}>
+            <div>
                 <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"} />
                 <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"} />
             </div>
