@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Drawer = props => {
     const classes = useStyles();
-    
+
     return (
         <MUIDrawer
             variant="persistent"
@@ -88,14 +88,13 @@ const Drawer = props => {
                     </Grid>
                 </Grid>
             </div>
-            { /* Components List */ }
+
+            { /* Components List */}
             <div>
-                <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"} />
-                <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"} />
+                <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
+                <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
             </div>
 
-            { /* New Possible Components List */}
-            
         </MUIDrawer>
     );
 };
