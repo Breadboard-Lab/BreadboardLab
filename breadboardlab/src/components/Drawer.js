@@ -15,7 +15,7 @@ import SideBarPart from "./SideBarPart";
 import {ReactComponent as Resistor} from "../assets/parts/resistor.svg";
 import {ReactComponent as Breadboard} from "../assets/parts/breadboard.svg";
 
-const drawerWidth = 281;
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     toolbarIcon: {

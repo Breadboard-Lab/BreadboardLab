@@ -26,7 +26,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Canvas from './components/Canvas';
 import AppbarCollapseMenu from "./components/AppbarCollapseMenu";
 
-const drawerWidth = 281;
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
