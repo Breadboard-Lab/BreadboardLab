@@ -1,10 +1,10 @@
-import {createMuiTheme} from "@material-ui/core/styles";
+import {createMuiTheme, responsiveFontSizes} from "@material-ui/core/styles";
 
 /*
 Custom overall app theme.
  */
 
-const theme = createMuiTheme({
+let theme = createMuiTheme({
     palette: {
         type: 'dark',
         text: {
@@ -25,5 +25,7 @@ const theme = createMuiTheme({
         }
     },
 })
+
+theme = responsiveFontSizes(theme)
 
 export default theme;
