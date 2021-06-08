@@ -24,13 +24,14 @@ import {blue, green, grey, red, yellow} from "@material-ui/core/colors";
 import theme from './components/theme';
 import InputBase from '@material-ui/core/InputBase';
 import Canvas from './components/Canvas';
+import AppbarCollapseMenu from "./components/AppbarCollapseMenu";
 
 const drawerWidth = 281;
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
-        height:'100%'
+        height: '100%'
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -63,6 +64,11 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+    },
+    collapse: {
+        [theme.breakpoints.down("xs")]: {
+            display: "none"
+        },
     }
 }));
 
@@ -154,6 +160,7 @@ function App() {
                                 <MenuIcon/>
                             </IconButton>
                         </Tooltip>
+                        <AppbarCollapseMenu/>
                         <Tooltip title="Select">
                             <IconButton
                                 color="inherit"
@@ -254,6 +261,7 @@ function App() {
                                 Start
                             </Button>
                         </Tooltip>
+
                     </Toolbar>
                 </AppBar>
 
@@ -272,7 +280,7 @@ function App() {
                     <Toolbar variant="dense"/>
 
                     { /* Content */}
-                    <Canvas listOfParts={listOfParts} />
+                    <Canvas listOfParts={listOfParts}/>
                 </div>
 
             </div>
