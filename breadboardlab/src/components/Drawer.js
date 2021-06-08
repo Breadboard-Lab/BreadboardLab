@@ -9,11 +9,11 @@ import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
-import Breadboard from "./Breadboard";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import SideBarPart from "./SideBarPart";
 import {ReactComponent as Resistor} from "../assets/parts/resistor.svg";
+import {ReactComponent as Breadboard} from "../assets/parts/breadboard.svg";
 
 const drawerWidth = 281;
 
