@@ -7,7 +7,7 @@ import {
     Divider,
     IconButton, ListItemIcon,
     makeStyles, withStyles, MenuItem, Select,
-    Toolbar, Tooltip, Typography,
+    Toolbar, Tooltip, Typography, Grid,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
@@ -161,107 +161,108 @@ function App() {
                             </IconButton>
                         </Tooltip>
                         <AppbarCollapseMenu/>
-                        <Tooltip title="Select">
-                            <IconButton
-                                color="inherit"
-                                aria-label="select">
-                                <SelectAllIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Rotate">
-                            <IconButton
-                                color="inherit"
-                                aria-label="rotate">
-                                <RotateRightIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Divider orientation="vertical" variant="middle" light flexItem/>
-                        <Tooltip title="Delete">
-                            <IconButton
-                                color="inherit"
-                                aria-label="delete">
-                                <DeleteForeverIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Undo">
-                            <IconButton
-                                color="inherit"
-                                aria-label="undo">
-                                <UndoIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Redo">
-                            <IconButton
-                                color="inherit"
-                                aria-label="redo">
-                                <RedoIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Divider orientation="vertical" variant="middle" light flexItem/>
-                        <Tooltip title="Draw Wire">
-                            <IconButton
-                                color="inherit"
-                                aria-label="draw wire">
-                                <LinearScaleIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen}
-                                 title="Select Wire Colour">
-                            <Select
-                                input={<BootstrapInput/>}
-                                onMouseDown={closeToolTip}
-                                value={wireColor}
-                                onChange={selectWire}
-                                MenuProps={{
-                                    anchorOrigin: {
-                                        vertical: "bottom",
-                                        horizontal: "center"
-                                    },
-                                    transformOrigin: {
-                                        vertical: "top",
-                                        horizontal: "center"
-                                    },
-                                    getContentAnchorEl: null
-                                }}
-                            >
-                                <MenuItem value={"black"}>
-                                    <ListItemIcon>
-                                        <LinearScaleIcon style={{color: grey[800]}}/>
-                                    </ListItemIcon>
-                                </MenuItem>
-                                <MenuItem value={"red"}>
-                                    <ListItemIcon>
-                                        <LinearScaleIcon style={{color: red[500]}}/>
-                                    </ListItemIcon>
-                                </MenuItem>
-                                <MenuItem value={"green"}>
-                                    <ListItemIcon>
-                                        <LinearScaleIcon style={{color: green[500]}}/>
-                                    </ListItemIcon>
-                                </MenuItem>
-                                <MenuItem value={"blue"}>
-                                    <ListItemIcon>
-                                        <LinearScaleIcon style={{color: blue[500]}}/>
-                                    </ListItemIcon>
-                                </MenuItem>
-                                <MenuItem value={"yellow"}>
-                                    <ListItemIcon>
-                                        <LinearScaleIcon style={{color: yellow[500]}}/>
-                                    </ListItemIcon>
-                                </MenuItem>
-                            </Select>
-                        </Tooltip>
-                        <Divider orientation="vertical" variant="middle" light flexItem/>
-                        <Tooltip title="Start Simulation">
-                            <Button
-                                color="inherit"
-                                aria-label="start simulation"
-                                startIcon={<PlayArrowIcon/>}
-                            >
-                                Start
-                            </Button>
-                        </Tooltip>
-
+                        <Grid container className={classes.collapse}>
+                            <Tooltip title="Select">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="select">
+                                    <SelectAllIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Rotate">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="rotate">
+                                    <RotateRightIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Divider orientation="vertical" variant="middle" light flexItem/>
+                            <Tooltip title="Delete">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="delete">
+                                    <DeleteForeverIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Undo">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="undo">
+                                    <UndoIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Redo">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="redo">
+                                    <RedoIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Divider orientation="vertical" variant="middle" light flexItem/>
+                            <Tooltip title="Draw Wire">
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="draw wire">
+                                    <LinearScaleIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen}
+                                     title="Select Wire Colour">
+                                <Select
+                                    input={<BootstrapInput/>}
+                                    onMouseDown={closeToolTip}
+                                    value={wireColor}
+                                    onChange={selectWire}
+                                    MenuProps={{
+                                        anchorOrigin: {
+                                            vertical: "bottom",
+                                            horizontal: "center"
+                                        },
+                                        transformOrigin: {
+                                            vertical: "top",
+                                            horizontal: "center"
+                                        },
+                                        getContentAnchorEl: null
+                                    }}
+                                >
+                                    <MenuItem value={"black"}>
+                                        <ListItemIcon>
+                                            <LinearScaleIcon style={{color: grey[800]}}/>
+                                        </ListItemIcon>
+                                    </MenuItem>
+                                    <MenuItem value={"red"}>
+                                        <ListItemIcon>
+                                            <LinearScaleIcon style={{color: red[500]}}/>
+                                        </ListItemIcon>
+                                    </MenuItem>
+                                    <MenuItem value={"green"}>
+                                        <ListItemIcon>
+                                            <LinearScaleIcon style={{color: green[500]}}/>
+                                        </ListItemIcon>
+                                    </MenuItem>
+                                    <MenuItem value={"blue"}>
+                                        <ListItemIcon>
+                                            <LinearScaleIcon style={{color: blue[500]}}/>
+                                        </ListItemIcon>
+                                    </MenuItem>
+                                    <MenuItem value={"yellow"}>
+                                        <ListItemIcon>
+                                            <LinearScaleIcon style={{color: yellow[500]}}/>
+                                        </ListItemIcon>
+                                    </MenuItem>
+                                </Select>
+                            </Tooltip>
+                            <Divider orientation="vertical" variant="middle" light flexItem/>
+                            <Tooltip title="Start Simulation">
+                                <Button
+                                    color="inherit"
+                                    aria-label="start simulation"
+                                    startIcon={<PlayArrowIcon/>}
+                                >
+                                    Start
+                                </Button>
+                            </Tooltip>
+                        </Grid>
                     </Toolbar>
                 </AppBar>
 
