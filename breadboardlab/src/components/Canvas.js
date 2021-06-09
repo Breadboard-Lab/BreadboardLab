@@ -2,8 +2,8 @@ import React from "react";
 
 
 export default class Canvas extends React.Component {
-    mouseCurrentPosition = {x: 0, y: 0};
     mouseIsDown = false;
+    scale = 1;
 
     constructor(props) {
         super(props)
@@ -45,7 +45,7 @@ export default class Canvas extends React.Component {
             let viewBox = {...this.state.viewBox};
             viewBox.x -= e.movementX;
             viewBox.y -= e.movementY;
-            this.setState({viewBox})
+            this.setState({viewBox});
         }
     }
 
@@ -57,13 +57,10 @@ export default class Canvas extends React.Component {
     }
 
     handleResize() {
-        if (this.state !== {}) {
-            let viewBox = {...this.state.viewBox};
-            viewBox.width = window.innerWidth;
-            viewBox.height = window.innerHeight;
-            this.setState({viewBox})
-
-        }
+        let viewBox = {...this.state.viewBox};
+        viewBox.width = window.innerWidth;
+        viewBox.height = window.innerHeight;
+        this.setState({viewBox})
     }
 
     render() {
@@ -87,7 +84,9 @@ export default class Canvas extends React.Component {
                     onMouseUp={e => this.handleOnMouseUp(e)}
                     onMouseDown={e => this.handleMouseDown(e)} 
                     onMouseMove={e => this.handleMouseMove(e)} 
-                    width="100%" height="100%" fill="url(#grid)"/>
+                    width="120%" height="120%" fill="url(#grid)"
+                    transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100 + 100)} ${this.state.viewBox.y - (this.state.viewBox.y % 100 + 100)})`}
+                />
                 {this.props.listOfParts}
             </svg>
         )
