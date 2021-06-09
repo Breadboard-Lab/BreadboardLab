@@ -34,11 +34,14 @@ export default class SideBarPart extends React.Component {
                 
                 // Get cursor location
                 function logKey(e) {
-                    document.getElementById("AppSVG").removeEventListener('mousemove', logKey);
+                    let svg = document.getElementById("AppSVG");
+                    svg.removeEventListener('mousemove', logKey);
+                    let pos = svg.createSVGPoint();
                     const rect = event.target.getBoundingClientRect();
-                    let xPos = e.clientX - rect.width / 2;
-                    let yPos = e.clientY - rect.height / 2;
-                    event.target.setAttribute("transform", `translate(${xPos}, ${yPos})`);
+                    pos.x = e.clientX - rect.width / 2;
+                    pos.y = e.clientY - rect.height / 2;
+                    var cursorpt =  pos.matrixTransform(svg.getScreenCTM().inverse());
+                    event.target.setAttribute("transform", `translate(${cursorpt.x}, ${cursorpt.y})`);
                 }
             }
         }

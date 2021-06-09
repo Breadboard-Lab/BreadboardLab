@@ -69,11 +69,6 @@ export default class Canvas extends React.Component {
     render() {
         return(
             <svg
-                
-                onWheel={e => this.handleOnWheel(e)}
-                onMouseUp={e => this.handleOnMouseUp(e)}
-                onMouseDown={e => this.handleMouseDown(e)} 
-                onMouseMove={e => this.handleMouseMove(e)} 
                 viewBox={`${this.state.viewBox.x} ${this.state.viewBox.y} ${this.state.viewBox.width} ${this.state.viewBox.height}`}
                 xmlns="http://www.w3.org/2000/svg" id="AppSVG" style={{position: "absolute", top: 0, right: 0}} width="100%" height="100%">
                 {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
@@ -88,7 +83,10 @@ export default class Canvas extends React.Component {
                     </pattern>
                 </defs>
                 <rect
-                    
+                    onWheel={e => this.handleOnWheel(e)}
+                    onMouseUp={e => this.handleOnMouseUp(e)}
+                    onMouseDown={e => this.handleMouseDown(e)} 
+                    onMouseMove={e => this.handleMouseMove(e)} 
                     width="100%" height="100%" fill="url(#grid)"/>
                 {this.props.listOfParts}
             </svg>
