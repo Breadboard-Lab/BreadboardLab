@@ -7,7 +7,7 @@ import {
     Divider,
     IconButton, ListItemIcon,
     makeStyles, withStyles, MenuItem, Select,
-    Toolbar, Tooltip, Typography, Grid,
+    Toolbar, Tooltip, Typography, Grid, useMediaQuery,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
@@ -36,22 +36,24 @@ const useStyles = makeStyles((theme) => ({
         height: '100%'
     },
     appBar: {
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        [theme.breakpoints.down(396)]: {
-            marginTop: 60
+        [theme.breakpoints.up(396)]: {
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            marginTop: 48
         },
-        marginTop: 48
+        marginTop: 60
     },
     appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
+        [theme.breakpoints.up(396)]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+            transition: theme.transitions.create(['margin', 'width'], {
+                easing: theme.transitions.easing.easeOut,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        }
     },
     appBarSpacer: {
         minHeight: 48
@@ -94,6 +96,8 @@ function App() {
     const [listOfParts, setListOfParts] = React.useState([]);
     const [themeState, setThemeState] = React.useState(true);
     const theme = themeState ? {...themeDark} : {...themeLight};
+
+    const isSmall = useMediaQuery(theme.breakpoints.down(396))
 
     const handleThemeChange = () => {
         setThemeState(!themeState)
@@ -278,6 +282,7 @@ function App() {
                 { /* Components/Properties Sidebar */}
                 <Drawer
                     open={open}
+                    anchor={isSmall ? "bottom" : "left"}
                     handleDrawerClose={handleDrawer}
                     addPart={addPart}
                 />

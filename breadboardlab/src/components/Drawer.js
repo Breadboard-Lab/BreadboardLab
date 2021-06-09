@@ -27,26 +27,29 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
     },
     drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        [theme.breakpoints.down(396)]: {
-            marginTop: 60
+        [theme.breakpoints.up(396)]: {
+            position: 'relative',
+            whiteSpace: 'nowrap',
+            width: drawerWidth,
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            marginTop: 48,
+            height: 'calc(100% - 48px)'
         },
-        marginTop: 48,
-        height: 'calc(100% - 48px)'
+        height: 200
+
     },
     drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: 0,
+        [theme.breakpoints.up(396)]: {
+            overflowX: 'hidden',
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            width: 0,
+        }
     },
     searchBar: {
         marginLeft: theme.spacing(1),
@@ -60,7 +63,7 @@ const Drawer = props => {
     return (
         <MUIDrawer
             variant="persistent"
-            anchor="left"
+            anchor={props.anchor}
             open={props.open}
             classes={
                 {
