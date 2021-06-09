@@ -1,5 +1,5 @@
 <svg>
-    <g transform="translate(100,100), scale(200,200)">
+    <g transform="translate(50,50), scale(100,100)">
         <rect x="-0.45" y="-0.45" width="0.9" height="0.9" rx=".1" fill="#202020" />
         <rect x="-0.41" y="-0.41" width="0.82" height="0.82" rx=".1" fill="#707070" />
         <rect x="-0.2" y="-0.5" width="0.06" height="0.05" fill="#707070" />
