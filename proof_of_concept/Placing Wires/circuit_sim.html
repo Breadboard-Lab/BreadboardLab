@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit Sim</title>
+    <link rel="stylesheet" href="styles/circuit_sim.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css" />
+    <script type="module" src="scripts/circuit_sim.js"></script>
+</head>
+
+<body>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="toolbar" class="navbar-menu">
+            <div class="navbar-start">
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">File</a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" id="export_png">Export as .png</a>
+                        <a class="navbar-item" id="export_svg">Export as .svg</a>
+                        <a class="navbar-item" id="export_circ">Export as .circ</a>
+                    </div>
+                </div>
+                <a class="navbar-item toolbar-item" id="not_gate"  href="#"><img src="images/not_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="and_gate"  href="#"><img src="images/and_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="or_gate"   href="#"><img src="images/or_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="nand_gate" href="#"><img src="images/nand_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="nor_gate"  href="#"><img src="images/nor_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="xor_gate"  href="#"><img src="images/xor_gate.png" /></a>
+                <a class="navbar-item toolbar-item" id="wire"      href="#"><img src="images/wire.png" /></a>
+                <a class="navbar-item toolbar-item" id="input"     href="#"><img src="images/input.png" /></a>
+                <a class="navbar-item toolbar-item" id="output"    href="#"><img src="images/output.png" /></a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="circuit_sim"></div>
+
+    <div id="export_content"></div>
+    <canvas id="png_canvas" width="1000" height="1000" style="display: none"></canvas>
+</body>
+
+</html>
