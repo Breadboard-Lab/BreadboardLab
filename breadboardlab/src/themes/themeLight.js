@@ -15,7 +15,7 @@ let themeLight = createTheme({
             secondary: '#fff'
         },
         background: {
-            default: '#ffffff',
+            default: '#f8faff',
             paper: '#6790cb'
         },
         primary: {
