@@ -21,10 +21,12 @@ import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './components/Drawer';
 import {blue, green, grey, red, yellow} from "@material-ui/core/colors";
-import theme from './components/theme';
+import themeDark from './themes/themeDark';
+import themeLight from './themes/themeLight';
 import InputBase from '@material-ui/core/InputBase';
 import Canvas from './components/Canvas';
 import AppbarCollapseMenu from "./components/AppbarCollapseMenu";
+import InvertColorsIcon from '@material-ui/icons/InvertColors';
 
 const drawerWidth = 240;
 
@@ -87,6 +89,12 @@ function App() {
     const [toolOpen, setToolOpen] = React.useState(false);
     const [wireColor, setWireColor] = React.useState("green");
     const [listOfParts, setListOfParts] = React.useState([]);
+    const [themeState, setThemeState] = React.useState(true);
+    const theme = themeState ? {...themeDark} : {...themeLight};
+
+    const handleThemeChange = () => {
+        setThemeState(!themeState)
+    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -136,6 +144,11 @@ function App() {
                             >
                                 Export
                             </Button>
+                        </Tooltip>
+                        <Tooltip title="Change Theme">
+                            <IconButton onClick={handleThemeChange}>
+                                <InvertColorsIcon/>
+                            </IconButton>
                         </Tooltip>
 
                     </Toolbar>
