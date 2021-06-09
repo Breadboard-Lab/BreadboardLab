@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
+        [theme.breakpoints.down(396)]: {
+            marginTop: 60
+        },
         marginTop: 48
     },
     appBarShift: {
@@ -94,27 +97,20 @@ function App() {
 
     const handleThemeChange = () => {
         setThemeState(!themeState)
-    }
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
     };
-    const handleDrawerClose = () => {
-        setOpen(false);
+    const handleDrawer = () => {
+        setOpen(!open);
     };
     const selectWire = (event) => {
         setWireColor(event.target.value)
-    }
-    const openToolTip = () => {
-        setToolOpen(true)
-    }
-    const closeToolTip = () => {
-        setToolOpen(false)
-    }
+    };
+    const handleTooltip = () => {
+        setToolOpen(!toolOpen)
+    };
     const addPart = (part) => {
         listOfParts.push(part)
         setListOfParts([...listOfParts]);
-    }
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -166,7 +162,7 @@ function App() {
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
-                                onClick={handleDrawerOpen}
+                                onClick={handleDrawer}
                                 edge="start"
                                 className={open && classes.menuHide}
                             >
@@ -219,11 +215,11 @@ function App() {
                                     <LinearScaleIcon/>
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip onPointerEnter={openToolTip} onPointerLeave={closeToolTip} open={toolOpen}
+                            <Tooltip onPointerEnter={handleTooltip} onPointerLeave={handleTooltip} open={toolOpen}
                                      title="Select Wire Colour">
                                 <Select
                                     input={<BootstrapInput/>}
-                                    onMouseDown={closeToolTip}
+                                    onMouseDown={()=>setToolOpen(false)}
                                     value={wireColor}
                                     onChange={selectWire}
                                     MenuProps={{
@@ -282,7 +278,7 @@ function App() {
                 { /* Components/Properties Sidebar */}
                 <Drawer
                     open={open}
-                    handleDrawerClose={handleDrawerClose}
+                    handleDrawerClose={handleDrawer}
                     addPart={addPart}
                 />
 
