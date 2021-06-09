@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
+        [theme.breakpoints.down(396)]: {
+            marginTop: 60
+        },
         marginTop: 48,
         height: 'calc(100% - 48px)'
     },
