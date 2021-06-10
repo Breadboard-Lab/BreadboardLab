@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const AppbarCollapseMenu = props => {
+const AppbarToolsCollapseMenu = props => {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -102,4 +102,4 @@ const AppbarCollapseMenu = props => {
             </div>
         );
 }
-export default AppbarCollapseMenu;
+export default AppbarToolsCollapseMenu;

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-end',
     },
     drawerPaper: {
-        [theme.breakpoints.up(396)]: {
+        [theme.breakpoints.up('sm')]: {
             position: 'relative',
             whiteSpace: 'nowrap',
             width: drawerWidth,
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
     },
     drawerPaperClose: {
-        [theme.breakpoints.up(396)]: {
+        [theme.breakpoints.up('sm')]: {
             overflowX: 'hidden',
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,

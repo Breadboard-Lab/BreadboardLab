@@ -25,8 +25,9 @@ import themeDark from './themes/themeDark';
 import themeLight from './themes/themeLight';
 import InputBase from '@material-ui/core/InputBase';
 import Canvas from './components/Canvas';
-import AppbarCollapseMenu from "./components/AppbarCollapseMenu";
+import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
+import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
 
 const drawerWidth = 240;
 
@@ -36,17 +37,16 @@ const useStyles = makeStyles((theme) => ({
         height: '100%'
     },
     appBar: {
-        [theme.breakpoints.up(396)]: {
+        [theme.breakpoints.up('sm')]: {
             transition: theme.transitions.create(['margin', 'width'], {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.leavingScreen,
             }),
-            marginTop: 48
         },
-        marginTop: 60
+        marginTop: 48
     },
     appBarShift: {
-        [theme.breakpoints.up(396)]: {
+        [theme.breakpoints.up('sm')]: {
             width: `calc(100% - ${drawerWidth}px)`,
             marginLeft: drawerWidth,
             transition: theme.transitions.create(['margin', 'width'], {
@@ -97,7 +97,7 @@ function App() {
     const [themeState, setThemeState] = React.useState(true);
     const theme = themeState ? {...themeDark} : {...themeLight};
 
-    const isSmall = useMediaQuery(theme.breakpoints.down(396))
+    const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
 
     const handleThemeChange = () => {
         setThemeState(!themeState)
@@ -121,7 +121,6 @@ function App() {
             <div className={classes.root}>
                 <CssBaseline/>
 
-
                 { /* Header Appbar */}
                 <AppBar
                     position="fixed"
@@ -131,25 +130,28 @@ function App() {
                         <Typography variant='h4' className={classes.title}>
                             Breadboard Lab
                         </Typography>
-                        <Tooltip title="Share">
-                            <Button
-                                aria-label='Share'
-                            >
-                                Share
-                            </Button>
-                        </Tooltip>
-                        <Tooltip title="Export">
-                            <Button
-                                aria-label='Export'
-                            >
-                                Export
-                            </Button>
-                        </Tooltip>
-                        <Tooltip title="Change Theme">
-                            <IconButton onClick={handleThemeChange}>
-                                <InvertColorsIcon/>
-                            </IconButton>
-                        </Tooltip>
+                        <AppbarSettingsCollapseMenu/>
+                        <Grid className={classes.collapse}>
+                            <Tooltip title="Share">
+                                <Button
+                                    aria-label='Share'
+                                >
+                                    Share
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Export">
+                                <Button
+                                    aria-label='Export'
+                                >
+                                    Export
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title="Change Theme">
+                                <IconButton onClick={handleThemeChange}>
+                                    <InvertColorsIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
 
                     </Toolbar>
                 </AppBar>
@@ -173,7 +175,7 @@ function App() {
                                 <MenuIcon/>
                             </IconButton>
                         </Tooltip>
-                        <AppbarCollapseMenu/>
+                        <AppbarToolsCollapseMenu/>
                         <Grid container className={classes.collapse}>
                             <Tooltip title="Select">
                                 <IconButton
@@ -223,7 +225,7 @@ function App() {
                                      title="Select Wire Colour">
                                 <Select
                                     input={<BootstrapInput/>}
-                                    onMouseDown={()=>setToolOpen(false)}
+                                    onMouseDown={() => setToolOpen(false)}
                                     value={wireColor}
                                     onChange={selectWire}
                                     MenuProps={{
@@ -282,7 +284,7 @@ function App() {
                 { /* Components/Properties Sidebar */}
                 <Drawer
                     open={open}
-                    anchor={isSmall ? "bottom" : "left"}
+                    anchor={isNotSmall ? "left" : "bottom"}
                     handleDrawerClose={handleDrawer}
                     addPart={addPart}
                 />
