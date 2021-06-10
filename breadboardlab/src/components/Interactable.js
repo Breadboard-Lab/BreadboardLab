@@ -2,7 +2,6 @@
 
 import { Component, cloneElement } from "react";
 import PropTypes from "prop-types";
-import { findDOMNode } from "react-dom";
 
 import interact from "interactjs";
 
@@ -23,12 +22,7 @@ export default class Interactable extends Component {
     }
 
     componentDidMount() {
-        this.interact = interact(findDOMNode(this.node));
-        this.setInteractions();
-    }
-
-    componentWillReceiveProps() {
-        this.interact = interact(findDOMNode(this.node));
+        this.interact = interact(this.node);
         this.setInteractions();
     }
 
