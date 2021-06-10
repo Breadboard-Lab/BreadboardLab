@@ -3,7 +3,7 @@ import {
     Drawer as MUIDrawer,
     Divider,
     Grid,
-    TextField
+    TextField, List
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -100,11 +100,13 @@ const Drawer = props => {
 
             { /* Components List */}
             <div>
-                <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
-                <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
-                <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
-                <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
-                <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
+                <List dense>
+                    <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
+                    <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
+                    <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
+                    <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
+                    <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
+                </List>
             </div>
 
         </MUIDrawer>
