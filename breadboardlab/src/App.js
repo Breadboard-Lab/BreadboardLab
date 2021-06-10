@@ -5,8 +5,8 @@ import {
     Button,
     CssBaseline,
     Divider,
-    IconButton, ListItemIcon,
-    makeStyles, withStyles, MenuItem, Select,
+    IconButton,
+    makeStyles,
     Toolbar, Tooltip, Typography, Grid, useMediaQuery,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
@@ -17,17 +17,15 @@ import RotateRightIcon from '@material-ui/icons/RotateRight';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
-import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './components/Drawer';
-import {blue, green, grey, red, yellow} from "@material-ui/core/colors";
 import themeDark from './themes/themeDark';
 import themeLight from './themes/themeLight';
-import InputBase from '@material-ui/core/InputBase';
 import Canvas from './components/Canvas';
 import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
+import SplitButton from "./components/SplitButton";
 
 const drawerWidth = 240;
 
@@ -79,20 +77,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BootstrapInput = withStyles((theme) => ({
-    input: {
-        borderRadius: 4,
-        position: 'relative',
-        backgroundColor: theme.palette.background.paper,
-        padding: '10px 0px 7px 16px'
-    },
-}))(InputBase);
-
 function App() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
-    const [toolOpen, setToolOpen] = React.useState(false);
-    const [wireColor, setWireColor] = React.useState("green");
     const [listOfParts, setListOfParts] = React.useState([]);
     const [themeState, setThemeState] = React.useState(true);
     const theme = themeState ? {...themeDark} : {...themeLight};
@@ -104,12 +91,6 @@ function App() {
     };
     const handleDrawer = () => {
         setOpen(!open);
-    };
-    const selectWire = (event) => {
-        setWireColor(event.target.value)
-    };
-    const handleTooltip = () => {
-        setToolOpen(!toolOpen)
     };
     const addPart = (part) => {
         listOfParts.push(part)
@@ -214,64 +195,7 @@ function App() {
                                 </IconButton>
                             </Tooltip>
                             <Divider orientation="vertical" variant="middle" light flexItem/>
-                            <Tooltip title="Draw Wire">
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="draw wire">
-                                    <LinearScaleIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip
-                                onPointerEnter={handleTooltip}
-                                onPointerLeave={handleTooltip}
-                                open={toolOpen}
-                                title="Select Wire Colour"
-                            >
-                                <Select
-                                    input={<BootstrapInput/>}
-                                    onMouseDown={() => setToolOpen(false)}
-                                    value={wireColor}
-                                    onChange={selectWire}
-                                    MenuProps={{
-                                        anchorOrigin: {
-                                            vertical: "bottom",
-                                            horizontal: "center"
-                                        },
-                                        transformOrigin: {
-                                            vertical: "top",
-                                            horizontal: "center"
-                                        },
-                                        getContentAnchorEl: null
-                                    }}
-                                    inputProps={{'aria-label': 'select wire colour'}}
-                                >
-                                    <MenuItem value={"black"} aria-label={"black wire"}>
-                                        <ListItemIcon>
-                                            <LinearScaleIcon style={{color: grey[800]}}/>
-                                        </ListItemIcon>
-                                    </MenuItem>
-                                    <MenuItem value={"red"} aria-label={"red wire"}>
-                                        <ListItemIcon>
-                                            <LinearScaleIcon style={{color: red[500]}}/>
-                                        </ListItemIcon>
-                                    </MenuItem>
-                                    <MenuItem value={"green"} aria-label={"green wire"}>
-                                        <ListItemIcon>
-                                            <LinearScaleIcon style={{color: green[500]}}/>
-                                        </ListItemIcon>
-                                    </MenuItem>
-                                    <MenuItem value={"blue"} aria-label={"blue wire"}>
-                                        <ListItemIcon>
-                                            <LinearScaleIcon style={{color: blue[500]}}/>
-                                        </ListItemIcon>
-                                    </MenuItem>
-                                    <MenuItem value={"yellow"} aria-label={"yellow wire"}>
-                                        <ListItemIcon>
-                                            <LinearScaleIcon style={{color: yellow[500]}}/>
-                                        </ListItemIcon>
-                                    </MenuItem>
-                                </Select>
-                            </Tooltip>
+                            <SplitButton/>
                             <Divider orientation="vertical" variant="middle" light flexItem/>
                             <Tooltip title="Start Simulation">
                                 <Button
