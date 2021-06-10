@@ -221,8 +221,12 @@ function App() {
                                     <LinearScaleIcon/>
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip onPointerEnter={handleTooltip} onPointerLeave={handleTooltip} open={toolOpen}
-                                     title="Select Wire Colour">
+                            <Tooltip
+                                onPointerEnter={handleTooltip}
+                                onPointerLeave={handleTooltip}
+                                open={toolOpen}
+                                title="Select Wire Colour"
+                            >
                                 <Select
                                     input={<BootstrapInput/>}
                                     onMouseDown={() => setToolOpen(false)}
@@ -239,28 +243,29 @@ function App() {
                                         },
                                         getContentAnchorEl: null
                                     }}
+                                    inputProps={{'aria-label': 'select wire colour'}}
                                 >
-                                    <MenuItem value={"black"}>
+                                    <MenuItem value={"black"} aria-label={"black wire"}>
                                         <ListItemIcon>
                                             <LinearScaleIcon style={{color: grey[800]}}/>
                                         </ListItemIcon>
                                     </MenuItem>
-                                    <MenuItem value={"red"}>
+                                    <MenuItem value={"red"} aria-label={"red wire"}>
                                         <ListItemIcon>
                                             <LinearScaleIcon style={{color: red[500]}}/>
                                         </ListItemIcon>
                                     </MenuItem>
-                                    <MenuItem value={"green"}>
+                                    <MenuItem value={"green"} aria-label={"green wire"}>
                                         <ListItemIcon>
                                             <LinearScaleIcon style={{color: green[500]}}/>
                                         </ListItemIcon>
                                     </MenuItem>
-                                    <MenuItem value={"blue"}>
+                                    <MenuItem value={"blue"} aria-label={"blue wire"}>
                                         <ListItemIcon>
                                             <LinearScaleIcon style={{color: blue[500]}}/>
                                         </ListItemIcon>
                                     </MenuItem>
-                                    <MenuItem value={"yellow"}>
+                                    <MenuItem value={"yellow"} aria-label={"yellow wire"}>
                                         <ListItemIcon>
                                             <LinearScaleIcon style={{color: yellow[500]}}/>
                                         </ListItemIcon>
