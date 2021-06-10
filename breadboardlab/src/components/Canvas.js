@@ -1,9 +1,8 @@
 import React from "react";
 
-
 export default class Canvas extends React.Component {
     mouseIsDown = false;
-    scale = 1;
+    scale = 0.3;
 
     constructor(props) {
         super(props)
@@ -11,8 +10,8 @@ export default class Canvas extends React.Component {
             viewBox : {
                 x: 0,
                 y: 0,
-                width: window.innerWidth,
-                height: window.innerHeight
+                width: window.innerWidth * this.scale,
+                height: window.innerHeight * this.scale
             }
         }
         this.handleOnMouseUp = this.handleOnMouseUp.bind(this);
@@ -43,30 +42,54 @@ export default class Canvas extends React.Component {
     handleMouseMove(e) {
         if (this.mouseIsDown) {
             let viewBox = {...this.state.viewBox};
-            viewBox.x -= e.movementX;
-            viewBox.y -= e.movementY;
-            this.setState({viewBox});
+            viewBox.x -= e.movementX * this.scale;
+            viewBox.y -= e.movementY * this.scale;
+            this.setViewBox(viewBox);
         }
     }
 
     handleOnWheel(e) {
-  
-    }
+       let scale = (e.deltaY < 0) ? 0.8 : 1.2;
+       let newScale = Number((this.scale * scale).toPrecision(3));
 
-    setViewBox() {
+       if ((newScale < 1.2) && (newScale > 0.1)) { 
+            this.scale = newScale;
+            let viewBox = {...this.state.viewBox};
+            let svg = document.getElementById("AppSVG");
+            let pos = svg.createSVGPoint();
+            pos.x = e.clientX;
+            pos.y = e.clientY;
+            let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
+
+            viewBox.x = (viewBox.x - cursorpt.x) * scale + cursorpt.x;
+            viewBox.y = (viewBox.y - cursorpt.y) * scale + cursorpt.y;
+            viewBox.width = window.innerWidth * this.scale;
+            viewBox.height = window.innerHeight * this.scale;
+            this.setViewBox(viewBox);
+        }
     }
 
     handleResize() {
         let viewBox = {...this.state.viewBox};
-        viewBox.width = window.innerWidth;
-        viewBox.height = window.innerHeight;
+        viewBox.width = window.innerWidth * this.scale;
+        viewBox.height = window.innerHeight * this.scale;
+        this.setViewBox(viewBox);
+    }
+
+    setViewBox(viewBox) {
+        viewBox.x = Number(viewBox.x).toPrecision(5);
+        viewBox.y = Number(viewBox.y).toPrecision(5);
+        viewBox.width = Number(viewBox.width).toPrecision(5);
+        viewBox.height = Number(viewBox.height).toPrecision(5);
         this.setState({viewBox})
     }
 
     render() {
         return(
-            <svg
+            <svg 
+                onWheel={e => this.handleOnWheel(e)}
                 viewBox={`${this.state.viewBox.x} ${this.state.viewBox.y} ${this.state.viewBox.width} ${this.state.viewBox.height}`}
+                scale={this.scale}
                 xmlns="http://www.w3.org/2000/svg" id="AppSVG" style={{position: "absolute", top: 0, right: 0}} width="100%" height="100%">
                 {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
                 <defs>
@@ -80,12 +103,11 @@ export default class Canvas extends React.Component {
                     </pattern>
                 </defs>
                 <rect
-                    onWheel={e => this.handleOnWheel(e)}
                     onMouseUp={e => this.handleOnMouseUp(e)}
                     onMouseDown={e => this.handleMouseDown(e)} 
                     onMouseMove={e => this.handleMouseMove(e)} 
-                    width="120%" height="120%" fill="url(#grid)"
-                    transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100 + 100)} ${this.state.viewBox.y - (this.state.viewBox.y % 100 + 100)})`}
+                    width={this.state.viewBox.width / this.scale * 2} height={this.state.viewBox.height / this.scale * 2} fill="url(#grid)"
+                    transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
                 />
                 {this.props.listOfParts}
             </svg>

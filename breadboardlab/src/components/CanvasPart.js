@@ -22,7 +22,10 @@ export default class CanvasPart extends React.Component {
                 const transform = regex.exec(event.target.getAttribute("transform"));
 
                 if (transform && transform.length > 1) {
-                    event.target.setAttribute("transform", `translate(${Number(transform[1]) + event.dx}, ${Number(transform[5]) + event.dy})`);
+                    let scale = event.target.parentNode.getAttribute("scale");
+                    let xPos = (Number(transform[1]) + event.dx * scale).toPrecision(5);
+                    let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5)
+                    event.target.setAttribute("transform", `translate(${xPos}, ${yPos})`);
                 }
             }
         }
