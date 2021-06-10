@@ -26,6 +26,7 @@ const CategorySelect = () => {
                 MenuProps={{
                     anchorOrigin: {
                         vertical: "bottom",
+                        horizontal: "center"
                     },
                     getContentAnchorEl: null
                 }}
