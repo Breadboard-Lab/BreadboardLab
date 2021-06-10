@@ -1,6 +1,5 @@
 import React from "react";
 import Interactable from "./Interactable";
-import ReactDOM from "react-dom";
 
 export default class CanvasPart extends React.Component {
     constructor(props) {
@@ -9,10 +8,9 @@ export default class CanvasPart extends React.Component {
     }
 
     handleDoubleClick() {
-        let element = ReactDOM.findDOMNode(this);
         console.log("Name: " + this.props.name);
-        console.log("X-coor: " + element.getBoundingClientRect().x);
-        console.log("Y-coor: " + element.getBoundingClientRect().y);
+        console.log("X-coor: " + this.node.getBoundingClientRect().x);
+        console.log("Y-coor: " + this.node.getBoundingClientRect().y);
     }
 
     draggableOptions = {
@@ -35,7 +33,7 @@ export default class CanvasPart extends React.Component {
         return(
             <Interactable draggable={true} draggableOptions={this.draggableOptions}>
                 <g onDoubleClick={() => {this.handleDoubleClick()}} className={"part"}>
-                    { React.Children.toArray(this.props.children).map((c, index) => React.cloneElement(
+                    { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,
                         {ref: (node) => {this.node = node}},
                     ))}

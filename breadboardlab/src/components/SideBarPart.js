@@ -10,15 +10,9 @@ import ReactDOM from "react-dom";
 import Interactable from "./Interactable";
 import CanvasPart from "./CanvasPart";
 
-let childrenRefs = {}
 let index = 0;
 
-let setChildRef = index => el => childrenRefs[index] = el;
-
 export default class SideBarPart extends React.Component {
-    part = <CanvasPart resetTransform={true} key={index} index={index}
-                       name={this.props.name}>{this.props.part}</CanvasPart>
-
     draggingOptions = {
         manualStart: true,
         listeners: {
@@ -49,12 +43,14 @@ export default class SideBarPart extends React.Component {
 
     onmove = (event) => {
         const {currentTarget, interaction} = event;
+        let newPart = <CanvasPart ref={node => this.node = node} key={index} index={index}
+                                  name={this.props.name}>{this.props.part}</CanvasPart>
+
         if (interaction.pointerIsDown && !interaction.interacting() && currentTarget.style.transform === "") {
             index += 1;
-            let newPart = React.cloneElement(this.part, {ref: setChildRef(index), key: index, draggable: true});
             this.props.ondrag(newPart);
         }
-        interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(childrenRefs[index]));
+        interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
     }
 
     render() {
