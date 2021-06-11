@@ -23,7 +23,7 @@ const StyledMenuItem = withStyles((theme) => ({
     },
 }))(MenuItem)
 
-const SplitButton = () => {
+const SplitButton = props => {
     const menuOptions = [['Black', grey[800]], ['Red', red[500]], ['Green', green[400]], ['Blue', blue[700]], ['Yellow', yellow[500]]];
 
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -53,18 +53,15 @@ const SplitButton = () => {
                 color="primary"
                 aria-label="split button"
             >
-                <Tooltip title="Draw Wire">
-                    <IconButton
-                        color="inherit"
-                        aria-label="draw wire"
-                    >
-                        <LinearScaleIcon/>
-                    </IconButton>
-                </Tooltip>
+                {props.children}
                 <Tooltip
                     title="Select wire colour"
-                    onPointerEnter={()=>{setToolOpen(true)}}
-                    onPointerLeave={()=>{setToolOpen(false)}}
+                    onPointerEnter={() => {
+                        setToolOpen(true)
+                    }}
+                    onPointerLeave={() => {
+                        setToolOpen(false)
+                    }}
                     open={toolOpen}
                 >
                     <IconButton

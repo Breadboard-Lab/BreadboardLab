@@ -27,6 +27,7 @@ import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
 import SplitButton from "./components/SplitButton";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
+import LinearScaleIcon from "@material-ui/icons/LinearScale";
 
 const drawerWidth = 240;
 
@@ -172,67 +173,75 @@ function App() {
                         </Tooltip>
                         <AppbarToolsCollapseMenu/>
                         <Grid container className={classes.collapse}>
-                            <StyledToggleButtonGroup
-                                value={selectedTool}
-                                exclusive
-                                onChange={handleTool}
-                                aria-label="Tool Menu"
-                            >
-                                <ToggleButton
-                                    aria-label="select"
-                                    value="select_tool"
+                            <SplitButton>
+                                <StyledToggleButtonGroup
+                                    value={selectedTool}
+                                    exclusive
+                                    onChange={handleTool}
+                                    aria-label="Tool Menu"
                                 >
-                                    <Tooltip title="Select">
-                                        <SelectAllIcon/>
-                                    </Tooltip>
-                                </ToggleButton>
-                                <ToggleButton
+                                    <ToggleButton
+                                        aria-label="select"
+                                        value="select_tool"
+                                    >
+                                        <Tooltip title="Select">
+                                            <SelectAllIcon/>
+                                        </Tooltip>
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        aria-label="draw wire"
+                                        value="wire_tool"
+                                    >
+                                        <Tooltip title="Draw Wire">
+                                            <LinearScaleIcon/>
+                                        </Tooltip>
+                                    </ToggleButton>
+                                </StyledToggleButtonGroup>
+                            </SplitButton>
+
+                            <Divider orientation="vertical" variant="middle" light flexItem/>
+
+                            <Tooltip title="Rotate">
+                                <IconButton
                                     aria-label="rotate"
                                     value="rotate_tool"
                                 >
-                                    <Tooltip title="Rotate">
-                                        <RotateRightIcon/>
-                                    </Tooltip>
-                                </ToggleButton>
-                                <Divider orientation="vertical" variant="middle" light flexItem/>
-                                <ToggleButton
+                                    <RotateRightIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Delete">
+                                <IconButton
                                     aria-label="delete"
-                                    value="delete_tool"
                                 >
-                                    <Tooltip title="Delete">
-
-                                        <DeleteForeverIcon/>
-                                    </Tooltip>
-                                </ToggleButton>
-                                <ToggleButton
+                                    <DeleteForeverIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Undo">
+                                <IconButton
                                     aria-label="undo"
-                                    value="undo_tool"
                                 >
-                                    <Tooltip title="Undo">
-                                        <UndoIcon/>
-                                    </Tooltip>
-                                </ToggleButton>
-                                <ToggleButton
+                                    <UndoIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Redo">
+                                <IconButton
                                     aria-label="redo"
-                                    value="redo_tool"
                                 >
-                                    <Tooltip title="Redo">
-                                        <RedoIcon/>
-                                    </Tooltip>
-                                </ToggleButton>
-                                <Divider orientation="vertical" variant="middle" light flexItem/>
-                                <SplitButton/>
-                                <Divider orientation="vertical" variant="middle" light flexItem/>
-                                <Tooltip title="Start Simulation">
-                                    <Button
-                                        color="inherit"
-                                        aria-label="start simulation"
-                                        startIcon={<PlayArrowIcon/>}
-                                    >
-                                        Start
-                                    </Button>
-                                </Tooltip>
-                            </StyledToggleButtonGroup>
+                                    <RedoIcon/>
+                                </IconButton>
+                            </Tooltip>
+
+                            <Divider orientation="vertical" variant="middle" light flexItem/>
+
+                            <Tooltip title="Start Simulation">
+                                <Button
+                                    color="inherit"
+                                    aria-label="start simulation"
+                                    startIcon={<PlayArrowIcon/>}
+                                >
+                                    Start
+                                </Button>
+                            </Tooltip>
                         </Grid>
                     </Toolbar>
                 </AppBar>
