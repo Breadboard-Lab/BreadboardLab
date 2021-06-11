@@ -46,34 +46,33 @@ const SplitButton = props => {
     };
 
     return (
-        <div>
+        <React.Fragment>
             <ButtonGroup
                 disableElevation
-                variant="text"
                 color="primary"
                 aria-label="split button"
             >
                 {props.children}
-                <Tooltip
-                    title="Select wire colour"
-                    onPointerEnter={() => {
-                        setToolOpen(true)
-                    }}
-                    onPointerLeave={() => {
-                        setToolOpen(false)
-                    }}
-                    open={toolOpen}
+                <IconButton
+                    color="inherit"
+                    size="small"
+                    aria-label="select wire colour"
+                    aria-haspopup="menu"
+                    onClick={handleClick}
                 >
-                    <IconButton
-                        color="inherit"
-                        size="small"
-                        aria-label="select wire colour"
-                        aria-haspopup="menu"
-                        onClick={handleClick}
+                    <Tooltip
+                        title="Select wire colour"
+                        onPointerEnter={() => {
+                            setToolOpen(true)
+                        }}
+                        onPointerLeave={() => {
+                            setToolOpen(false)
+                        }}
+                        open={toolOpen}
                     >
                         <ArrowDropDownIcon/>
-                    </IconButton>
-                </Tooltip>
+                    </Tooltip>
+                </IconButton>
             </ButtonGroup>
             <Popper open={Boolean(anchorEl)} anchorEl={anchorEl} transition disablePortal>
                 {({TransitionProps, placement}) => (
@@ -104,7 +103,7 @@ const SplitButton = props => {
                     </Grow>
                 )}
             </Popper>
-        </div>
+        </React.Fragment>
     );
 }
 
