@@ -2,7 +2,7 @@ import React from "react";
 
 export default class Canvas extends React.Component {
     mouseIsDown = false;
-    scale = 0.3;
+    scale = 1;
 
     constructor(props) {
         super(props)
@@ -50,9 +50,9 @@ export default class Canvas extends React.Component {
 
     handleOnWheel(e) {
        let scale = (e.deltaY < 0) ? 0.8 : 1.2;
-       let newScale = Number((this.scale * scale).toPrecision(3));
+       let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
 
-       if ((newScale < 1.2) && (newScale > 0.1)) { 
+       if ((newScale <= 1.2) && (newScale >= 0.06)) { 
             this.scale = newScale;
             let viewBox = {...this.state.viewBox};
             let svg = document.getElementById("AppSVG");

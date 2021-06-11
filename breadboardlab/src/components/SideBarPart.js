@@ -24,7 +24,9 @@ export default class SideBarPart extends React.Component {
 
                 document.getElementById("AppSVG").addEventListener('mousemove', logKey);
                 let transform = element.getAttribute("transform");
-                element.setAttribute("transform", transform.replace(regexTranslate, `translate(${Number(scale[1]) / 2}, ${Number(scale[4]) / 2})`))
+
+                if (transform && scale)
+                    element.setAttribute("transform", transform.replace(regexTranslate, `translate(${Number(scale[1]) / 2}, ${Number(scale[4]) / 2})`))
 
                 // Get cursor location
                 function logKey(e) {
