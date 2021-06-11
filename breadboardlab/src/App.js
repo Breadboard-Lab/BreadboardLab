@@ -7,12 +7,11 @@ import {
     Divider,
     IconButton,
     makeStyles,
-    Toolbar, Tooltip, Typography, Grid, useMediaQuery, withStyles,
+    Toolbar, Tooltip, Typography, Grid, useMediaQuery, withStyles, SvgIcon,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SelectAllIcon from '@material-ui/icons/SelectAll';
 import RotateRightIcon from '@material-ui/icons/RotateRight';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UndoIcon from '@material-ui/icons/Undo';
@@ -28,6 +27,7 @@ import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu"
 import SplitButton from "./components/SplitButton";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import LinearScaleIcon from "@material-ui/icons/LinearScale";
+import {ReactComponent as SelectIcon} from "./assets/select_icon.svg"
 
 const drawerWidth = 240;
 
@@ -185,7 +185,9 @@ function App() {
                                         value="select_tool"
                                     >
                                         <Tooltip title="Select">
-                                            <SelectAllIcon/>
+                                            <SvgIcon>
+                                                <SelectIcon/>
+                                            </SvgIcon>
                                         </Tooltip>
                                     </ToggleButton>
                                     <ToggleButton
