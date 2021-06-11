@@ -26,6 +26,7 @@ import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
 import SplitButton from "./components/SplitButton";
+import {ToggleButton} from "@material-ui/lab";
 
 const drawerWidth = 240;
 
@@ -159,11 +160,11 @@ function App() {
                         <AppbarToolsCollapseMenu/>
                         <Grid container className={classes.collapse}>
                             <Tooltip title="Select">
-                                <IconButton
+                                <ToggleButton
                                     color="inherit"
                                     aria-label="select">
                                     <SelectAllIcon/>
-                                </IconButton>
+                                </ToggleButton>
                             </Tooltip>
                             <Tooltip title="Rotate">
                                 <IconButton
