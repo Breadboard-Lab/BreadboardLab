@@ -65,9 +65,6 @@ const useStyles = makeStyles((theme) => ({
     appBarSpacer: {
         minHeight: 48
     },
-    menuButton: {
-        marginRight: theme.spacing(2),
-    },
     menuHide: {
         display: 'none',
     },
@@ -109,7 +106,32 @@ function App() {
 
     const handleTool = (event, newTool) => {
         setSelectedTool(newTool);
-        console.log(selectedTool)
+        console.log(selectedTool + " clicked")
+    };
+
+    const handleRotate = () => {
+        // TODO handle svg rotation
+        console.log('Rotate clicked')
+    };
+
+    const handleDelete = () => {
+        // TODO handle svg deletion
+        console.log('Delete clicked')
+    };
+
+    const handleUndo = () => {
+        // TODO handle undo
+        console.log('Undo clicked')
+    };
+
+    const handleRedo = () => {
+        // TODO handle redo
+        console.log('Redo clicked')
+    };
+
+    const handleStart = () => {
+        // TODO handle Start
+        console.log('Start clicked')
     };
 
     return (
@@ -207,6 +229,7 @@ function App() {
                                 <IconButton
                                     aria-label="rotate"
                                     value="rotate_tool"
+                                    onClick={handleRotate}
                                 >
                                     <RotateRightIcon/>
                                 </IconButton>
@@ -214,6 +237,7 @@ function App() {
                             <Tooltip title="Delete">
                                 <IconButton
                                     aria-label="delete"
+                                    onClick={handleDelete}
                                 >
                                     <DeleteForeverIcon/>
                                 </IconButton>
@@ -221,6 +245,7 @@ function App() {
                             <Tooltip title="Undo">
                                 <IconButton
                                     aria-label="undo"
+                                    onClick={handleUndo}
                                 >
                                     <UndoIcon/>
                                 </IconButton>
@@ -228,6 +253,7 @@ function App() {
                             <Tooltip title="Redo">
                                 <IconButton
                                     aria-label="redo"
+                                    onClick={handleRedo}
                                 >
                                     <RedoIcon/>
                                 </IconButton>
@@ -240,6 +266,7 @@ function App() {
                                     color="inherit"
                                     aria-label="start simulation"
                                     startIcon={<PlayArrowIcon/>}
+                                    onClick={handleStart}
                                 >
                                     Start
                                 </Button>
