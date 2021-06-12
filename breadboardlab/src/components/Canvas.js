@@ -3,6 +3,7 @@ import React from "react";
 export default class Canvas extends React.Component {
     previousTouch = null;
     mouseIsDown = false;
+    prevDiff = 0;
     scale = 1;
 
     constructor(props) {
@@ -53,7 +54,7 @@ export default class Canvas extends React.Component {
     }
 
     handleTouchMove(e) {
-        if (this.mouseIsDown) {
+        if (e.touches.length === 1) {
             const touch = e.touches[0];
 
             if (this.previousTouch) {
@@ -62,18 +63,32 @@ export default class Canvas extends React.Component {
                 this.handleMouseMove(e);
             };
             this.previousTouch = touch;
+        } else if (e.touches.length === 2) {
+                let curDiff = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+                if (this.prevDiff > 0) {
+                    if (curDiff > this.prevDiff) {
+                        e.deltaY = 2;
+                        this.handleOnWheel(e);
+                    }
+                    if (curDiff < this.prevDiff) {
+                        e.deltaY = -2;
+                        this.handleOnWheel(e);
+                    }
+                }
+                this.prevDiff = curDiff;
+            
         }
     }
 
     handleOnWheel(e) {
         let scale;
-        if (e.deltaY < -2) {
+        if (e.deltaY <= -2) {
             scale = 0.8;
-        } else if (e.deltaY > 2) {
+        } else if (e.deltaY >= 2) {
             scale = 1.2;
         }
         let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
-
+        
         if (newScale <= 1.2 && newScale >= 0.06) { 
             this.scale = newScale;
             let viewBox = {...this.state.viewBox};
