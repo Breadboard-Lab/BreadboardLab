@@ -19,11 +19,13 @@ export default class Canvas extends React.Component {
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleOnWheel = this.handleOnWheel.bind(this);
-        this.handleResize = this.handleResize.bind(this)
+        this.handleResize = this.handleResize.bind(this);
+        window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false })
     }
     
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
+        
     }
 
     componentWillUnmount() {
@@ -64,10 +66,15 @@ export default class Canvas extends React.Component {
     }
 
     handleOnWheel(e) {
-       let scale = (e.deltaY < 0) ? 0.8 : 1.2;
-       let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
+        let scale;
+        if (e.deltaY < -2) {
+            scale = 0.8;
+        } else if (e.deltaY > 2) {
+            scale = 1.2;
+        }
+        let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
 
-       if ((newScale <= 1.2) && (newScale >= 0.06)) { 
+        if (newScale <= 1.2 && newScale >= 0.06) { 
             this.scale = newScale;
             let viewBox = {...this.state.viewBox};
             let svg = document.getElementById("AppSVG");
@@ -75,13 +82,13 @@ export default class Canvas extends React.Component {
             pos.x = e.clientX;
             pos.y = e.clientY;
             let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
-
+    
             viewBox.x = (viewBox.x - cursorpt.x) * scale + cursorpt.x;
             viewBox.y = (viewBox.y - cursorpt.y) * scale + cursorpt.y;
             viewBox.width = window.innerWidth * this.scale;
             viewBox.height = window.innerHeight * this.scale;
             this.setViewBox(viewBox);
-        }
+         }
     }
 
     handleResize() {
@@ -124,7 +131,7 @@ export default class Canvas extends React.Component {
                     onTouchStart={e => this.handleMouseDown(e)}
                     onMouseMove={e => this.handleMouseMove(e)}
                     onTouchMove={e => this.handleTouchMove(e)}
-                    width={this.state.viewBox.width / this.scale * 2} height={this.state.viewBox.height / this.scale * 2} fill="url(#grid)"
+                    width={this.state.viewBox.width / this.scale * 2 + 200} height={this.state.viewBox.height / this.scale * 2 + 200} fill="url(#grid)"
                     transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
                 />
                 {this.props.listOfParts}
