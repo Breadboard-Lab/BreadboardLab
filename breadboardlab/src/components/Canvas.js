@@ -1,6 +1,7 @@
 import React from "react";
 
 export default class Canvas extends React.Component {
+    previousTouch = null;
     mouseIsDown = false;
     scale = 1;
 
@@ -29,13 +30,14 @@ export default class Canvas extends React.Component {
         window.removeEventListener("resize", this.handleResize);
     }
 
-    handleOnMouseUp(e) {
+    handleOnMouseUp() {
         window.removeEventListener("mouseup", this.handleOnMouseUp);
         this.mouseIsDown = false;
     }
 
-    handleMouseDown(e) {
+    handleMouseDown() {
         this.mouseIsDown = true;
+        this.previousTouch = null;
         window.addEventListener("mouseup", this.handleOnMouseUp);
     }
 
@@ -45,6 +47,19 @@ export default class Canvas extends React.Component {
             viewBox.x -= e.movementX * this.scale;
             viewBox.y -= e.movementY * this.scale;
             this.setViewBox(viewBox);
+        }
+    }
+
+    handleTouchMove(e) {
+        if (this.mouseIsDown) {
+            const touch = e.touches[0];
+
+            if (this.previousTouch) {
+                e.movementX = touch.pageX - this.previousTouch.pageX;
+                e.movementY = touch.pageY - this.previousTouch.pageY;
+                this.handleMouseMove(e);
+            };
+            this.previousTouch = touch;
         }
     }
 
@@ -90,8 +105,9 @@ export default class Canvas extends React.Component {
                 onWheel={e => this.handleOnWheel(e)}
                 viewBox={`${this.state.viewBox.x} ${this.state.viewBox.y} ${this.state.viewBox.width} ${this.state.viewBox.height}`}
                 scale={this.scale}
-                xmlns="http://www.w3.org/2000/svg" id="AppSVG" style={{position: "absolute", top: 0, right: 0}} width="100%" height="100%">
-                {/*<path d="M 0 0 L 1 0 Q 2 0 2 -1 L 2 -2 Q 2 -3 3 -3 L 5 -3 Q 6 -3 6 -2 L 6 0"/> */}
+                xmlns="http://www.w3.org/2000/svg" id="AppSVG" 
+                style={{position: "absolute", top: 0, right: 0, touchAction: "none"}} width="100%" height="100%"
+            >
                 <defs>
                     <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
                         <path d="M 10 0 L 0 0 0 10" fill="none" stroke="gray" strokeWidth="0.5"/>
@@ -105,7 +121,9 @@ export default class Canvas extends React.Component {
                 <rect
                     onMouseUp={e => this.handleOnMouseUp(e)}
                     onMouseDown={e => this.handleMouseDown(e)} 
-                    onMouseMove={e => this.handleMouseMove(e)} 
+                    onTouchStart={e => this.handleMouseDown(e)}
+                    onMouseMove={e => this.handleMouseMove(e)}
+                    onTouchMove={e => this.handleTouchMove(e)}
                     width={this.state.viewBox.width / this.scale * 2} height={this.state.viewBox.height / this.scale * 2} fill="url(#grid)"
                     transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
                 />
