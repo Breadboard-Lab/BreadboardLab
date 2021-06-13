@@ -11,30 +11,65 @@ import Interactable from "./Interactable";
 import CanvasPart from "./CanvasPart";
 
 let index = 0;
+let svg;
+
+window.addEventListener("load", () => {
+    svg = document.getElementById("AppSVG");
+})
 
 export default class SideBarPart extends React.Component {
+    constructor(props) {
+        super(props);
+
+        window.addEventListener("mouseup", () => {
+            window.removeEventListener("mousemove", this.mousemove)
+            this.added = false;
+            this.listening = false;
+        })
+    }
+
+    added = false;
+    listening = false;
+
+    addPart = (e, event, interaction) => {
+        let newPart = <CanvasPart name={this.props.name} ref={node => this.node = node} key={index} index={index}>{this.props.part}</CanvasPart>;
+
+        // Reason for '==' and NOT '===': Changing HTML in console
+        if (document.elementFromPoint(e.pageX, e.pageY).parentNode == svg && !this.added && interaction.pointerIsDown) {
+            window.removeEventListener("mousemove", this.addPart);
+            index += 1;
+            this.props.ondrag(newPart);
+            this.listening = false;
+            this.added = true;
+        }
+
+        if (this.added)
+            interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
+    }
+
     draggingOptions = {
         manualStart: true,
         listeners: {
-            move(event) {
-                let element = event.target.getElementsByTagName("g")[0];
-                const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
-                const regexScale = /scale\((([\d]+)?(\.[\d]+)?),?[\s]?(([\d]+)?(\.[\d]+)?)\)/i;
-                const scale = regexScale.exec(element.getAttribute("transform"));
-
-                document.getElementById("AppSVG").addEventListener("mousemove", logKey);
-                window.addEventListener("touchmove", logKey);
-                let transform = element.getAttribute("transform");
-
-                if (transform && scale)
-                    element.setAttribute("transform", transform.replace(regexTranslate, `translate(${Number(scale[1]) / 2}, ${Number(scale[4]) / 2})`))
-
+            move: (event) => {
+                if (event.target) {
+                    let element = event.target.getElementsByTagName("g")[0];
+                    const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+                    const regexScale = /scale\((([\d]+)?(\.[\d]+)?),?[\s]?(([\d]+)?(\.[\d]+)?)\)/i;
+                    const scale = regexScale.exec(element.getAttribute("transform"));
+    
+                    svg.addEventListener("mousemove", logKey);
+                    window.addEventListener("touchmove", logKey);
+                    let transform = element.getAttribute("transform");
+    
+                    if (transform && scale)
+                        element.setAttribute("transform", transform.replace(regexTranslate, `translate(${Number(scale[1]) / 2}, ${Number(scale[4]) / 2})`));
+                }
+                
                 // Get cursor location
                 function logKey(e) {
-                    let svg = document.getElementById("AppSVG");
                     svg.removeEventListener("mousemove", logKey);
                     window.addEventListener("touchend", () => {
-                        window.removeEventListener("touchmove", logKey)
+                        window.removeEventListener("touchmove", logKey);
                     });
 
                     let pos = svg.createSVGPoint();
@@ -43,27 +78,33 @@ export default class SideBarPart extends React.Component {
                     pos.y = (e.clientY || e.touches[0].clientY) - rect.height / 2;
                     var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    event.target.setAttribute("transform", `translate(${cursorpt.x}, ${cursorpt.y})`);
+                    event.target.setAttribute("transform", `translate(${cursorpt.x.toPrecision(5)}, ${cursorpt.y.toPrecision(5)})`);
                 }
+            },
+            end: () => {
+                this.mousedown = false;
+                this.added = false;
             }
         }
     }
 
-    onmove = (event) => {
-        const {currentTarget, interaction} = event;
-        let newPart = <CanvasPart ref={node => this.node = node} key={index} index={index}
-                                  name={this.props.name}>{this.props.part}</CanvasPart>
+    ondown = () => {
+        this.mousedown = true;
+    }
 
-        if (interaction.pointerIsDown && !interaction.interacting() && currentTarget.style.transform === "") {
-            index += 1;
-            this.props.ondrag(newPart);
+    onmove = (event) => {
+        const {interaction} = event;
+        
+        if (interaction.pointerIsDown && !interaction.interacting() && !this.listening && this.mousedown) {
+            this.listening = true;
+            this.mousemove = (e) => this.addPart(e, event, interaction);
+            window.addEventListener("mousemove", this.mousemove);
         }
-        interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
     }
 
     render() {
         return (
-            <Interactable draggable={true} draggableOptions={this.draggingOptions} onmove={this.onmove}>
+            <Interactable draggable={true} draggableOptions={this.draggingOptions} onmove={this.onmove} ondown={this.ondown}>
                 <div className={"part-container"}>
                     <ListItem button>
                         <ListItemAvatar>

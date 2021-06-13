@@ -15,18 +15,18 @@ export default class Canvas extends React.Component {
                 width: window.innerWidth * this.scale,
                 height: window.innerHeight * this.scale
             }
-        }
+        };
         this.handleOnMouseUp = this.handleOnMouseUp.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleOnWheel = this.handleOnWheel.bind(this);
         this.handleResize = this.handleResize.bind(this);
-        window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false })
+        window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false });
     }
     
     componentDidMount() {
         window.addEventListener("resize", this.handleResize);
-        
+        this.svg = document.getElementById("AppSVG");
     }
 
     componentWillUnmount() {
@@ -64,19 +64,18 @@ export default class Canvas extends React.Component {
             };
             this.previousTouch = touch;
         } else if (e.touches.length === 2) {
-                let curDiff = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
-                if (this.prevDiff > 0) {
-                    if (curDiff > this.prevDiff) {
-                        e.deltaY = 2;
-                        this.handleOnWheel(e);
-                    }
-                    if (curDiff < this.prevDiff) {
-                        e.deltaY = -2;
-                        this.handleOnWheel(e);
-                    }
+            let curDiff = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
+            if (this.prevDiff > 0) {
+                if (curDiff > this.prevDiff) {
+                    e.deltaY = 2;
+                    this.handleOnWheel(e);
                 }
-                this.prevDiff = curDiff;
-            
+                if (curDiff < this.prevDiff) {
+                    e.deltaY = -2;
+                    this.handleOnWheel(e);
+                }
+            }
+            this.prevDiff = curDiff;
         }
     }
 
@@ -92,11 +91,10 @@ export default class Canvas extends React.Component {
         if (newScale <= 1.2 && newScale >= 0.06) { 
             this.scale = newScale;
             let viewBox = {...this.state.viewBox};
-            let svg = document.getElementById("AppSVG");
-            let pos = svg.createSVGPoint();
+            let pos = this.svg.createSVGPoint();
             pos.x = e.clientX;
             pos.y = e.clientY;
-            let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
+            let cursorpt = pos.matrixTransform(this.svg.getScreenCTM().inverse());
     
             viewBox.x = (viewBox.x - cursorpt.x) * scale + cursorpt.x;
             viewBox.y = (viewBox.y - cursorpt.y) * scale + cursorpt.y;
@@ -118,7 +116,7 @@ export default class Canvas extends React.Component {
         viewBox.y = Number(viewBox.y).toPrecision(5);
         viewBox.width = Number(viewBox.width).toPrecision(5);
         viewBox.height = Number(viewBox.height).toPrecision(5);
-        this.setState({viewBox})
+        this.setState({viewBox});
     }
 
     render() {

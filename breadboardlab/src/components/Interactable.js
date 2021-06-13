@@ -14,6 +14,7 @@ export default class Interactable extends Component {
         dropzoneOptions: {},
         resizableOptions: {}
     };
+
     render() {
         return cloneElement(this.props.children, {
             ref: node => (this.node = node),
@@ -35,6 +36,8 @@ export default class Interactable extends Component {
             this.interact.resizable(this.props.resizableOptions);
         if (this.props.onmove)
             this.interact.on("move", this.props.onmove);
+        if (this.props.ondown)
+            this.interact.on("down", this.props.ondown);
     }
 }
 
