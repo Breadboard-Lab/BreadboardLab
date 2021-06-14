@@ -110,7 +110,6 @@ const Drawer = props => {
                 </List>
             </div>
 
-            <Divider/>
             <PropertiesPanel/>
 
         </MUIDrawer>
