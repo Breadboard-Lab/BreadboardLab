@@ -60,9 +60,9 @@ export default class Canvas extends React.Component {
 
     handleOnWheel(e) {
         let scale;
-        if (e.deltaY <= -2) {
+        if (e.deltaY <= -4) {
             scale = 0.8;
-        } else if (e.deltaY >= 2) {
+        } else if (e.deltaY >= 4) {
             scale = 1.2;
         }
         let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
@@ -126,10 +126,10 @@ export default class Canvas extends React.Component {
                     gesturable={true} gesturableOptions={this.gesturableOptions}
                     styleCursor={false}
                 >
-                <rect
-                    width={this.state.viewBox.width / this.scale * 2 + 200} height={this.state.viewBox.height / this.scale * 2 + 200} fill="url(#grid)"
-                    transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
-                />
+                    <rect
+                        width={this.state.viewBox.width / this.scale * 2 + 200} height={this.state.viewBox.height / this.scale * 2 + 200} fill="url(#grid)"
+                        transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
+                    />
                 </Interactable>
                 
                 {this.props.listOfParts}
