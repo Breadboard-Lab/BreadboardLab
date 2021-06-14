@@ -13,38 +13,27 @@ import CanvasPart from "./CanvasPart";
 let index = 0;
 let svg;
 
-window.addEventListener("load", () => {
-    svg = document.getElementById("AppSVG");
-})
-
 export default class SideBarPart extends React.Component {
-    constructor(props) {
-        super(props);
-
-        window.addEventListener("mouseup", () => {
-            window.removeEventListener("mousemove", this.mousemove)
-            this.added = false;
-            this.listening = false;
-        })
-    }
-
     added = false;
     listening = false;
 
     addPart = (e, event, interaction) => {
         let newPart = <CanvasPart name={this.props.name} ref={node => this.node = node} key={index} index={index}>{this.props.part}</CanvasPart>;
+        let hoverElement = document.elementFromPoint(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
 
         // Reason for '==' and NOT '===': Changing HTML in console
-        if (document.elementFromPoint(e.pageX, e.pageY).parentNode == svg && !this.added && interaction.pointerIsDown) {
-            window.removeEventListener("mousemove", this.addPart);
+        if ((hoverElement && hoverElement.parentNode == svg && !this.added) || e.touches) {
+            window.removeEventListener("mousemove", this.mousemove);
+            window.removeEventListener("touchmove", this.mousemove);
             index += 1;
             this.props.ondrag(newPart);
             this.listening = false;
             this.added = true;
         }
-
-        if (this.added)
+        
+        if (this.added) {
             interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
+        }
     }
 
     draggingOptions = {
@@ -99,7 +88,24 @@ export default class SideBarPart extends React.Component {
             this.listening = true;
             this.mousemove = (e) => this.addPart(e, event, interaction);
             window.addEventListener("mousemove", this.mousemove);
+            window.addEventListener("touchmove", this.mousemove);
         }
+    }
+
+    componentDidMount() {
+        svg = document.getElementById("AppSVG");
+
+        window.addEventListener("mouseup", () => {
+            window.removeEventListener("mousemove", this.mousemove);
+            this.added = false;
+            this.listening = false;
+        });
+
+        window.addEventListener("touchend", () => {
+            window.removeEventListener("touchmove", this.mousemove);
+            this.added = false;
+            this.listening = false;
+        });
     }
 
     render() {
