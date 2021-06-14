@@ -20,17 +20,23 @@ export default class SideBarPart extends React.Component {
     addPart = (e, event, interaction) => {
         let newPart = <CanvasPart name={this.props.name} ref={node => this.node = node} key={index} index={index}>{this.props.part}</CanvasPart>;
         let hoverElement = document.elementFromPoint(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
+        let element = hoverElement.parentNode;
 
-        // Reason for '==' and NOT '===': Changing HTML in console
-        if ((hoverElement && hoverElement.parentNode == svg && !this.added) || e.touches) {
-            window.removeEventListener("mousemove", this.mousemove);
-            window.removeEventListener("touchmove", this.mousemove);
-            index += 1;
-            this.props.ondrag(newPart);
-            this.listening = false;
-            this.added = true;
+        while (element) {
+            // Reason for '==' and NOT '===': Changing HTML in console
+            if (element == svg) {
+                if (!this.added || e.touches) {
+                    window.removeEventListener("mousemove", this.mousemove);
+                    window.removeEventListener("touchmove", this.mousemove);
+                    index += 1;
+                    this.props.ondrag(newPart);
+                    this.listening = false;
+                    this.added = true;
+                }               
+                break;
+            }
+            element = element.parentNode
         }
-        
         if (this.added) {
             interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
         }
