@@ -55,6 +55,13 @@ const useStyles = makeStyles((theme) => ({
     searchBar: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
+    },
+    propertiesPanel: {
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        },
+        position: "fixed",
+        bottom: 0,
     }
 }));
 
@@ -110,12 +117,15 @@ const Drawer = props => {
                 </List>
             </div>
 
-            <PropertiesPanel
-                partType={'Lorem Ipsum Resistor'}
-                colourEnabled={true}
-                resistanceEnabled={true}
-                capacitanceEnabled={true}
-            />
+            { /* Properties Panel */}
+            <div className={classes.propertiesPanel}>
+                <PropertiesPanel
+                    partType={'Lorem Ipsum Resistor'}
+                    colourEnabled={true}
+                    resistanceEnabled={true}
+                    capacitanceEnabled={true}
+                />
+            </div>
 
         </MUIDrawer>
     );

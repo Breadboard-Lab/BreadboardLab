@@ -3,10 +3,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import {Container, Divider, Grid, InputLabel, MenuItem, Select, TextField, Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        position: "fixed",
-        bottom: 0,
-    },
     grid: {
         margin: theme.spacing(1),
     },
@@ -40,7 +36,7 @@ const PropertiesPanel = props => {
     };
 
     return (
-        <Container disableGutters className={classes.root}>
+        <Container disableGutters>
             <Divider/>
             <Grid className={classes.grid}>
                 <Typography variant={'h6'}>
