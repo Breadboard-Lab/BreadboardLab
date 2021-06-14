@@ -1,10 +1,10 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import {ListItemIcon, ListItemText, Menu, MenuItem} from "@material-ui/core";
+import {ListItemIcon, ListItemText, Menu, MenuItem, SvgIcon} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SelectAllIcon from '@material-ui/icons/SelectAll';
+import {ReactComponent as SelectIcon} from "../assets/select_icon.svg"
 import RotateRightIcon from '@material-ui/icons/RotateRight';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UndoIcon from '@material-ui/icons/Undo';
@@ -53,10 +53,20 @@ const AppbarToolsCollapseMenu = props => {
                 >
                     <MenuItem>
                         <ListItemIcon>
-                            <SelectAllIcon/>
+                            <SvgIcon>
+                                <SelectIcon/>
+                            </SvgIcon>
                         </ListItemIcon>
                         <ListItemText primary="Select" />
                     </MenuItem>
+
+                    <MenuItem>
+                        <ListItemIcon>
+                            <LinearScaleIcon/>
+                        </ListItemIcon>
+                        <ListItemText primary="Draw Wire" />
+                    </MenuItem>
+
                     <MenuItem>
                         <ListItemIcon>
                             <RotateRightIcon/>
@@ -83,13 +93,6 @@ const AppbarToolsCollapseMenu = props => {
                             <RedoIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Redo" />
-                    </MenuItem>
-
-                    <MenuItem>
-                        <ListItemIcon>
-                            <LinearScaleIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Draw Wire" />
                     </MenuItem>
 
                     <MenuItem>
