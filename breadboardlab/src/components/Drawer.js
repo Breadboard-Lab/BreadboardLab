@@ -17,6 +17,7 @@ import {ReactComponent as Breadboard} from "../assets/parts/breadboard.svg";
 import {ReactComponent as LED} from "../assets/parts/led.svg";
 import {ReactComponent as Transistor} from "../assets/parts/transistor.svg";
 import {ReactComponent as MomentaryButton} from "../assets/parts/momentary_button.svg";
+import PropertiesPanel from "./PropertiesPanel";
 
 const drawerWidth = 240;
 
@@ -108,6 +109,9 @@ const Drawer = props => {
                     <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
                 </List>
             </div>
+
+            <Divider/>
+            <PropertiesPanel/>
 
         </MUIDrawer>
     );
