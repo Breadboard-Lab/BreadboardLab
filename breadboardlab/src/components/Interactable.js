@@ -1,5 +1,3 @@
-//from https://codesandbox.io/s/xl4qqqn774?file=/src/Interactable.js
-
 import { Component, cloneElement } from "react";
 import PropTypes from "prop-types";
 
@@ -34,10 +32,14 @@ export default class Interactable extends Component {
             this.interact.dropzone(this.props.dropzoneOptions);
         if (this.props.resizable)
             this.interact.resizable(this.props.resizableOptions);
+        if (this.props.gesturable)
+            this.interact.gesturable(this.props.gesturableOptions);
         if (this.props.onmove)
             this.interact.on("move", this.props.onmove);
         if (this.props.ondown)
             this.interact.on("down", this.props.ondown);
+        if (this.props.styleCursor === false)
+            this.interact.styleCursor(false);
     }
 }
 

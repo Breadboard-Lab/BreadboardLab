@@ -38,6 +38,7 @@ export default class SideBarPart extends React.Component {
             element = element.parentNode
         }
         if (this.added) {
+            console.log("start")
             interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
         }
     }

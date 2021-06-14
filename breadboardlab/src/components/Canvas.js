@@ -1,10 +1,39 @@
 import React from "react";
+import Interactable from "./Interactable";
 
 export default class Canvas extends React.Component {
     previousTouch = null;
     mouseIsDown = false;
     prevDiff = 0;
     scale = 1;
+
+    draggableOptions = {
+        inertia: true,
+        listeners: {
+            move: (event) => {
+                let viewBox = {...this.state.viewBox};
+                viewBox.x -= event.delta.x * this.scale;
+                viewBox.y -= event.delta.y * this.scale;
+                this.setViewBox(viewBox);
+            }
+        }
+    }
+
+    gesturableOptions = {
+        listeners: {
+            move: (event) => {
+                let newScale = this.scale / event.scale;
+
+                if (newScale <= 1.2 && newScale >= 0.15 && Math.abs(event.da) >= 0.25) { 
+                    this.scale = newScale;
+                    let xPos = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+                    let yPos = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+                    this.handleZoom(xPos, yPos, event.scale)
+                }
+                this.draggableOptions.listeners.move(event)
+            }
+        }
+    }
 
     constructor(props) {
         super(props)
@@ -16,11 +45,7 @@ export default class Canvas extends React.Component {
                 height: window.innerHeight * this.scale
             }
         };
-        this.handleOnMouseUp = this.handleOnMouseUp.bind(this);
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleOnWheel = this.handleOnWheel.bind(this);
-        this.handleResize = this.handleResize.bind(this);
+        this.handleResize = this.handleResize.bind(this)
         window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false });
     }
     
@@ -31,54 +56,6 @@ export default class Canvas extends React.Component {
 
     componentWillUnmount() {
         window.removeEventListener("resize", this.handleResize);
-    }
-
-    handleOnMouseUp() {
-        window.removeEventListener("mouseup", this.handleOnMouseUp);
-        this.mouseIsDown = false;
-    }
-
-    handleMouseDown() {
-        this.mouseIsDown = true;
-        this.previousTouch = null;
-        window.addEventListener("mouseup", this.handleOnMouseUp);
-    }
-
-    handleMouseMove(e) {
-        if (this.mouseIsDown) {
-            let viewBox = {...this.state.viewBox};
-            viewBox.x -= e.movementX * this.scale;
-            viewBox.y -= e.movementY * this.scale;
-            
-            this.setViewBox(viewBox);
-        }
-    }
-
-    handleTouchMove(e) {
-        if (e.touches.length === 1) {
-            const touch = e.touches[0];
-
-            if (this.previousTouch) {
-                e.movementX = touch.pageX - this.previousTouch.pageX;
-                e.movementY = touch.pageY - this.previousTouch.pageY;
-                this.handleMouseMove(e);
-            };
-            this.previousTouch = touch;
-        } else if (e.touches.length === 2) {
-            let curDiff = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
-            if (this.prevDiff > 0) {
-                if (curDiff > this.prevDiff) {
-                    e.deltaY = -2;
-                }
-                if (curDiff < this.prevDiff) {
-                    e.deltaY = 2;
-                }
-                e.clientX = Math.abs(e.touches[0].clientX + e.touches[1].clientX) / 2;
-                e.clientY = Math.abs(e.touches[0].clientY - e.touches[1].clientY) / 2;
-                this.handleOnWheel(e);
-            }
-            this.prevDiff = curDiff;
-        }
     }
 
     handleOnWheel(e) {
@@ -92,18 +69,22 @@ export default class Canvas extends React.Component {
         
         if (newScale <= 1.2 && newScale >= 0.15) { 
             this.scale = newScale;
-            let viewBox = {...this.state.viewBox};
             let pos = this.svg.createSVGPoint();
             pos.x = e.clientX;
             pos.y = e.clientY;
             let cursorpt = pos.matrixTransform(this.svg.getScreenCTM().inverse());
-    
-            viewBox.x = (viewBox.x - cursorpt.x) * scale + cursorpt.x;
-            viewBox.y = (viewBox.y - cursorpt.y) * scale + cursorpt.y;
-            viewBox.width = window.innerWidth * this.scale;
-            viewBox.height = window.innerHeight * this.scale;
-            this.setViewBox(viewBox);
+            
+            this.handleZoom(cursorpt.x, cursorpt.y, scale);
          }
+    }
+    
+    handleZoom(x, y, scale) {
+        let viewBox = {...this.state.viewBox};
+        viewBox.x = (viewBox.x - x) * scale + x;
+        viewBox.y = (viewBox.y - y) * scale + y;
+        viewBox.width = window.innerWidth * this.scale;
+        viewBox.height = window.innerHeight * this.scale;
+        this.setViewBox(viewBox);
     }
 
     handleResize() {
@@ -140,15 +121,17 @@ export default class Canvas extends React.Component {
                         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                     </pattern>
                 </defs>
+                <Interactable 
+                    draggable={true} draggableOptions={this.draggableOptions}
+                    gesturable={true} gesturableOptions={this.gesturableOptions}
+                    styleCursor={false}
+                >
                 <rect
-                    onMouseUp={e => this.handleOnMouseUp(e)}
-                    onMouseDown={e => this.handleMouseDown(e)} 
-                    onTouchStart={e => this.handleMouseDown(e)}
-                    onMouseMove={e => this.handleMouseMove(e)}
-                    onTouchMove={e => this.handleTouchMove(e)}
                     width={this.state.viewBox.width / this.scale * 2 + 200} height={this.state.viewBox.height / this.scale * 2 + 200} fill="url(#grid)"
                     transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
                 />
+                </Interactable>
+                
                 {this.props.listOfParts}
             </svg>
         )
