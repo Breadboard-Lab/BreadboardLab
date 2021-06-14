@@ -110,7 +110,12 @@ const Drawer = props => {
                 </List>
             </div>
 
-            <PropertiesPanel/>
+            <PropertiesPanel
+                partType={'Lorem Ipsum Resistor'}
+                colourEnabled={true}
+                resistanceEnabled={true}
+                capacitanceEnabled={true}
+            />
 
         </MUIDrawer>
     );

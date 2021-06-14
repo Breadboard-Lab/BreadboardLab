@@ -9,7 +9,16 @@ const useStyles = makeStyles((theme) => ({
     },
     grid: {
         margin: theme.spacing(1),
-    }
+    },
+    colourHide: {
+        display: 'none',
+    },
+    resistanceHide: {
+        display: 'none',
+    },
+    capacitanceHide: {
+        display: 'none',
+    },
 
 }));
 
@@ -34,20 +43,18 @@ const PropertiesPanel = props => {
         <Container disableGutters className={classes.root}>
             <Divider/>
             <Grid className={classes.grid}>
-                <Grid>
-                    <Typography>{props.partType ? props.partType : 'Lorem Ipsum Header'}</Typography>
-                </Grid>
+                <Typography variant={'h6'}>
+                    {props.partType ? props.partType : 'Null Type Header'}
+                </Typography>
                 <Grid
                     container
                     spacing={1}
                     direction="column"
                 >
-                    { /* TODO Enable/disable certain parts based off part type*/ }
                     <Grid item>
-                        <TextField id="part-name" label="Part Name" />
+                        <TextField id="part-name" label="Part Name"/>
                     </Grid>
-                    <Grid item>
-                        { /* TODO color */}
+                    <Grid item className={!props.colourEnabled && classes.colourHide}>
                         <InputLabel id="part-colour">Colour</InputLabel>
                         <Select
                             labelId="part-colour"
@@ -60,8 +67,7 @@ const PropertiesPanel = props => {
                             <MenuItem value={3}>Blue</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item>
-                        { /* TODO resistance */}
+                    <Grid item className={!props.resistanceEnabled && classes.resistanceHide}>
                         <InputLabel id="part-resistance">Resistance</InputLabel>
                         <Select
                             labelId="part-resistance"
@@ -74,8 +80,7 @@ const PropertiesPanel = props => {
                             <MenuItem value={6}>1 kΩ</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item>
-                        { /* TODO capacitance */}
+                    <Grid item className={!props.capacitanceEnabled && classes.capacitanceHide}>
                         <InputLabel id="part-capacitance">Capacitance</InputLabel>
                         <Select
                             labelId="part-capacitance"
