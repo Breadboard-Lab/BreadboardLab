@@ -49,6 +49,7 @@ export default class Canvas extends React.Component {
             let viewBox = {...this.state.viewBox};
             viewBox.x -= e.movementX * this.scale;
             viewBox.y -= e.movementY * this.scale;
+            
             this.setViewBox(viewBox);
         }
     }
@@ -67,13 +68,14 @@ export default class Canvas extends React.Component {
             let curDiff = Math.abs(e.touches[0].clientX - e.touches[1].clientX);
             if (this.prevDiff > 0) {
                 if (curDiff > this.prevDiff) {
-                    e.deltaY = 2;
-                    this.handleOnWheel(e);
+                    e.deltaY = -2;
                 }
                 if (curDiff < this.prevDiff) {
-                    e.deltaY = -2;
-                    this.handleOnWheel(e);
+                    e.deltaY = 2;
                 }
+                e.clientX = Math.abs(e.touches[0].clientX + e.touches[1].clientX) / 2;
+                e.clientY = Math.abs(e.touches[0].clientY - e.touches[1].clientY) / 2;
+                this.handleOnWheel(e);
             }
             this.prevDiff = curDiff;
         }
@@ -88,7 +90,7 @@ export default class Canvas extends React.Component {
         }
         let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
         
-        if (newScale <= 1.2 && newScale >= 0.06) { 
+        if (newScale <= 1.2 && newScale >= 0.15) { 
             this.scale = newScale;
             let viewBox = {...this.state.viewBox};
             let pos = this.svg.createSVGPoint();
