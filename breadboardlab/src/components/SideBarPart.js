@@ -15,7 +15,7 @@ let svg;
 
 export default class SideBarPart extends React.Component {
     added = false;
-    listening = false;
+    listening = false;   
 
     addPart = (e, event, interaction) => {
         let newPart = <CanvasPart name={this.props.name} ref={node => this.node = node} key={index} index={index}>{this.props.part}</CanvasPart>;
@@ -24,7 +24,7 @@ export default class SideBarPart extends React.Component {
 
         while (element) {
             // Reason for '==' and NOT '===': Changing HTML in console
-            if (element == svg || e.touches) {
+            if (element == svg) {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
                 index += 1;
@@ -32,6 +32,20 @@ export default class SideBarPart extends React.Component {
                 this.listening = false;
                 this.added = true;
                 interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
+
+                
+                if (e.touches) {
+                    let mobileAddPart = () => {
+                        document.addEventListener("touchend", function f() {
+                            document.removeEventListener("touchend", f)
+                            document.removeEventListener("touchmove", mobileAddPart);
+                        });
+                        let canvasPart = ReactDOM.findDOMNode(newPart._self.node);
+                        this.draggingOptions.listeners.move({target: canvasPart});
+                    }
+
+                    document.addEventListener("touchmove", mobileAddPart);
+                }
                 break;
             }
             element = element.parentNode
