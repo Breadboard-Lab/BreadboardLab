@@ -24,6 +24,8 @@ export default class CanvasPart extends React.Component {
                     let xPos = (Number(transform[1]) + event.dx * scale).toPrecision(5);
                     let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5)
                     event.target.setAttribute("transform", `translate(${xPos}, ${yPos})`);
+                } else {
+                    event.target.setAttribute("transform", "translate(0, 0)");
                 }
             }
         }

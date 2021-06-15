@@ -24,23 +24,19 @@ export default class SideBarPart extends React.Component {
 
         while (element) {
             // Reason for '==' and NOT '===': Changing HTML in console
-            if (element == svg) {
-                if (!this.added || e.touches) {
-                    window.removeEventListener("mousemove", this.mousemove);
-                    window.removeEventListener("touchmove", this.mousemove);
-                    index += 1;
-                    this.props.ondrag(newPart);
-                    this.listening = false;
-                    this.added = true;
-                }               
+            if (element == svg || e.touches) {
+                window.removeEventListener("mousemove", this.mousemove);
+                window.removeEventListener("touchmove", this.mousemove);
+                index += 1;
+                this.props.ondrag(newPart);
+                this.listening = false;
+                this.added = true;
+                interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
                 break;
             }
             element = element.parentNode
         }
         
-        if (this.added) {
-            interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
-        }
     }
 
     draggingOptions = {
