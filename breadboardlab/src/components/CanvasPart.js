@@ -11,6 +11,12 @@ export default class CanvasPart extends React.Component {
         console.log("Name: " + this.props.name);
         console.log("X-coor: " + this.node.getBoundingClientRect().x);
         console.log("Y-coor: " + this.node.getBoundingClientRect().y);
+        console.log(this.node.classList.toggle('selected'))
+        /* TODO push key to an array of selectedParts
+            if selectedParts is not empty
+                1. open properties panel with first index/part info
+                2. on tool button press; rotate, delete, etc
+        */
     }
 
     draggableOptions = {
