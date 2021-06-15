@@ -286,10 +286,6 @@ function App() {
 
                 { /* Canvas */}
                 <div className={classes.canvas}>
-                    { /* Appbar spacing */}
-                    <Toolbar variant="dense"/>
-                    <Toolbar variant="dense"/>
-
                     { /* Content */}
                     <Canvas listOfParts={listOfParts}/>
                 </div>
