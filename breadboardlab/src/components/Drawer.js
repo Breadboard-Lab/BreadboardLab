@@ -60,8 +60,9 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             display: 'none'
         },
-        position: "fixed",
-        bottom: 0,
+    },
+    grid: {
+        flexGrow: 1,
     }
 }));
 
@@ -106,26 +107,37 @@ const Drawer = props => {
                 </Grid>
             </div>
 
-            { /* Components List */}
-            <div>
-                <List dense>
-                    <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
-                    <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
-                    <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
-                    <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
-                    <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
-                </List>
-            </div>
+            <Grid
+                container
+                direction="column"
+                justify="space-between"
+                className={classes.grid}
+            >
+                { /* Components List */}
+                <Grid item>
+                    <List dense>
+                        <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
+                        <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
+                        <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
+                        <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
+                        <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
+                    </List>
+                </Grid>
 
-            { /* Properties Panel */}
-            <div className={classes.propertiesPanel}>
-                <PropertiesPanel
-                    partType={'Lorem Ipsum Resistor'}
-                    colourEnabled={true}
-                    resistanceEnabled={true}
-                    capacitanceEnabled={true}
-                />
-            </div>
+                { /* Properties Panel */}
+                <Grid
+                    item
+                    className={classes.propertiesPanel}
+                >
+                    <PropertiesPanel
+                        partType={'Lorem Ipsum Resistor'}
+                        colourEnabled={true}
+                        resistanceEnabled={true}
+                        capacitanceEnabled={true}
+                    />
+                </Grid>
+            </Grid
+            >
 
         </MUIDrawer>
     );
