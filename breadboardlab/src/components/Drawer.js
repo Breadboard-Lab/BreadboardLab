@@ -3,7 +3,7 @@ import {
     Drawer as MUIDrawer,
     Divider,
     Grid,
-    TextField, List
+    TextField, List, Button
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -61,13 +61,23 @@ const useStyles = makeStyles((theme) => ({
             display: 'none'
         },
     },
+    propertiesPanelHide: {
+        display: 'none'
+    },
     grid: {
         flexGrow: 1,
-    }
+    },
 }));
 
 const Drawer = props => {
     const classes = useStyles();
+
+    const [hideProperties, setHideProperties] = React.useState(true)
+
+    /* TODO setHideProperties to false on part select */
+    const handleProperties = () => {
+        setHideProperties(!hideProperties)
+    }
 
     return (
         <MUIDrawer
@@ -124,10 +134,18 @@ const Drawer = props => {
                     </List>
                 </Grid>
 
+                {/*<Button*/}
+                {/*    onClick={handleProperties}*/}
+                {/*>*/}
+                {/*    Click Me!*/}
+                {/*</Button>*/}
+
                 { /* Properties Panel */}
                 <Grid
                     item
-                    className={classes.propertiesPanel}
+                    className={clsx(classes.propertiesPanel, {
+                        [classes.propertiesPanelHide]: hideProperties,
+                    })}
                 >
                     <PropertiesPanel
                         partType={'Lorem Ipsum Resistor'}
