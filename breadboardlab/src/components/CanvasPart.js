@@ -9,9 +9,9 @@ export default class CanvasPart extends React.Component {
 
     handleDoubleClick() {
         console.log("Name: " + this.props.name);
-        console.log("X-coor: " + this.node.getBoundingClientRect().x);
-        console.log("Y-coor: " + this.node.getBoundingClientRect().y);
-        console.log(this.node.classList.toggle('selected'))
+        console.log("X-coor: " + this.node.node.current.getBoundingClientRect().x);
+        console.log("Y-coor: " + this.node.node.current.getBoundingClientRect().y);
+        console.log(this.node.node.current.classList.toggle('selected'));
         /* TODO push key to an array of selectedParts
             if selectedParts is not empty
                 1. open properties panel with first index/part info
@@ -39,7 +39,7 @@ export default class CanvasPart extends React.Component {
 
     render() {
         return(
-            <Interactable draggable={true} draggableOptions={this.draggableOptions}>
+            <Interactable draggable={true} draggableOptions={this.draggableOptions} styleCursor={false}>
                 <g onDoubleClick={() => {this.handleDoubleClick()}} className={"part"}>
                     { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,

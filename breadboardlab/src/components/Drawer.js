@@ -13,7 +13,7 @@ import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import SideBarPart from "./SideBarPart";
 import {ReactComponent as Resistor} from "../assets/parts/resistor.svg";
-import {ReactComponent as Breadboard} from "../assets/parts/breadboard.svg";
+import BreadBoard from "./parts/BreadBoard.js";
 import {ReactComponent as LED} from "../assets/parts/led.svg";
 import {ReactComponent as Transistor} from "../assets/parts/transistor.svg";
 import {ReactComponent as MomentaryButton} from "../assets/parts/momentary_button.svg";
@@ -126,7 +126,7 @@ const Drawer = props => {
                 { /* Components List */}
                 <Grid item>
                     <List dense>
-                        <SideBarPart ondrag={props.addPart} part={<Breadboard/>} name={"Breadboard"}/>
+                        <SideBarPart ondrag={props.addPart} part={<BreadBoard/>} name={"Breadboard"}/>
                         <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
                         <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
                         <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
