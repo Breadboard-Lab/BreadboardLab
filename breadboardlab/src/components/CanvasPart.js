@@ -4,24 +4,6 @@ import Interactable from "./Interactable";
 export default class CanvasPart extends React.Component {
     constructor(props) {
         super(props);
-        this.handleDoubleClick = this.handleDoubleClick.bind(this);
-    }
-
-    handleDoubleClick() {
-        let node = this.node.node ? this.node.node.current : this.node;
-
-        if (this.node.handleDoubleClick)
-            this.node.handleDoubleClick();
-
-        console.log("Name: " + this.props.name);
-        console.log("X-coor: " + node.getBoundingClientRect().x);
-        console.log("Y-coor: " + node.getBoundingClientRect().y);
-        console.log(node.classList.toggle('selected'));
-        /* TODO push key to an array of selectedParts
-            if selectedParts is not empty
-                1. open properties panel with first index/part info
-                2. on tool button press; rotate, delete, etc
-        */
     }
 
     draggableOptions = {
@@ -42,10 +24,24 @@ export default class CanvasPart extends React.Component {
         }
     }
 
+    onDoubleTap = event => {
+        console.log("Name: " + this.props.name);
+        console.log("X-coor: " + event.target.getBoundingClientRect().x);
+        console.log("Y-coor: " + event.target.getBoundingClientRect().y);
+        console.log(event.type, event.target)
+        event.currentTarget.classList.toggle('selected')
+        event.preventDefault()
+        /* TODO push key to an array of selectedParts
+            if selectedParts is not empty
+                1. open properties panel with first index/part info
+                2. on tool button press; rotate, delete, etc
+        */
+    }
+
     render() {
         return(
-            <Interactable draggable={true} draggableOptions={this.draggableOptions} styleCursor={false}>
-                <g onDoubleClick={() => {this.handleDoubleClick()}} className={"part"}>
+            <Interactable draggable draggableOptions={this.draggableOptions} onDoubleTap={this.onDoubleTap} styleCursor={false}>
+                <g className={"part"}>
                     { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,
                         {ref: (node) => {this.node = node}},

@@ -94,11 +94,11 @@ export default class SideBarPart extends React.Component {
         }
     }
 
-    ondown = () => {
+    onDown = () => {
         this.mousedown = true;
     }
 
-    onmove = (event) => {
+    onMove = (event) => {
         const {interaction} = event;
         
         if (interaction.pointerIsDown && !interaction.interacting() && !this.listening && this.mousedown) {
@@ -127,7 +127,7 @@ export default class SideBarPart extends React.Component {
 
     render() {
         return (
-            <Interactable draggable={true} draggableOptions={this.draggingOptions} onmove={this.onmove} ondown={this.ondown}>
+            <Interactable draggable={true} draggableOptions={this.draggingOptions} onMove={this.onMove} onDown={this.onDown}>
                 <div className={"part-container"}>
                     <ListItem button>
                         <ListItemAvatar>
