@@ -12,13 +12,11 @@ export default class BreadBoard extends React.Component {
         
         for (let i = 0; i < holeLayer.children.length; i++) {
             holeLayer.children[i].addEventListener("mouseover", (e) => {
-                e.srcElement.setAttribute("stroke", "#009CE6");
-                e.srcElement.setAttribute("fill", "#009CE6");
+                e.srcElement.setAttribute("filter", "url(#f1)");
             });
 
             holeLayer.children[i].addEventListener("mouseleave", (e) => {
-                e.srcElement.setAttribute("stroke", "#000000");
-                e.srcElement.setAttribute("fill", "#000000");
+                e.srcElement.setAttribute("filter", "");
             });
 
             interact(holeLayer.children[i]).styleCursor(false).draggable({
