@@ -18,5 +18,5 @@ code {
 }
 
 .selected {
-  outline: 1px solid dodgerblue;
+  filter: url(#f1);
 }
