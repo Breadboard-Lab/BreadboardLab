@@ -249,7 +249,7 @@
                 stroke-width="0.264583"
                 stroke-opacity="1">I</tspan></text>
     </g>
-    <g id="layer3">
+    <g id="powerTop">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="Power-Top-3"
@@ -600,7 +600,8 @@
                 cy="4.4"
                 rx="0.5"
                 ry="0.5" />
-
+   </g>
+   <g id="groundTop">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="Ground-Top-3"
@@ -951,7 +952,8 @@
                 cy="7.0"
                 rx="0.5"
                 ry="0.5" />
-
+   </g>
+   <g id="column01top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A1"
@@ -987,6 +989,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column02top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A2"
@@ -1022,6 +1026,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column03top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A3"
@@ -1057,6 +1063,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column04top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A4"
@@ -1092,6 +1100,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column05top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A5"
@@ -1127,6 +1137,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column06top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A6"
@@ -1162,6 +1174,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column07top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A7"
@@ -1197,6 +1211,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column08top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A8"
@@ -1232,6 +1248,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column09top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A9"
@@ -1267,6 +1285,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column10top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A10"
@@ -1302,6 +1322,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column11top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A11"
@@ -1337,6 +1359,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column12top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A12"
@@ -1372,6 +1396,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column13top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A13"
@@ -1407,6 +1433,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column14top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A14"
@@ -1442,6 +1470,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column15top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A15"
@@ -1477,6 +1507,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column16top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A16"
@@ -1512,6 +1544,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column17top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A17"
@@ -1547,6 +1581,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column18top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A18"
@@ -1582,6 +1618,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column19top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A19"
@@ -1617,6 +1655,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column20top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A20"
@@ -1652,6 +1692,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column21top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A21"
@@ -1687,6 +1729,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column22top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A22"
@@ -1722,6 +1766,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column23top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A23"
@@ -1757,6 +1803,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column24top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A24"
@@ -1792,6 +1840,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column25top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A25"
@@ -1827,6 +1877,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column26top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A26"
@@ -1862,6 +1914,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column27top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A27"
@@ -1897,6 +1951,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column28top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A28"
@@ -1932,6 +1988,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column29top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A29"
@@ -1967,6 +2025,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column30top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A30"
@@ -2002,6 +2062,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column31top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A31"
@@ -2037,6 +2099,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column32top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A32"
@@ -2072,6 +2136,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column33top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A33"
@@ -2107,6 +2173,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column34top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A34"
@@ -2142,6 +2210,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column35top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A35"
@@ -2177,6 +2247,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column36top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A36"
@@ -2212,6 +2284,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column37top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A37"
@@ -2247,6 +2321,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column38top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A38"
@@ -2282,6 +2358,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column39top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A39"
@@ -2317,6 +2395,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column40top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A40"
@@ -2352,6 +2432,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column41top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A41"
@@ -2387,6 +2469,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column42top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A42"
@@ -2422,6 +2506,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column43top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A43"
@@ -2457,6 +2543,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column44top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A44"
@@ -2492,6 +2580,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column45top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A45"
@@ -2527,6 +2617,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column46top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A46"
@@ -2562,6 +2654,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column47top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A47"
@@ -2597,6 +2691,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column48top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A48"
@@ -2632,6 +2728,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column49top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A49"
@@ -2667,6 +2765,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column51top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A50"
@@ -2702,6 +2802,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column51top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A51"
@@ -2737,6 +2839,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column52top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A52"
@@ -2772,6 +2876,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column53top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A53"
@@ -2807,6 +2913,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column54top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A54"
@@ -2842,6 +2950,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column55top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A55"
@@ -2877,6 +2987,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column56top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A56"
@@ -2912,6 +3024,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column57top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A57"
@@ -2947,6 +3061,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column58top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A58"
@@ -2982,6 +3098,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column59top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A59"
@@ -3017,6 +3135,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column60top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A60"
@@ -3052,6 +3172,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column61top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A61"
@@ -3087,6 +3209,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column62top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A62"
@@ -3122,6 +3246,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column63top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A63"
@@ -3157,6 +3283,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column64top">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="A64"
@@ -3192,7 +3320,8 @@
                 cy="25.2"
                 rx="0.5"
                 ry="0.5" />
-
+   </g>
+   <g id="column01bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F1"
@@ -3228,6 +3357,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column02bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F2"
@@ -3263,6 +3394,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column03bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F3"
@@ -3298,6 +3431,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column04bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F4"
@@ -3333,6 +3468,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column05bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F5"
@@ -3368,6 +3505,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column06bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F6"
@@ -3403,6 +3542,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column07bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F7"
@@ -3438,6 +3579,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column08bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F8"
@@ -3473,6 +3616,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column09bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F9"
@@ -3508,6 +3653,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column10bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F10"
@@ -3543,6 +3690,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column11bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F11"
@@ -3578,6 +3727,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column12bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F12"
@@ -3613,6 +3764,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column13bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F13"
@@ -3648,6 +3801,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column13bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F14"
@@ -3683,6 +3838,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column15bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F15"
@@ -3718,6 +3875,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column16bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F16"
@@ -3753,6 +3912,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column17bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F17"
@@ -3788,6 +3949,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column18bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F18"
@@ -3823,6 +3986,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column19bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F19"
@@ -3858,6 +4023,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column20bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F20"
@@ -3893,6 +4060,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column21bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F21"
@@ -3928,6 +4097,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column22bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F22"
@@ -3963,6 +4134,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column23bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F23"
@@ -3998,6 +4171,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column24bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F24"
@@ -4033,6 +4208,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column25bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F25"
@@ -4068,6 +4245,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column26bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F26"
@@ -4103,6 +4282,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column27bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F27"
@@ -4138,6 +4319,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column28bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F28"
@@ -4173,6 +4356,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column29bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F29"
@@ -4208,6 +4393,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column30bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F30"
@@ -4243,6 +4430,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column31bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F31"
@@ -4278,6 +4467,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column32bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F32"
@@ -4313,6 +4504,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column33bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F33"
@@ -4348,6 +4541,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column34bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F34"
@@ -4383,6 +4578,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column35bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F35"
@@ -4418,6 +4615,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column36bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F36"
@@ -4453,6 +4652,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column37bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F37"
@@ -4488,6 +4689,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column38bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F38"
@@ -4523,6 +4726,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column39bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F39"
@@ -4558,6 +4763,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column40bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F40"
@@ -4593,6 +4800,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column41bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F41"
@@ -4628,6 +4837,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column42bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F42"
@@ -4663,6 +4874,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column43bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F43"
@@ -4698,6 +4911,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column44bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F44"
@@ -4733,6 +4948,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column45bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F45"
@@ -4768,6 +4985,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column46bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F46"
@@ -4803,6 +5022,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column47bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F47"
@@ -4838,6 +5059,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column48bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F48"
@@ -4873,6 +5096,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column49bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F49"
@@ -4908,6 +5133,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column50bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F50"
@@ -4943,6 +5170,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column51bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F51"
@@ -4978,6 +5207,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column52bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F52"
@@ -5013,6 +5244,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column53bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F53"
@@ -5048,6 +5281,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column54bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F54"
@@ -5083,6 +5318,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column55bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F55"
@@ -5118,6 +5355,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column56bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F56"
@@ -5153,6 +5392,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column57bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F57"
@@ -5188,6 +5429,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column58bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F58"
@@ -5223,6 +5466,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column59bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F59"
@@ -5258,6 +5503,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column60bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F60"
@@ -5293,6 +5540,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column61bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F61"
@@ -5328,6 +5577,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column62bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F62"
@@ -5363,6 +5614,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column63bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F63"
@@ -5398,6 +5651,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
+   </g>
+   <g id="column64bottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="F64"
@@ -5433,7 +5688,8 @@
                 cy="40.4"
                 rx="0.5"
                 ry="0.5" />
-
+   </g>
+   <g id="powerBottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="Power-Bottom-3"
@@ -5784,7 +6040,8 @@
                 cy="48.2"
                 rx="0.5"
                 ry="0.5" />
-
+   </g>
+   <g id="groundbottom">
         <ellipse
                 fill="#000000" stroke="#000000" stroke-width="0.5" stroke-opacity="1"
                 id="Ground-Bottom-3"
@@ -6135,7 +6392,6 @@
                 cy="50.8"
                 rx="0.5"
                 ry="0.5" />
-
     </g>
     <g id="layer5">
         <text
