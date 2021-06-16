@@ -8,10 +8,11 @@ export default class CanvasPart extends React.Component {
     }
 
     handleDoubleClick() {
+        let node = this.node.node ? this.node.node.current : this.node;
         console.log("Name: " + this.props.name);
-        console.log("X-coor: " + this.node.node.current.getBoundingClientRect().x);
-        console.log("Y-coor: " + this.node.node.current.getBoundingClientRect().y);
-        console.log(this.node.node.current.classList.toggle('selected'));
+        console.log("X-coor: " + node.getBoundingClientRect().x);
+        console.log("Y-coor: " + node.getBoundingClientRect().y);
+        console.log(node.classList.toggle('selected'));
         /* TODO push key to an array of selectedParts
             if selectedParts is not empty
                 1. open properties panel with first index/part info
