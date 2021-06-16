@@ -1,5 +1,6 @@
 import React from "react";
 import Interactable from "./Interactable";
+import interact from "interactjs";
 
 export default class CanvasPart extends React.Component {
     constructor(props) {
@@ -21,7 +22,21 @@ export default class CanvasPart extends React.Component {
                     event.target.setAttribute("transform", "translate(0, 0)");
                 }
             }
-        }
+        },
+        modifiers: [
+            /*
+                Snaps object to grid.
+                    Modify line 34 x, y to change grid square size.
+                    Modify line 37 x, y to change grid center.
+             */
+            interact.modifiers.snap({
+                targets: [
+                    interact.snappers.grid({x: 10, y: 10})
+                ],
+                range: Infinity,
+                relativePoints: [{x: 0, y: 0}]
+            }),
+        ],
     }
 
     onDoubleTap = event => {
@@ -40,7 +55,12 @@ export default class CanvasPart extends React.Component {
 
     render() {
         return(
-            <Interactable draggable draggableOptions={this.draggableOptions} onDoubleTap={this.onDoubleTap} styleCursor={false}>
+            <Interactable
+                draggable
+                draggableOptions={this.draggableOptions}
+                onDoubleTap={this.onDoubleTap}
+                styleCursor={false}
+            >
                 <g className={"part"}>
                     { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,
