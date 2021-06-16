@@ -9,6 +9,10 @@ export default class CanvasPart extends React.Component {
 
     handleDoubleClick() {
         let node = this.node.node ? this.node.node.current : this.node;
+
+        if (this.node.handleDoubleClick)
+            this.node.handleDoubleClick();
+
         console.log("Name: " + this.props.name);
         console.log("X-coor: " + node.getBoundingClientRect().x);
         console.log("Y-coor: " + node.getBoundingClientRect().y);

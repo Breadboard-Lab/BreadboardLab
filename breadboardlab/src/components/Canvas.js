@@ -120,6 +120,22 @@ export default class Canvas extends React.Component {
                         <rect width="100" height="100" fill="url(#smallGrid)"/>
                         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                     </pattern>
+
+                    <filter id="f1" x="-50" y="-50" width="100" height="100">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"/>
+                        <feColorMatrix
+                            in="blur"
+                            type="matrix"
+                            values="0 0 0 0 0
+                                    0 0 0 0 0
+                                    1 1 1 1 1
+                                    0 0 0 3 0" 
+                            result="blue"/>
+                        <feMerge>
+                            <feMergeNode in="blue" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
                 </defs>
                 <Interactable 
                     draggable={true} draggableOptions={this.draggableOptions}
