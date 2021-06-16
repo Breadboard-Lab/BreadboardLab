@@ -27,6 +27,10 @@ export default class BreadBoard extends React.Component {
         }
     }
 
+    handleDoubleClick() {
+        console.log("hi")
+    }
+
     render() {
         return (
             <g ref={this.node} transform="translate(10, 40) scale(6, 6)">
