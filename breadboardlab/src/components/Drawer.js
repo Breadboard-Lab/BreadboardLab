@@ -12,11 +12,11 @@ import clsx from "clsx";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import SideBarPart from "./SideBarPart";
-import {ReactComponent as Resistor} from "../assets/parts/resistor.svg";
-import BreadBoard from "./parts/BreadBoard.js";
-import {ReactComponent as LED} from "../assets/parts/led.svg";
-import {ReactComponent as Transistor} from "../assets/parts/transistor.svg";
-import {ReactComponent as MomentaryButton} from "../assets/parts/momentary_button.svg";
+import Resistor from "./parts/Resistor";
+import BreadBoard from "./parts/BreadBoard";
+import LED from "./parts/LED";
+import Transistor from "./parts/Transistor";
+import MomentaryButton from "./parts/Button";
 import PropertiesPanel from "./PropertiesPanel";
 
 const drawerWidth = 240;

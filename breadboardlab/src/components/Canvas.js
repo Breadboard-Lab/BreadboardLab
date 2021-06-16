@@ -121,7 +121,7 @@ export default class Canvas extends React.Component {
                         <path d="M 100 0 L 0 0 0 100" fill="none" stroke="gray" strokeWidth="1"/>
                     </pattern>
 
-                    <filter id="f1" x="-50" y="-50" width="100" height="100">
+                    <filter id="f1" x="-25" y="-25" width="50" height="50">
                         <feGaussianBlur in="SourceGraphic" stdDeviation="0.8" result="blur"/>
                         <feColorMatrix
                             in="blur"
@@ -130,6 +130,22 @@ export default class Canvas extends React.Component {
                                     0 0 0 0 0
                                     1 1 1 1 1
                                     0 0 0 3 0" 
+                            result="blue"/>
+                        <feMerge>
+                            <feMergeNode in="blue" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+
+                    <filter id="f2" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur"/>
+                        <feColorMatrix
+                            in="blur"
+                            type="matrix"
+                            values="0 0 0 0 0
+                                    0 0 0 0 0
+                                    1 1 1 1 1
+                                    0 0 0 4 0" 
                             result="blue"/>
                         <feMerge>
                             <feMergeNode in="blue" />
