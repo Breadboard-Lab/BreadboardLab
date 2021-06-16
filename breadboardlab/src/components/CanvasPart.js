@@ -2,10 +2,6 @@ import React from "react";
 import Interactable from "./Interactable";
 
 export default class CanvasPart extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     draggableOptions = {
         listeners: {
             move(event) {

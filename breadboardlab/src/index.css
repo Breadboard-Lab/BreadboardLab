@@ -18,5 +18,5 @@ code {
 }
 
 .selected {
-  filter: url(#f1);
+  filter: url(#f2);
 }
