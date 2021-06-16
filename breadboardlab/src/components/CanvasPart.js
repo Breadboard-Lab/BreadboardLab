@@ -24,10 +24,11 @@ export default class CanvasPart extends React.Component {
                 Snaps object to grid.
                     Modify line 34 x, y to change grid square size.
                     Modify line 37 x, y to change grid center.
+                    Should be in-sync with SideBarPart.js snap grid.
              */
             interact.modifiers.snap({
                 targets: [
-                    interact.snappers.grid({x: 10, y: 10})
+                    interact.snappers.grid({x: 50, y: 50})
                 ],
                 range: Infinity,
                 relativePoints: [{x: 0, y: 0}]

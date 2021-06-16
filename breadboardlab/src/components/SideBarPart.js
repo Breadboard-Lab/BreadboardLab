@@ -9,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ReactDOM from "react-dom";
 import Interactable from "./Interactable";
 import CanvasPart from "./CanvasPart";
+import interact from "interactjs";
 
 let index = 0;
 let svg;
@@ -91,7 +92,22 @@ export default class SideBarPart extends React.Component {
                 this.mousedown = false;
                 this.added = false;
             }
-        }
+        },
+        modifiers: [
+            /*
+                Snaps object to grid.
+                    Modify line 104 x, y to change grid square size.
+                    Modify line 107 x, y to change grid center.
+                    Should be in-sync with CanvasPart.js snap grid.
+             */
+            interact.modifiers.snap({
+                targets: [
+                    interact.snappers.grid({x: 50, y: 50})
+                ],
+                range: Infinity,
+                relativePoints: [{x: 0, y: 0}]
+            }),
+        ],
     }
 
     onDown = () => {
