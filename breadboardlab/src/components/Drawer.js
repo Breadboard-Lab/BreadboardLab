@@ -75,13 +75,6 @@ const Drawer = props => {
     const theme = useTheme();
     const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
 
-    const [hideProperties, setHideProperties] = React.useState(true)
-
-    /* TODO setHideProperties to false on part select */
-    const handleProperties = () => {
-        setHideProperties(!hideProperties)
-    }
-
     return (
         <MUIDrawer
             variant="persistent"
@@ -129,11 +122,11 @@ const Drawer = props => {
                 { /* Components List */}
                 <Grid item>
                     <List dense>
-                        <SideBarPart ondrag={props.addPart} part={<BreadBoard/>} name={"Breadboard"}/>
-                        <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"}/>
-                        <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"}/>
-                        <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}/>
-                        <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"}/>
+                        <SideBarPart ondrag={props.addPart} part={<BreadBoard/>} name={"Breadboard"} onDoubleTap={props.onDoubleTap}/>
+                        <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"} onDoubleTap={props.onDoubleTap}/>
+                        <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"} onDoubleTap={props.onDoubleTap}/>
+                        <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"} onDoubleTap={props.onDoubleTap}/>
+                        <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"} onDoubleTap={props.onDoubleTap}/>
                     </List>
                 </Grid>
 
@@ -147,7 +140,7 @@ const Drawer = props => {
                 <Grid
                     item
                     className={clsx(classes.propertiesPanel, {
-                        [classes.propertiesPanelHide]: hideProperties,
+                        [classes.propertiesPanelHide]: props.hideProperties,
                     })}
                 >
                     <PropertiesPanel
