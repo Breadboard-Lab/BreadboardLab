@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import {
     AppBar,
@@ -6,8 +6,12 @@ import {
     CssBaseline,
     Divider,
     IconButton,
-    makeStyles,
-    Toolbar, Tooltip, Typography, Grid, useMediaQuery, withStyles, SvgIcon,
+    Toolbar,
+    Tooltip,
+    Typography,
+    Grid,
+    withStyles,
+    SvgIcon,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
@@ -32,12 +36,12 @@ import ExportMenu from './components/exportMenu';
 
 const drawerWidth = 240;
 
-const StyledToggleButtonGroup = withStyles((theme) => ({
+const StyledToggleButtonGroup = withStyles({
     grouped: {
         border: 'none',
         borderRadius: '0px',
     },
-}))(ToggleButtonGroup);
+})(ToggleButtonGroup);
 
 const styles = theme => ({
     root: {
@@ -110,7 +114,7 @@ class App extends Component {
     };
 
     handleTool = (event, newTool) => {
-        this.setState(state => ({selectedTool: newTool}));
+        this.setState({selectedTool: newTool});
         console.log(this.state.selectedTool + " clicked")
     };
 
@@ -174,7 +178,7 @@ class App extends Component {
                                     </Button>
                                 </Tooltip>
                                 <Tooltip title="Export">
-                                    <ExportMenu />
+                                    <ExportMenu/>
                                 </Tooltip>
                                 <Tooltip title="Change Theme">
                                     <IconButton onClick={this.handleThemeChange}>
