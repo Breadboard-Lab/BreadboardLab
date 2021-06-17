@@ -52,7 +52,7 @@ function arrayBufferToBase64(buffer) {
 }
 
 function getDimension(el, clone, dim) {
-  var v = el.viewBox && el.viewBox.baseVal && el.viewBox.baseVal[dim] || clone.getAttribute(dim) !== null && !clone.getAttribute(dim).match(/%$/) && parseInt(clone.getAttribute(dim)) || el.getBoundingClientRect()[dim] || parseInt(clone.style[dim]) || parseInt(window.getComputedStyle(el).getPropertyValue(dim));
+  var v = (el.viewBox && el.viewBox.baseVal && el.viewBox.baseVal[dim]) || (clone.getAttribute(dim) !== null && !clone.getAttribute(dim).match(/%$/) && parseInt(clone.getAttribute(dim))) || el.getBoundingClientRect()[dim] || parseInt(clone.style[dim]) || parseInt(window.getComputedStyle(el).getPropertyValue(dim));
   return typeof v === 'undefined' || v === null || isNaN(parseFloat(v)) ? 0 : v;
 }
 
@@ -96,7 +96,7 @@ function uriToBlob(uri) {
 function query(el, selector) {
   if (!selector) return;
   try {
-    return el.querySelector(selector) || el.parentNode && el.parentNode.querySelector(selector);
+    return el.querySelector(selector) || (el.parentNode && el.parentNode.querySelector(selector));
   } catch (err) {
     console.warn('Invalid CSS selector "' + selector + '"', err);
   }
@@ -108,7 +108,7 @@ function detectCssFont(rule, href) {
   //   src: local('Abel'), url(https://fonts.gstatic.com/s/abel/v6/UzN-iejR1VoXU2Oc-7LsbvesZW2xOQ-xsNqO47m55DA.woff2);
   // }
   var match = rule.cssText.match(urlRegex);
-  var url = match && match[1] || '';
+  var url = (match && match[1]) || '';
   if (!url || url.match(/^data:/) || url === 'about:blank') return;
   var fullUrl = url.startsWith('../') ? href + '/../' + url : url.startsWith('./') ? href + '/.' + url : url;
   return {

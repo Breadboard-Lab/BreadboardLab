@@ -28,7 +28,7 @@ import SplitButton from "./components/SplitButton";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import LinearScaleIcon from "@material-ui/icons/LinearScale";
 import {ReactComponent as SelectIcon} from "./assets/select_icon.svg";
-import exportSVG from './utils/Exporter';
+import ExportMenu from './components/exportMenu';
 
 const drawerWidth = 240;
 
@@ -140,7 +140,7 @@ function App() {
         console.log('Share clicked')
     };
 
-    return (
+    return (    
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
                 <CssBaseline/>
@@ -164,14 +164,7 @@ function App() {
                                     Share
                                 </Button>
                             </Tooltip>
-                            <Tooltip title="Export">
-                                <Button
-                                    aria-label='Export'
-                                    onClick={exportSVG}
-                                >
-                                    Export
-                                </Button>
-                            </Tooltip>
+                            <ExportMenu />
                             <Tooltip title="Change Theme">
                                 <IconButton onClick={handleThemeChange}>
                                     <InvertColorsIcon/>
