@@ -65,7 +65,7 @@ export default function ExportMenu() {
             <ArrowDropDownIcon />
           </Button>
         </ButtonGroup>
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition style={{zIndex: 2000}}>
           {({ TransitionProps, placement }) => (
             <Grow
               {...TransitionProps}
