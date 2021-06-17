@@ -3,7 +3,7 @@ import {
     Drawer as MUIDrawer,
     Divider,
     Grid,
-    TextField, List, Button
+    TextField, List, useMediaQuery, useTheme
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -72,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
 const Drawer = props => {
     const classes = useStyles();
 
+    const theme = useTheme();
+    const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
+
     const [hideProperties, setHideProperties] = React.useState(true)
 
     /* TODO setHideProperties to false on part select */
@@ -82,7 +85,7 @@ const Drawer = props => {
     return (
         <MUIDrawer
             variant="persistent"
-            anchor={props.anchor}
+            anchor={isNotSmall ? "left" : "bottom"}
             open={props.open}
             classes={
                 {

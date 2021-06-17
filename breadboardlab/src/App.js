@@ -151,7 +151,6 @@ class App extends Component {
     render() {
         const {classes} = this.props;
 
-        //const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
 
         return (
             <ThemeProvider theme={this.state.theme}>
@@ -294,11 +293,9 @@ class App extends Component {
                     { /* Components/Properties Sidebar */}
                     <Drawer
                         open={this.state.open}
-                        anchor={false ? "left" : "bottom"}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
                     />
-
 
                     { /* Canvas */}
                     <div className={classes.canvas}>
