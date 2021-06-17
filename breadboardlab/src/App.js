@@ -148,10 +148,22 @@ class App extends Component {
         console.log('Share clicked')
     };
 
+    onDoubleTap = event => {
+        console.log("Object Selected")
+        console.log("X-coor: " + event.target.getBoundingClientRect().x);
+        console.log("Y-coor: " + event.target.getBoundingClientRect().y);
+        console.log(event.type, event.target)
+        event.currentTarget.classList.toggle('selected')
+        event.preventDefault()
+        /* TODO push key to an array of selectedParts
+            if selectedParts is not empty
+                1. open properties panel with first index/part info
+                2. on tool button press; rotate, delete, etc
+        */
+    }
+
     render() {
         const {classes} = this.props;
-
-
         return (
             <ThemeProvider theme={this.state.theme}>
                 <div className={classes.root}>
@@ -295,6 +307,7 @@ class App extends Component {
                         open={this.state.open}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
+                        onDoubleTap={this.onDoubleTap}
                     />
 
                     { /* Canvas */}

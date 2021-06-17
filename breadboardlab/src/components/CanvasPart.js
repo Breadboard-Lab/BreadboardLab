@@ -3,6 +3,10 @@ import Interactable from "./Interactable";
 import interact from "interactjs";
 
 export default class CanvasPart extends React.Component {
+    constructor(props){
+        super(props)
+    }
+
     draggableOptions = {
         listeners: {
             move(event) {
@@ -36,26 +40,14 @@ export default class CanvasPart extends React.Component {
         ],
     }
 
-    onDoubleTap = event => {
-        console.log("Name: " + this.props.name);
-        console.log("X-coor: " + event.target.getBoundingClientRect().x);
-        console.log("Y-coor: " + event.target.getBoundingClientRect().y);
-        console.log(event.type, event.target)
-        event.currentTarget.classList.toggle('selected')
-        event.preventDefault()
-        /* TODO push key to an array of selectedParts
-            if selectedParts is not empty
-                1. open properties panel with first index/part info
-                2. on tool button press; rotate, delete, etc
-        */
-    }
+
 
     render() {
         return(
             <Interactable
                 draggable
                 draggableOptions={this.draggableOptions}
-                onDoubleTap={this.onDoubleTap}
+                onDoubleTap={this.props.onDoubleTap}
                 styleCursor={false}
             >
                 <g className={"part"}>
