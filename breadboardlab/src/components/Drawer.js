@@ -75,13 +75,6 @@ const Drawer = props => {
     const theme = useTheme();
     const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
 
-    const [hideProperties, setHideProperties] = React.useState(true)
-
-    /* TODO setHideProperties to false on part select */
-    const handleProperties = () => {
-        setHideProperties(!hideProperties)
-    }
-
     return (
         <MUIDrawer
             variant="persistent"
@@ -147,7 +140,7 @@ const Drawer = props => {
                 <Grid
                     item
                     className={clsx(classes.propertiesPanel, {
-                        [classes.propertiesPanelHide]: hideProperties,
+                        [classes.propertiesPanelHide]: props.hideProperties,
                     })}
                 >
                     <PropertiesPanel

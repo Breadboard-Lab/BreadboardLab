@@ -96,7 +96,8 @@ class App extends Component {
             listOfParts: [],
             themeState: true,
             selectedTool: 'select_tool',
-            theme: {...themeDark}
+            theme: {...themeDark},
+            hideProperties: true,
 
         }
     }
@@ -149,6 +150,8 @@ class App extends Component {
     };
 
     onDoubleTap = event => {
+        this.setState(state => ({hideProperties: !state.hideProperties}));
+
         console.log("Object Selected")
         console.log("X-coor: " + event.target.getBoundingClientRect().x);
         console.log("Y-coor: " + event.target.getBoundingClientRect().y);
@@ -306,6 +309,7 @@ class App extends Component {
                     <Drawer
                         open={this.state.open}
                         handleDrawerClose={this.handleDrawer}
+                        hideProperties={this.state.hideProperties}
                         addPart={this.addPart}
                         onDoubleTap={this.onDoubleTap}
                     />
