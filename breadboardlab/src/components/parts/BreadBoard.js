@@ -9,15 +9,16 @@ export default class BreadBoard extends React.Component {
 
     componentDidMount() {
         const holeLayer = this.node.current.querySelectorAll("ellipse");
-		console.log(holeLayer)
         
         for (let i = 0; i < holeLayer.length; i++) {
             holeLayer[i].addEventListener("mouseover", (e) => {
                 e.srcElement.setAttribute("filter", "url(#f1)");
+                e.srcElement.setAttribute("style", "cursor: pointer");
             });
 
             holeLayer[i].addEventListener("mouseleave", (e) => {
                 e.srcElement.setAttribute("filter", "");
+				e.srcElement.setAttribute("style", "");
             });
 
             interact(holeLayer[i]).styleCursor(false).draggable({

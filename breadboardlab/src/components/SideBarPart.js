@@ -24,8 +24,7 @@ export default class SideBarPart extends React.Component {
         let element = hoverElement.parentNode;
 
         while (element) {
-            // Reason for '==' and NOT '===': Changing HTML in console
-            if (element == svg) {
+            if (element === svg) {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
                 index += 1;
