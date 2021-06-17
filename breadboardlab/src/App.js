@@ -134,6 +134,16 @@ function App() {
         console.log('Start clicked')
     };
 
+    const handleShare = () => {
+        // TODO handle Share
+        console.log('Share clicked')
+    };
+
+    const handleExport = () => {
+        // TODO handle Export
+        console.log('Export clicked')
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -153,6 +163,7 @@ function App() {
                             <Tooltip title="Share">
                                 <Button
                                     aria-label='Share'
+                                    onClick={handleShare}
                                 >
                                     Share
                                 </Button>
@@ -160,6 +171,7 @@ function App() {
                             <Tooltip title="Export">
                                 <Button
                                     aria-label='Export'
+                                    onClick={handleExport}
                                 >
                                     Export
                                 </Button>
