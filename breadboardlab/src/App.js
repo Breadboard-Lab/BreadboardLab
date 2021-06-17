@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component, useState} from 'react';
 import './App.css';
 import {
     AppBar,
@@ -39,7 +39,7 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
     },
 }))(ToggleButtonGroup);
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
     root: {
         display: 'flex',
         height: '100%'
@@ -82,218 +82,230 @@ const useStyles = makeStyles((theme) => ({
             display: "none"
         },
     }
-}));
+});
 
-function App() {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const [listOfParts, setListOfParts] = React.useState([]);
-    const [themeState, setThemeState] = React.useState(true);
-    const theme = themeState ? {...themeDark} : {...themeLight};
-    const [selectedTool, setSelectedTool] = React.useState('select_tool');
+class App extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            open: true,
+            listOfParts: [],
+            themeState: true,
+            selectedTool: 'select_tool',
+            theme: {...themeDark}
 
-    const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
+        }
+    }
 
-    const handleThemeChange = () => {
-        setThemeState(!themeState)
+    handleThemeChange = () => {
+        this.setState(state => ({themeState: !state.themeState}));
+        this.setState(state => ({theme: state.themeState ? {...themeDark} : {...themeLight}}))
     };
-    const handleDrawer = () => {
-        setOpen(!open);
+    handleDrawer = () => {
+        this.setState(state => ({open: !state.open}));
     };
-    const addPart = (part) => {
-        listOfParts.push(part)
-        setListOfParts([...listOfParts]);
-    };
-
-    const handleTool = (event, newTool) => {
-        setSelectedTool(newTool);
-        console.log(selectedTool + " clicked")
+    addPart = (part) => {
+        this.state.listOfParts.push(part)
+        this.setState(state => ({listOfParts: [...state.listOfParts]}));
     };
 
-    const handleRotate = () => {
+    handleTool = (event, newTool) => {
+        this.setState(state => ({selectedTool: newTool}));
+        console.log(this.state.selectedTool + " clicked")
+    };
+
+    handleRotate = () => {
         // TODO handle svg rotation
         console.log('Rotate clicked')
     };
 
-    const handleDelete = () => {
+    handleDelete = () => {
         // TODO handle svg deletion
         console.log('Delete clicked')
     };
 
-    const handleUndo = () => {
+    handleUndo = () => {
         // TODO handle undo
         console.log('Undo clicked')
     };
 
-    const handleRedo = () => {
+    handleRedo = () => {
         // TODO handle redo
         console.log('Redo clicked')
     };
 
-    const handleStart = () => {
+    handleStart = () => {
         // TODO handle Start
         console.log('Start clicked')
     };
 
-    const handleShare = () => {
+    handleShare = () => {
         // TODO handle Share
         console.log('Share clicked')
     };
 
-    return (    
-        <ThemeProvider theme={theme}>
-            <div className={classes.root}>
-                <CssBaseline/>
+    render() {
+        const {classes} = this.props;
 
-                { /* Header Appbar */}
-                <AppBar
-                    position="fixed"
-                    color='secondary'
-                >
-                    <Toolbar variant="dense">
-                        <Typography variant='h4' className={classes.title}>
-                            Breadboard Lab
-                        </Typography>
-                        <AppbarSettingsCollapseMenu/>
-                        <Grid className={classes.collapse}>
-                            <Tooltip title="Share">
-                                <Button
-                                    aria-label='Share'
-                                    onClick={handleShare}
-                                >
-                                    Share
-                                </Button>
-                            </Tooltip>
-                            <ExportMenu />
-                            <Tooltip title="Change Theme">
-                                <IconButton onClick={handleThemeChange}>
-                                    <InvertColorsIcon/>
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
+        //const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
 
-                    </Toolbar>
-                </AppBar>
+        return (
+            <ThemeProvider theme={this.state.theme}>
+                <div className={classes.root}>
+                    <CssBaseline/>
 
-                { /* Tools Menu Appbar */}
-                <AppBar
-                    position="fixed"
-                    className={clsx(classes.appBar, {
-                        [classes.appBarShift]: open,
-                    })}
-                >
-                    <Toolbar variant="dense">
-                        <Tooltip title="Open Drawer">
-                            <IconButton
-                                color="inherit"
-                                aria-label="open drawer"
-                                onClick={handleDrawer}
-                                edge="start"
-                                className={open && classes.menuHide}
-                            >
-                                <MenuIcon/>
-                            </IconButton>
-                        </Tooltip>
-                        <AppbarToolsCollapseMenu/>
-                        <Grid container className={classes.collapse}>
-                            <SplitButton>
-                                <StyledToggleButtonGroup
-                                    value={selectedTool}
-                                    exclusive
-                                    onChange={handleTool}
-                                    aria-label="Tool Menu"
-                                >
-                                    <ToggleButton
-                                        aria-label="select"
-                                        value="select_tool"
+                    { /* Header Appbar */}
+                    <AppBar
+                        position="fixed"
+                        color='secondary'
+                    >
+                        <Toolbar variant="dense">
+                            <Typography variant='h4' className={classes.title}>
+                                Breadboard Lab
+                            </Typography>
+                            <AppbarSettingsCollapseMenu/>
+                            <Grid className={classes.collapse}>
+                                <Tooltip title="Share">
+                                    <Button
+                                        aria-label='Share'
+                                        onClick={this.handleShare}
                                     >
-                                        <Tooltip title="Select">
-                                            <SvgIcon>
-                                                <SelectIcon/>
-                                            </SvgIcon>
-                                        </Tooltip>
-                                    </ToggleButton>
-                                    <ToggleButton
-                                        aria-label="draw wire"
-                                        value="wire_tool"
-                                    >
-                                        <Tooltip title="Draw Wire">
-                                            <LinearScaleIcon/>
-                                        </Tooltip>
-                                    </ToggleButton>
-                                </StyledToggleButtonGroup>
-                            </SplitButton>
+                                        Share
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Export">
+                                    <ExportMenu />
+                                </Tooltip>
+                                <Tooltip title="Change Theme">
+                                    <IconButton onClick={this.handleThemeChange}>
+                                        <InvertColorsIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
 
-                            <Divider orientation="vertical" variant="middle" light flexItem/>
+                        </Toolbar>
+                    </AppBar>
 
-                            <Tooltip title="Rotate">
+                    { /* Tools Menu Appbar */}
+                    <AppBar
+                        position="fixed"
+                        className={clsx(classes.appBar, {
+                            [classes.appBarShift]: this.state.open,
+                        })}
+                    >
+                        <Toolbar variant="dense">
+                            <Tooltip title="Open Drawer">
                                 <IconButton
-                                    aria-label="rotate"
-                                    value="rotate_tool"
-                                    onClick={handleRotate}
-                                >
-                                    <RotateRightIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Delete">
-                                <IconButton
-                                    aria-label="delete"
-                                    onClick={handleDelete}
-                                >
-                                    <DeleteForeverIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Undo">
-                                <IconButton
-                                    aria-label="undo"
-                                    onClick={handleUndo}
-                                >
-                                    <UndoIcon/>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Redo">
-                                <IconButton
-                                    aria-label="redo"
-                                    onClick={handleRedo}
-                                >
-                                    <RedoIcon/>
-                                </IconButton>
-                            </Tooltip>
-
-                            <Divider orientation="vertical" variant="middle" light flexItem/>
-
-                            <Tooltip title="Start Simulation">
-                                <Button
                                     color="inherit"
-                                    aria-label="start simulation"
-                                    startIcon={<PlayArrowIcon/>}
-                                    onClick={handleStart}
+                                    aria-label="open drawer"
+                                    onClick={this.handleDrawer}
+                                    edge="start"
+                                    className={this.state.open && classes.menuHide}
                                 >
-                                    Start
-                                </Button>
+                                    <MenuIcon/>
+                                </IconButton>
                             </Tooltip>
-                        </Grid>
-                    </Toolbar>
-                </AppBar>
+                            <AppbarToolsCollapseMenu/>
+                            <Grid container className={classes.collapse}>
+                                <SplitButton>
+                                    <StyledToggleButtonGroup
+                                        value={this.state.selectedTool}
+                                        exclusive
+                                        onChange={this.handleTool}
+                                        aria-label="Tool Menu"
+                                    >
+                                        <ToggleButton
+                                            aria-label="select"
+                                            value="select_tool"
+                                        >
+                                            <Tooltip title="Select">
+                                                <SvgIcon>
+                                                    <SelectIcon/>
+                                                </SvgIcon>
+                                            </Tooltip>
+                                        </ToggleButton>
+                                        <ToggleButton
+                                            aria-label="draw wire"
+                                            value="wire_tool"
+                                        >
+                                            <Tooltip title="Draw Wire">
+                                                <LinearScaleIcon/>
+                                            </Tooltip>
+                                        </ToggleButton>
+                                    </StyledToggleButtonGroup>
+                                </SplitButton>
 
-                { /* Components/Properties Sidebar */}
-                <Drawer
-                    open={open}
-                    anchor={isNotSmall ? "left" : "bottom"}
-                    handleDrawerClose={handleDrawer}
-                    addPart={addPart}
-                />
+                                <Divider orientation="vertical" variant="middle" light flexItem/>
+
+                                <Tooltip title="Rotate">
+                                    <IconButton
+                                        aria-label="rotate"
+                                        value="rotate_tool"
+                                        onClick={this.handleRotate}
+                                    >
+                                        <RotateRightIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Delete">
+                                    <IconButton
+                                        aria-label="delete"
+                                        onClick={this.handleDelete}
+                                    >
+                                        <DeleteForeverIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Undo">
+                                    <IconButton
+                                        aria-label="undo"
+                                        onClick={this.handleUndo}
+                                    >
+                                        <UndoIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Redo">
+                                    <IconButton
+                                        aria-label="redo"
+                                        onClick={this.handleRedo}
+                                    >
+                                        <RedoIcon/>
+                                    </IconButton>
+                                </Tooltip>
+
+                                <Divider orientation="vertical" variant="middle" light flexItem/>
+
+                                <Tooltip title="Start Simulation">
+                                    <Button
+                                        color="inherit"
+                                        aria-label="start simulation"
+                                        startIcon={<PlayArrowIcon/>}
+                                        onClick={this.handleStart}
+                                    >
+                                        Start
+                                    </Button>
+                                </Tooltip>
+                            </Grid>
+                        </Toolbar>
+                    </AppBar>
+
+                    { /* Components/Properties Sidebar */}
+                    <Drawer
+                        open={this.state.open}
+                        anchor={false ? "left" : "bottom"}
+                        handleDrawerClose={this.handleDrawer}
+                        addPart={this.addPart}
+                    />
 
 
-                { /* Canvas */}
-                <div className={classes.canvas}>
-                    { /* Content */}
-                    <Canvas listOfParts={listOfParts}/>
+                    { /* Canvas */}
+                    <div className={classes.canvas}>
+                        { /* Content */}
+                        <Canvas listOfParts={this.state.listOfParts}/>
+                    </div>
+
                 </div>
-
-            </div>
-        </ThemeProvider>
-    );
+            </ThemeProvider>
+        );
+    }
 }
 
-export default App;
+export default withStyles(styles, {withTheme: true})(App);
