@@ -1,5 +1,6 @@
 import React from "react";
 import interact from "interactjs";
+import Wire from "./Wire";
 
 export default class BreadBoard extends React.Component {
     constructor(props) {
@@ -22,7 +23,19 @@ export default class BreadBoard extends React.Component {
             });
 
             interact(holeLayer[i]).styleCursor(false).draggable({
-                // TODO: Show wire when dragged
+                listeners: {
+					start: (event) => {
+						let startPoint = {x: event.currentTarget.getAttribute("cx"), y: event.currentTarget.getAttribute("cy")};
+						let endPoint = {x: Number(event.currentTarget.getAttribute("cx")) + 50, y: Number(event.currentTarget.getAttribute("cy")) + 50};
+						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+                    	const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
+						console.log(translate)
+
+						
+						let wire = <Wire startPoint={startPoint} endPoint={endPoint} transform={`translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3}) scale(6, 6)`}></Wire>
+						this.props.addpart(wire)
+					}
+				}
             });
         }
     }

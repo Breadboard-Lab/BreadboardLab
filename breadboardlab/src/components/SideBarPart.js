@@ -11,7 +11,6 @@ import Interactable from "./Interactable";
 import CanvasPart from "./CanvasPart";
 import interact from "interactjs";
 
-let index = 0;
 let svg;
 
 export default class SideBarPart extends React.Component {
@@ -19,7 +18,7 @@ export default class SideBarPart extends React.Component {
     listening = false;   
 
     addPart = (e, event, interaction) => {
-        let newPart = <CanvasPart name={this.props.name} ref={node => this.node = node} key={index} index={index}>{this.props.part}</CanvasPart>;
+        let newPart = <CanvasPart addPart={this.props.ondrag} name={this.props.name} ref={node => this.node = node}>{this.props.part}</CanvasPart>;
         let hoverElement = document.elementFromPoint(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
         let element = hoverElement.parentNode;
 
@@ -27,7 +26,6 @@ export default class SideBarPart extends React.Component {
             if (element === svg) {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
-                index += 1;
                 this.props.ondrag(newPart);
                 this.listening = false;
                 this.added = true;

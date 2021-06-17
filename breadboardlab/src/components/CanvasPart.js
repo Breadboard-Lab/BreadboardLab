@@ -8,6 +8,7 @@ export default class CanvasPart extends React.Component {
             move(event) {
                 const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
                 const transform = regex.exec(event.target.getAttribute("transform"));
+                //let currentTransform = 
 
                 if (transform && transform.length > 1) {
                     let scale = event.target.parentNode.getAttribute("scale");
@@ -58,10 +59,10 @@ export default class CanvasPart extends React.Component {
                 onDoubleTap={this.onDoubleTap}
                 styleCursor={false}
             >
-                <g className={"part"}>
+                <g className={"part"} transform={this.props.transform}>
                     { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,
-                        {ref: (node) => {this.node = node}},
+                        {ref: (node) => {this.node = node}, addpart: this.props.addPart},
                     ))}
                 </g>
             </Interactable>

@@ -71,12 +71,12 @@ Interactable.propTypes = {
     dropzoneOptions: PropTypes.object,
 
     // Pointer Events Types
-    onDown: PropTypes.func,
-    onMove: PropTypes.func,
-    onUp: PropTypes.func,
-    onCancel: PropTypes.func,
-    onTap: PropTypes.func,
-    onDoubleTap: PropTypes.func,
-    onHold: PropTypes.func,
+    // onDown: PropTypes.func,
+    // onMove: PropTypes.func,
+    // onUp: PropTypes.func,
+    // onCancel: PropTypes.func,
+    // onTap: PropTypes.func,
+    // onDoubleTap: PropTypes.func,
+    // onHold: PropTypes.func,
 
 };

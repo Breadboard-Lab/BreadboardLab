@@ -103,6 +103,9 @@ export default class Canvas extends React.Component {
     }
 
     render() {
+        let listOfParts = this.props.listOfParts.map((c, index) => 
+            React.cloneElement(c, {key: index})
+        )
         return(
             <svg 
                 onWheel={e => this.handleOnWheel(e)}
@@ -163,8 +166,7 @@ export default class Canvas extends React.Component {
                         transform={`translate(${this.state.viewBox.x - (this.state.viewBox.x % 100) - 100} ${(this.state.viewBox.y - (this.state.viewBox.y % 100) - 100)})`}
                     />
                 </Interactable>
-                
-                {this.props.listOfParts}
+                {listOfParts}
             </svg>
         )
     }
