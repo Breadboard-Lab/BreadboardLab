@@ -27,7 +27,8 @@ import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu"
 import SplitButton from "./components/SplitButton";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
 import LinearScaleIcon from "@material-ui/icons/LinearScale";
-import {ReactComponent as SelectIcon} from "./assets/select_icon.svg"
+import {ReactComponent as SelectIcon} from "./assets/select_icon.svg";
+import exportSVG from './utils/Exporter';
 
 const drawerWidth = 240;
 
@@ -139,11 +140,6 @@ function App() {
         console.log('Share clicked')
     };
 
-    const handleExport = () => {
-        // TODO handle Export
-        console.log('Export clicked')
-    };
-
     return (
         <ThemeProvider theme={theme}>
             <div className={classes.root}>
@@ -171,7 +167,7 @@ function App() {
                             <Tooltip title="Export">
                                 <Button
                                     aria-label='Export'
-                                    onClick={handleExport}
+                                    onClick={exportSVG}
                                 >
                                     Export
                                 </Button>
