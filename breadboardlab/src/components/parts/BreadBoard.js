@@ -41,10 +41,28 @@ export default class BreadBoard extends React.Component {
 					move: (event) => {
 						let scale = document.getElementById("AppSVG").getAttribute("scale");
 						let endPoint = {x: Number(this.wire.state.endPoint.x) + event.delta.x * scale, y: Number(this.wire.state.endPoint.y) + event.delta.y * scale};
-						this.wire.setPoints(this.wire.props.startPoint, endPoint)
+						this.wire.setPoints(this.wire.props.startPoint, endPoint);
 					}
 				}
             });
+
+			interact(holeLayer[i]).dropzone({
+				ondragenter: event => {
+					let svg = document.getElementById("AppSVG");
+					let relatedTarget = document.elementFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
+					let breadboardHole = event.currentTarget;
+					var pt = svg.createSVGPoint();
+					
+					if (relatedTarget.id === "connector") {
+						pt.x = breadboardHole.getBoundingClientRect().x;
+						pt.y = breadboardHole.getBoundingClientRect().y;
+					
+						var cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+						relatedTarget.setAttribute("cx", cursorpt.x);
+						relatedTarget.setAttribute("cy", cursorpt.y);
+					}
+				}
+			});
         }
     }
 
