@@ -6,6 +6,15 @@ export default class BreadBoard extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.onDoubleTap = this.onDoubleTap.bind(this)
+        this.state = {
+            type: "Breadboard",
+            name: "Lorem Ipsum",
+        }
+    }
+
+    onDoubleTap() {
+        return this.state;
     }
 
     componentDidMount() {

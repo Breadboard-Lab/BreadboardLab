@@ -4,6 +4,15 @@ export default class Resistor extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.onDoubleTap = this.onDoubleTap.bind(this)
+        this.state = {
+            type: "Resistor",
+            name: "Lorem Ipsum",
+        }
+    }
+
+    onDoubleTap() {
+        return this.state;
     }
 
     render() {
