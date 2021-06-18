@@ -3,6 +3,11 @@ import Interactable from "./Interactable";
 import interact from "interactjs";
 
 export default class CanvasPart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onDoubleTap = this.onDoubleTap.bind(this);
+    }
+
     draggableOptions = {
         listeners: {
             move(event) {
@@ -38,12 +43,20 @@ export default class CanvasPart extends React.Component {
         ],
     }
 
+    onDoubleTap(event) {
+        this.props.onDoubleTap(event);
+        
+        if (this.node.onDoubleTap) {
+            this.node.onDoubleTap();
+        }
+    }
+
     render() {
         return(
             <Interactable
                 draggable
                 draggableOptions={this.draggableOptions}
-                onDoubleTap={this.props.onDoubleTap}
+                onDoubleTap={this.onDoubleTap}
                 styleCursor={false}
             >
                 <g className={"part"} transform={this.props.transform}>

@@ -29,12 +29,14 @@ export default class BreadBoard extends React.Component {
 						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
                     	const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
 						
-						let wire = React.createElement(Wire, {ref: node => this.wire = node,
-															  startPoint: startPoint,
-															  endPoint: startPoint,
-															  transform: `translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3})`});
-						
-						this.props.addpart(wire);
+						if (translate) {
+							let wire = React.createElement(Wire, {ref: node => this.wire = node,
+																  startPoint: startPoint,
+																  endPoint: startPoint,
+																  transform: `translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3})`});
+
+							this.props.addpart(wire);
+						}
 					},
 					move: (event) => {
 						let scale = document.getElementById("AppSVG").getAttribute("scale");

@@ -1,6 +1,6 @@
 import React from "react"
 
-export default class Transistor extends React.Component {
+export default class LED extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();

@@ -1,9 +1,14 @@
 import React from "react";
 
-export default class Resistor extends React.Component {
+export default class Button extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.onDoubleTap = this.onDoubleTap.bind(this)
+    }
+
+    onDoubleTap() {
+        console.log("Button");
     }
     
     render() {
