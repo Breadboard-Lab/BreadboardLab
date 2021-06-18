@@ -3,24 +3,21 @@ import Interactable from "./Interactable";
 import interact from "interactjs";
 
 export default class CanvasPart extends React.Component {
-    constructor(props){
-        super(props)
-    }
-
     draggableOptions = {
         listeners: {
             move(event) {
                 const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-                const transform = regex.exec(event.target.getAttribute("transform"));
-                //let currentTransform = 
+                const currentTransform = event.target.getAttribute("transform");
+                const transform = regex.exec(currentTransform);
 
                 if (transform && transform.length > 1) {
                     let scale = event.target.parentNode.getAttribute("scale");
                     let xPos = (Number(transform[1]) + event.dx * scale).toPrecision(5);
-                    let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5)
-                    event.target.setAttribute("transform", `translate(${xPos}, ${yPos})`);
+                    let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5);
+                    
+                    event.target.setAttribute("transform", currentTransform.replace(regex, `translate(${xPos}, ${yPos})`));
                 } else {
-                    event.target.setAttribute("transform", "translate(0, 0)");
+                    event.target.setAttribute("transform", currentTransform.replace(regex, "translate(0, 0)"));
                 }
             }
         },
@@ -40,8 +37,6 @@ export default class CanvasPart extends React.Component {
             }),
         ],
     }
-
-
 
     render() {
         return(

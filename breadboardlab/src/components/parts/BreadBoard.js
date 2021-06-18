@@ -25,23 +25,25 @@ export default class BreadBoard extends React.Component {
             interact(holeLayer[i]).styleCursor(false).draggable({
                 listeners: {
 					start: (event) => {
-						let startPoint = {x: event.currentTarget.getAttribute("cx"), y: event.currentTarget.getAttribute("cy")};
-						let endPoint = {x: Number(event.currentTarget.getAttribute("cx")) + 50, y: Number(event.currentTarget.getAttribute("cy")) + 50};
+						let startPoint = {x: Number(event.currentTarget.getAttribute("cx")) * 6, y: Number(event.currentTarget.getAttribute("cy")) * 6};
 						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
                     	const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
-						console.log(translate)
-
 						
-						let wire = <Wire startPoint={startPoint} endPoint={endPoint} transform={`translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3}) scale(6, 6)`}></Wire>
-						this.props.addpart(wire)
+						let wire = React.createElement(Wire, {ref: node => this.wire = node,
+															  startPoint: startPoint,
+															  endPoint: startPoint,
+															  transform: `translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3})`});
+						
+						this.props.addpart(wire);
+					},
+					move: (event) => {
+						let scale = document.getElementById("AppSVG").getAttribute("scale");
+						let endPoint = {x: Number(this.wire.state.endPoint.x) + event.delta.x * scale, y: Number(this.wire.state.endPoint.y) + event.delta.y * scale};
+						this.wire.setPoints(this.wire.props.startPoint, endPoint)
 					}
 				}
             });
         }
-    }
-
-    handleDoubleClick() {
-        console.log("hi")
     }
 
     render() {
