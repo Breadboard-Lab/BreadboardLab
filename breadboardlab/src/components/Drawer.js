@@ -1,9 +1,9 @@
-import React from "react";
+import React, {Component} from "react";
 import {
     Drawer as MUIDrawer,
     Divider,
     Grid,
-    TextField, List, useMediaQuery, useTheme
+    TextField, List, useMediaQuery, useTheme, withStyles
 } from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -21,7 +21,7 @@ import PropertiesPanel from "./PropertiesPanel";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
     toolbarIcon: {
         display: 'flex',
         alignItems: 'center',
@@ -67,94 +67,132 @@ const useStyles = makeStyles((theme) => ({
     grid: {
         flexGrow: 1,
     },
-}));
+});
 
-const Drawer = props => {
-    const classes = useStyles();
+class Drawer extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            hideProperties: true,
+            data: {
+                type: null,
+                name: null,
+                colour: null,
+                resistance: null,
+                capacitance: null
+            },
+            colourEnabled: false,
+            resistanceEnabled: false,
+            capacitanceEnabled: false,
 
-    const theme = useTheme();
-    const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
+        }
 
-    return (
-        <MUIDrawer
-            variant="persistent"
-            anchor={isNotSmall ? "left" : "bottom"}
-            open={props.open}
-            classes={
-                {
-                    paper: clsx(classes.drawerPaper, !props.open && classes.drawerPaperClose),
+    }
+
+    handleProperties = () => {
+        this.setState(state => ({
+            hideProperties: !state.hideProperties
+        }))
+    }
+
+    onDoubleTap = (childData) => {
+        this.handleProperties();
+        this.setState({data: childData})
+        console.log(this.state.data)
+    }
+
+    render() {
+        const {classes} = this.props;
+
+        //const theme = useTheme();
+        //const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
+
+        return (
+            <MUIDrawer
+                variant="persistent"
+                anchor={true ? "left" : "bottom"}
+                open={this.props.open}
+                classes={
+                    {
+                        paper: clsx(classes.drawerPaper, !this.props.open && classes.drawerPaperClose),
+                    }
                 }
-            }
-        >
-            { /* Drawer Header */}
-            <div className={classes.toolbarIcon}>
-                <CategorySelect/>
-                <IconButton
-                    onClick={props.handleDrawerClose}
-                    aria-label="close drawer"
-                >
-                    <ChevronLeftIcon/>
-                </IconButton>
-            </div>
-            <Divider/>
+            >
+                { /* Drawer Header */}
+                <div className={classes.toolbarIcon}>
+                    <CategorySelect/>
+                    <IconButton
+                        onClick={this.props.handleDrawerClose}
+                        aria-label="close drawer"
+                    >
+                        <ChevronLeftIcon/>
+                    </IconButton>
+                </div>
+                <Divider/>
 
-            { /* Searchbar Content */}
-            <div className={classes.searchBar}>
+                { /* Searchbar Content */}
+                <div className={classes.searchBar}>
+                    <Grid
+                        container
+                        alignItems="flex-end"
+                    >
+                        <Grid item xs>
+                            <SearchIcon/>
+                        </Grid>
+                        <Grid item xs={10}>
+                            <TextField id="search" label="Search"/>
+                        </Grid>
+                    </Grid>
+                </div>
+
                 <Grid
                     container
-                    alignItems="flex-end"
+                    direction="column"
+                    justify="space-between"
+                    className={classes.grid}
                 >
-                    <Grid item xs>
-                        <SearchIcon/>
+                    { /* Components List */}
+                    <Grid item>
+                        <List dense>
+                            <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
+                                         onDoubleTap={this.onDoubleTap}/>
+                            <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
+                                         onDoubleTap={this.onDoubleTap}/>
+                            <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
+                                         onDoubleTap={this.onDoubleTap}/>
+                            <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
+                                         onDoubleTap={this.onDoubleTap}/>
+                            <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
+                                         onDoubleTap={this.onDoubleTap}/>
+                        </List>
                     </Grid>
-                    <Grid item xs={10}>
-                        <TextField id="search" label="Search"/>
+
+                    {/*<Button*/}
+                    {/*    onClick={handleProperties}*/}
+                    {/*>*/}
+                    {/*    Click Me!*/}
+                    {/*</Button>*/}
+
+                    { /* Properties Panel */}
+                    <Grid
+                        item
+                        className={clsx(classes.propertiesPanel, {
+                            [classes.propertiesPanelHide]: this.state.hideProperties,
+                        })}
+                    >
+                        <PropertiesPanel
+                            partType={this.state.data.type}
+                            partName={this.state.data.name}
+                            colourEnabled={this.state.colourEnabled}
+                            resistanceEnabled={this.state.resistanceEnabled}
+                            capacitanceEnabled={this.state.capacitanceEnabled}
+                        />
                     </Grid>
                 </Grid>
-            </div>
 
-            <Grid
-                container
-                direction="column"
-                justify="space-between"
-                className={classes.grid}
-            >
-                { /* Components List */}
-                <Grid item>
-                    <List dense>
-                        <SideBarPart ondrag={props.addPart} part={<BreadBoard/>} name={"Breadboard"} onDoubleTap={props.onDoubleTap}/>
-                        <SideBarPart ondrag={props.addPart} part={<Resistor/>} name={"Resistor"} onDoubleTap={props.onDoubleTap}/>
-                        <SideBarPart ondrag={props.addPart} part={<LED/>} name={"LED"} onDoubleTap={props.onDoubleTap}/>
-                        <SideBarPart ondrag={props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"} onDoubleTap={props.onDoubleTap}/>
-                        <SideBarPart ondrag={props.addPart} part={<Transistor/>} name={"Transistor"} onDoubleTap={props.onDoubleTap}/>
-                    </List>
-                </Grid>
+            </MUIDrawer>
+        );
+    }
+}
 
-                {/*<Button*/}
-                {/*    onClick={handleProperties}*/}
-                {/*>*/}
-                {/*    Click Me!*/}
-                {/*</Button>*/}
-
-                { /* Properties Panel */}
-                <Grid
-                    item
-                    className={clsx(classes.propertiesPanel, {
-                        [classes.propertiesPanelHide]: props.hideProperties,
-                    })}
-                >
-                    <PropertiesPanel
-                        partType={'Lorem Ipsum Resistor'}
-                        colourEnabled={true}
-                        resistanceEnabled={true}
-                        capacitanceEnabled={true}
-                    />
-                </Grid>
-            </Grid
-            >
-
-        </MUIDrawer>
-    );
-};
-
-export default Drawer;
+export default withStyles(styles)(Drawer);

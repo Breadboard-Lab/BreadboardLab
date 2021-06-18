@@ -1,14 +1,19 @@
 import React from "react";
+import themeDark from "../../themes/themeDark";
 
 export default class Button extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
         this.onDoubleTap = this.onDoubleTap.bind(this)
+        this.state = {
+            type: "MomentaryButton",
+            name: "Lorem Ipsum",
+        }
     }
 
     onDoubleTap() {
-        console.log("Button");
+        return this.state;
     }
     
     render() {

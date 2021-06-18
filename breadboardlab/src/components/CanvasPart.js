@@ -44,11 +44,12 @@ export default class CanvasPart extends React.Component {
     }
 
     onDoubleTap(event) {
-        this.props.onDoubleTap(event);
-        
         if (this.node.onDoubleTap) {
-            this.node.onDoubleTap();
+            this.props.parentCallback(this.node.onDoubleTap());
         }
+
+        event.currentTarget.classList.toggle('selected')
+        event.preventDefault();
     }
 
     render() {

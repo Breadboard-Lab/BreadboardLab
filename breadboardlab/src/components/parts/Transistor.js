@@ -4,6 +4,15 @@ export default class Transistor extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.onDoubleTap = this.onDoubleTap.bind(this)
+        this.state = {
+            type: "Transistor",
+            name: "Lorem Ipsum",
+        }
+    }
+
+    onDoubleTap() {
+        return this.state;
     }
 
     render() {
