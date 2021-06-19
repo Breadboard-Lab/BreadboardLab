@@ -65,7 +65,7 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.25,
+				overlap: 0.2,
 				ondragenter: event => {
 					snapConnector(event)
 				},
@@ -100,15 +100,19 @@ export default class BreadBoard extends React.Component {
 				relatedTarget.setAttribute("cx", xPos);
 				relatedTarget.setAttribute("cy", yPos);
 				
-				let wire = event.relatedTarget.parentNode.querySelectorAll("path");
+				const wire = event.relatedTarget.parentNode.querySelectorAll("path");
 				const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
 				const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
 
 				for (let w of wire) {
 					if (relatedTarget.classList.contains("end")) {
+						let startPoint = event.relatedTarget.parentNode.getElementsByClassName("start")[0];
+						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
 						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
 					} else if (relatedTarget.classList.contains("start")) {
+						let endPoint = event.relatedTarget.parentNode.getElementsByClassName("end")[0];
 						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
+						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
 					}
 				}
 			}

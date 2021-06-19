@@ -17,8 +17,10 @@ export default class Wire extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let endPoint = event.currentTarget.parentNode.getElementsByClassName("end")[0];
 
-                this.setPoints({x: this.state.startPoint.x + event.delta.x * scale, y: this.state.startPoint.y + event.delta.y * scale}, this.state.endPoint);
+                this.setPoints({x: this.state.startPoint.x + event.delta.x * scale, y: this.state.startPoint.y + event.delta.y * scale},
+                               {x: Number(endPoint.getAttribute("cx")), y: Number(endPoint.getAttribute("cy"))});
             }
         }
     }
@@ -27,8 +29,10 @@ export default class Wire extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let startPoint = event.currentTarget.parentNode.getElementsByClassName("start")[0];
 
-                this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + event.delta.x * scale, y: this.state.endPoint.y + event.delta.y * scale});
+                this.setPoints({x: Number(startPoint.getAttribute("cx")), y: Number(startPoint.getAttribute("cy"))},
+                               {x: this.state.endPoint.x + event.delta.x * scale, y: this.state.endPoint.y + event.delta.y * scale});
             }
         }
     }
