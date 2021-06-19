@@ -42,17 +42,17 @@ export default class Wire extends React.Component {
 
     render() {
         this.startPoint = <Interactable draggable={true} draggableOptions={this.draggableOptionsStartPoint}>
-                              <ellipse id="connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="4.5" ry="4.5"/>
+                              <ellipse className="wire start connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="4.5" ry="4.5"/>
                           </Interactable>
         
         this.endPoint = <Interactable draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
-                            <ellipse id="connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="4.5" ry="4.5"/>
+                            <ellipse className="wire end connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="4.5" ry="4.5"/>
                         </Interactable>
                         
         return(
             <CanvasPart transform={this.props.transform}>
-                <path stroke="darkred" strokeWidth="6" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x}  ${this.state.endPoint.y}`}/>
-                <path stroke="red" strokeWidth="3" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x}  ${this.state.endPoint.y}`}/>
+                <path stroke="darkred" strokeWidth="6" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+                <path stroke="red" strokeWidth="3" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 {this.startPoint}
                 {this.endPoint}
             </CanvasPart>
