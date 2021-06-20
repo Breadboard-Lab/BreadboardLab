@@ -19,7 +19,7 @@ export default class Wire extends React.Component {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let endPoint = event.currentTarget.parentNode.getElementsByClassName("end")[0];
 
-                this.setPoints({x: this.state.startPoint.x + event.delta.x * scale, y: this.state.startPoint.y + event.delta.y * scale},
+                this.setPoints({x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale},
                                {x: Number(endPoint.getAttribute("cx")), y: Number(endPoint.getAttribute("cy"))});
             }
         }
@@ -32,7 +32,7 @@ export default class Wire extends React.Component {
                 let startPoint = event.currentTarget.parentNode.getElementsByClassName("start")[0];
 
                 this.setPoints({x: Number(startPoint.getAttribute("cx")), y: Number(startPoint.getAttribute("cy"))},
-                               {x: this.state.endPoint.x + event.delta.x * scale, y: this.state.endPoint.y + event.delta.y * scale});
+                               {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale});
             }
         }
     }
@@ -55,8 +55,8 @@ export default class Wire extends React.Component {
                         
         return(
             <CanvasPart transform={this.props.transform}>
-                <path stroke="darkred" strokeWidth="6" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
-                <path stroke="red" strokeWidth="3" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+                <path stroke="darkred" strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+                <path stroke="red" strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 {this.startPoint}
                 {this.endPoint}
             </CanvasPart>

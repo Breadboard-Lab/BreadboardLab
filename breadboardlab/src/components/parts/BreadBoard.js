@@ -29,7 +29,7 @@ export default class BreadBoard extends React.Component {
 			});
 
 			holeLayer[i].addEventListener("mouseleave", (e) => {
-				if (e.srcElement.getAttribute("filter") != "url(#f3)")
+				if (e.srcElement.getAttribute("filter") !== "url(#f3)")
 					e.srcElement.setAttribute("filter", "");
 
 				e.srcElement.setAttribute("style", "");
@@ -41,7 +41,7 @@ export default class BreadBoard extends React.Component {
 					move: (event) => {
 						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
 						const translate = regexTranslate.exec(event.currentTarget.parentNode.getAttribute("transform"));
-						let svg = document.getElementById("AppSVG")
+						let svg = document.getElementById("AppSVG");
 						let pt = svg.createSVGPoint();
 						pt.x = event.client.x;
 						pt.y = event.client.y;
@@ -74,9 +74,9 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.2,
+				overlap: 0.25,
 				ondragenter: event => {
-					snapConnector(event)
+					snapConnector(event);
 				},
 				ondropmove: event => {
 					let listOfElements = document.elementsFromPoint(event.dragmove.client.x, event.dragmove.client.y);
@@ -87,19 +87,15 @@ export default class BreadBoard extends React.Component {
 							return;
 						}
 					}
+					unHighlight(event);
+					moveConnectortoCursor(event);
 				},
 				ondragleave: event => {
-					let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
-
-					for (let element of listOfElements) {
-						if (element.classList.contains("connector") && element != event.relatedTarget) {
-							return;
-						}
-					}
-					event.currentTarget.setAttribute("filter", "");
+					unHighlight(event);
+					moveConnectortoCursor(event);
 				}
 			});
-
+			
 			function snapConnector(event) {
 				let relatedTarget = event.relatedTarget;
 				let breadboardHole = event.currentTarget;
@@ -111,9 +107,6 @@ export default class BreadBoard extends React.Component {
 
 				const xPos = Number(breadboardHole.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
 				const yPos = Number(breadboardHole.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
-
-				relatedTarget.setAttribute("cx", xPos);
-				relatedTarget.setAttribute("cy", yPos);
 				
 				const wire = event.relatedTarget.parentNode.querySelectorAll("path");
 				const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
@@ -130,8 +123,34 @@ export default class BreadBoard extends React.Component {
 						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
 					}
 				}
+				relatedTarget.setAttribute("cx", xPos);
+				relatedTarget.setAttribute("cy", yPos);
 			}
-		}
+
+			function unHighlight(event) {
+				let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
+
+				for (let element of listOfElements) {
+					if (element.classList.contains("connector") && element !== event.relatedTarget) {
+						return;
+					}
+				}
+				event.currentTarget.setAttribute("filter", "");
+			}
+
+			function moveConnectortoCursor(event) {
+				const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+				const translate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
+				let svg = document.getElementById("AppSVG");
+				let pt = svg.createSVGPoint();
+				pt.x = event.dragEvent.client.x;
+				pt.y = event.dragEvent.client.y;
+			
+				let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+				event.relatedTarget.setAttribute("cx", cursorpt.x - Number(translate[1]));
+				event.relatedTarget.setAttribute("cy", cursorpt.y - Number(translate[5]));
+			}
+		} 
     }
 
     render() {
