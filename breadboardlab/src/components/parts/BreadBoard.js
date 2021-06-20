@@ -29,7 +29,9 @@ export default class BreadBoard extends React.Component {
 			});
 
 			holeLayer[i].addEventListener("mouseleave", (e) => {
-				e.srcElement.setAttribute("filter", "");
+				if (e.srcElement.getAttribute("filter") != "url(#f3)")
+					e.srcElement.setAttribute("filter", "");
+
 				e.srcElement.setAttribute("style", "");
 			});
 
@@ -37,10 +39,16 @@ export default class BreadBoard extends React.Component {
 				manualStart: true,
 				listeners: {
 					move: (event) => {
-						let scale = document.getElementById("AppSVG").getAttribute("scale");
-						let xPos = Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale;
-						let yPos = Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale;
-						this.wire.setPoints(this.wire.state.startPoint, {x: xPos, y: yPos});
+						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+						const translate = regexTranslate.exec(event.currentTarget.parentNode.getAttribute("transform"));
+						let svg = document.getElementById("AppSVG")
+						let pt = svg.createSVGPoint();
+						pt.x = event.client.x;
+						pt.y = event.client.y;
+					
+						let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+						
+						this.wire.setPoints(this.wire.state.startPoint, {x: cursorpt.x - Number(translate[1]), y: cursorpt.y - Number(translate[5])});
 					}
 				},
 			})
@@ -57,9 +65,10 @@ export default class BreadBoard extends React.Component {
 															  startPoint: startPoint,
 															  endPoint: startPoint,
 															  transform: `translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3})`});
-
+															  
 						this.props.addpart(wire);
 						interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(this.wire).getElementsByClassName("end")[0]);
+						event.currentTarget.setAttribute("filter", "url(#f3)");
 					}
 				}
 			})
@@ -78,9 +87,15 @@ export default class BreadBoard extends React.Component {
 							return;
 						}
 					}
-					
 				},
 				ondragleave: event => {
+					let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
+
+					for (let element of listOfElements) {
+						if (element.classList.contains("connector") && element != event.relatedTarget) {
+							return;
+						}
+					}
 					event.currentTarget.setAttribute("filter", "");
 				}
 			});
@@ -88,7 +103,7 @@ export default class BreadBoard extends React.Component {
 			function snapConnector(event) {
 				let relatedTarget = event.relatedTarget;
 				let breadboardHole = event.currentTarget;
-				breadboardHole.setAttribute("filter", "url(#f1)");
+				breadboardHole.setAttribute("filter", "url(#f3)");
 
 				const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
 				const relatedTargetTranslate = regexTranslate.exec(relatedTarget.parentNode.getAttribute("transform"));

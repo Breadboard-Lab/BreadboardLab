@@ -155,6 +155,22 @@ export default class Canvas extends React.Component {
                             <feMergeNode in="SourceGraphic" />
                         </feMerge>
                     </filter>
+
+                    <filter id="f3" x="-25" y="-25" width="50" height="50">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" result="blur"/>
+                        <feColorMatrix
+                            in="blur"
+                            type="matrix"
+                            values="0 0 0 0 0
+                                    1 1 1 1 1
+                                    0 0 0 0 0
+                                    0 0 0 4 0" 
+                            result="green"/>
+                        <feMerge>
+                            <feMergeNode in="green" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
                 </defs>
                 <Interactable 
                     draggable={true} draggableOptions={this.draggableOptions}
