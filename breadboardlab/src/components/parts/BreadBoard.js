@@ -8,11 +8,14 @@ export default class BreadBoard extends React.Component {
 		super(props);
 		this.node = React.createRef();
 		this.onDoubleTap = this.onDoubleTap.bind(this);
+		this.moveConnector = this.moveConnector.bind(this);
 		
 		this.state = {
 			type: "Breadboard",
 			name: "Lorem Ipsum",
 		}
+
+		this.connectedParts = [];
     }
 
     onDoubleTap() {
@@ -69,6 +72,7 @@ export default class BreadBoard extends React.Component {
 						this.props.addpart(wire);
 						interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(this.wire).getElementsByClassName("end")[0]);
 						event.currentTarget.setAttribute("filter", "url(#f3)");
+						this.connectedParts.push(ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]);
 					}
 				}
 			})
@@ -76,86 +80,95 @@ export default class BreadBoard extends React.Component {
 				accept: ".connector",
 				overlap: 0.1,
 				ondragenter: event => {
-					snapConnector(event);
+					this.snapConnector(event);
 				},
 				ondropmove: event => {
 					let listOfElements = document.elementsFromPoint(event.dragmove.client.x, event.dragmove.client.y);
 
 					for (let breadboardHole of holeLayer) {
 						if (listOfElements.includes(breadboardHole)) {
-							snapConnector(event);
+							this.snapConnector(event);
 							return;
 						}
 					}
-					unHighlight(event);
-					moveConnectortoCursor(event);
+					this.unHighlight(event);
+					this.moveConnectortoCursor(event);
 				},
 				ondragleave: event => {
-					unHighlight(event);
-					moveConnectortoCursor(event);
+					this.unHighlight(event);
+					this.moveConnectortoCursor(event);
 				}
 			});
-			
-			function snapConnector(event) {
-				event.currentTarget.setAttribute("filter", "url(#f3)");
-
-				const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
-				const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
-				const breadboardTranslate = regexTranslate.exec(event.currentTarget.parentNode.parentNode.parentNode.getAttribute("transform"));
-
-				const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
-				const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
-				
-				moveConnector(event.relatedTarget, xPos, yPos);
-			}
-
-			function unHighlight(event) {
-				let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
-
-				for (let element of listOfElements) {
-					if (element.classList.contains("connector") && element !== event.relatedTarget) {
-						return;
-					}
-				}
-				event.currentTarget.setAttribute("filter", "");
-			}
-
-			function moveConnectortoCursor(event) {
-				const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
-				const translate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
-				let svg = document.getElementById("AppSVG");
-				let pt = svg.createSVGPoint();
-				pt.x = event.dragEvent.client.x;
-				pt.y = event.dragEvent.client.y;
-			
-				let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
-				const xPos = cursorpt.x - Number(translate[1]);
-				const yPos = cursorpt.y - Number(translate[5]);
-				moveConnector(event.relatedTarget, xPos, yPos)
-				
-			}
-
-			function moveConnector(connector, xPos, yPos) {
-				const wire = connector.parentNode.querySelectorAll("path");
-				const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-				const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-
-				for (let w of wire) {
-					if (connector.classList.contains("end")) {
-						let startPoint = connector.parentNode.getElementsByClassName("start")[0];
-						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
-						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
-					} else if (connector.classList.contains("start")) {
-						let endPoint = connector.parentNode.getElementsByClassName("end")[0];
-						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
-						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
-					}
-				}
-				connector.setAttribute("cx", xPos);
-				connector.setAttribute("cy", yPos);
-			}
 		} 
     }
+				
+	snapConnector(event) {
+		event.currentTarget.setAttribute("filter", "url(#f3)");
+
+		const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
+		const breadboardTranslate = regexTranslate.exec(event.currentTarget.parentNode.parentNode.parentNode.getAttribute("transform"));
+
+		const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
+		const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
+		
+		this.moveConnector(event.relatedTarget, xPos, yPos);
+
+		if (!this.connectedParts.includes(event.relatedTarget))
+			this.connectedParts.push(event.relatedTarget);
+	}
+
+	unHighlight(event) {
+		let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
+
+		for (let element of listOfElements) {
+			if (element.classList.contains("connector") && element !== event.relatedTarget) {
+				return;
+			}
+		}
+		event.currentTarget.setAttribute("filter", "");
+
+		const index = this.connectedParts.indexOf(event.relatedTarget);
+
+		if (index > -1) {
+			this.connectedParts.splice(index, 1);
+		}
+	}
+
+	moveConnectortoCursor(event) {
+		const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const translate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
+		let svg = document.getElementById("AppSVG");
+		let pt = svg.createSVGPoint();
+		pt.x = event.dragEvent.client.x;
+		pt.y = event.dragEvent.client.y;
+	
+		let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+		const xPos = cursorpt.x - Number(translate[1]);
+		const yPos = cursorpt.y - Number(translate[5]);
+
+		this.moveConnector(event.relatedTarget, xPos, yPos)
+	}
+
+	moveConnector(connector, xPos, yPos) {
+		const wire = connector.parentNode.querySelectorAll("path");
+		const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
+		const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
+
+		for (let w of wire) {
+			if (connector.classList.contains("end")) {
+				let startPoint = connector.parentNode.getElementsByClassName("start")[0];
+				w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
+				w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
+			} else if (connector.classList.contains("start")) {
+				let endPoint = connector.parentNode.getElementsByClassName("end")[0];
+				w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
+				w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
+			}
+		}
+		connector.setAttribute("cx", xPos);
+		connector.setAttribute("cy", yPos);
+	}
 
     render() {
 		return (
