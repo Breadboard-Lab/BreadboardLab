@@ -79,12 +79,11 @@ class Drawer extends Component {
                 name: null,
                 colour: null,
                 resistance: null,
-                capacitance: null
+                capacitance: null,
+                colourEnabled: false,
+                resistanceEnabled: false,
+                capacitanceEnabled: false,
             },
-            colourEnabled: false,
-            resistanceEnabled: false,
-            capacitanceEnabled: false,
-
         }
 
     }
@@ -98,6 +97,16 @@ class Drawer extends Component {
     onDoubleTap = (childData) => {
         this.handleProperties();
         this.setState({data: childData})
+        //console.log(this.state.data)
+    }
+
+    handleTextField = (event, value) => {
+        this.setState(prevState => ({
+            data: {
+                ...prevState.data,
+                name: event.target.value
+            }
+        }))
         console.log(this.state.data)
     }
 
@@ -181,11 +190,12 @@ class Drawer extends Component {
                         })}
                     >
                         <PropertiesPanel
+                            handleTextField={this.handleTextField}
                             partType={this.state.data.type}
                             partName={this.state.data.name}
-                            colourEnabled={this.state.colourEnabled}
-                            resistanceEnabled={this.state.resistanceEnabled}
-                            capacitanceEnabled={this.state.capacitanceEnabled}
+                            colourEnabled={this.state.data.colourEnabled}
+                            resistanceEnabled={this.state.data.resistanceEnabled}
+                            capacitanceEnabled={this.state.data.capacitanceEnabled}
                         />
                     </Grid>
                 </Grid>

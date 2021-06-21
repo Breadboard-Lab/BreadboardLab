@@ -8,6 +8,7 @@ export default class Resistor extends React.Component {
         this.state = {
             type: "Resistor",
             name: "Lorem Ipsum",
+            resistanceEnabled: true,
         }
     }
 

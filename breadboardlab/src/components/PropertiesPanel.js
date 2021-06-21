@@ -48,7 +48,12 @@ const PropertiesPanel = props => {
                     direction="column"
                 >
                     <Grid item>
-                        <TextField id="part-name" label="Part Name" value={props.partName ? props.partName : ""}/>
+                        <TextField
+                            id="part-name"
+                            label="Part Name"
+                            value={props.partName}
+                            onChange={props.handleTextField}
+                        />
                     </Grid>
                     <Grid item className={!props.colourEnabled && classes.colourHide}>
                         <InputLabel id="part-colour">Colour</InputLabel>

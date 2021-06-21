@@ -8,6 +8,7 @@ export default class LED extends React.Component {
         this.state = {
             type: "LED",
             name: "Lorem Ipsum",
+            colourEnabled: true,
         }
     }
 
