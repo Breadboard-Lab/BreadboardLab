@@ -21,26 +21,12 @@ const useStyles = makeStyles((theme) => ({
 const PropertiesPanel = props => {
     const classes = useStyles();
 
-    const [colour, setColour] = React.useState(1);
-    const [resistance, setResistance] = React.useState(4);
-    const [capacitance, setCapacitance] = React.useState(7);
-
-    const handleColourChange = (event) => {
-        setColour(event.target.value);
-    };
-    const handleResistanceChange = (event) => {
-        setResistance(event.target.value);
-    };
-    const handleCapacitanceChange = (event) => {
-        setCapacitance(event.target.value);
-    };
-
     return (
         <Container disableGutters>
             <Divider/>
             <Grid className={classes.grid}>
                 <Typography variant={'h6'}>
-                    {props.partType ? props.partType : 'Null Type Header'}
+                    {props.partData.type ? props.partData.type : 'Null Type Header'}
                 </Typography>
                 <Grid
                     container
@@ -51,47 +37,47 @@ const PropertiesPanel = props => {
                         <TextField
                             id="part-name"
                             label="Part Name"
-                            value={props.partName}
+                            value={props.partData.name}
                             onChange={props.handleTextField}
                         />
                     </Grid>
-                    <Grid item className={!props.colourEnabled && classes.colourHide}>
+                    <Grid item className={!props.partData.colourEnabled && classes.colourHide}>
                         <InputLabel id="part-colour">Colour</InputLabel>
                         <Select
                             labelId="part-colour"
                             id="part-colour"
-                            value={colour}
-                            onChange={handleColourChange}
+                            value={props.partData.colour}
+                            onChange={props.handleColourChange}
                         >
-                            <MenuItem value={1}>Red</MenuItem>
-                            <MenuItem value={2}>Green</MenuItem>
-                            <MenuItem value={3}>Blue</MenuItem>
+                            <MenuItem value={"red"}>Red</MenuItem>
+                            <MenuItem value={"green"}>Green</MenuItem>
+                            <MenuItem value={"blue"}>Blue</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item className={!props.resistanceEnabled && classes.resistanceHide}>
+                    <Grid item className={!props.partData.resistanceEnabled && classes.resistanceHide}>
                         <InputLabel id="part-resistance">Resistance</InputLabel>
                         <Select
                             labelId="part-resistance"
                             id="part-resistance"
-                            value={resistance}
-                            onChange={handleResistanceChange}
+                            value={props.partData.resistance}
+                            onChange={props.handleResistanceChange}
                         >
-                            <MenuItem value={4}>10 Ω</MenuItem>
-                            <MenuItem value={5}>330 Ω</MenuItem>
-                            <MenuItem value={6}>1 kΩ</MenuItem>
+                            <MenuItem value={10}>10 Ω</MenuItem>
+                            <MenuItem value={330}>330 Ω</MenuItem>
+                            <MenuItem value={1000}>1 kΩ</MenuItem>
                         </Select>
                     </Grid>
-                    <Grid item className={!props.capacitanceEnabled && classes.capacitanceHide}>
+                    <Grid item className={!props.partData.capacitanceEnabled && classes.capacitanceHide}>
                         <InputLabel id="part-capacitance">Capacitance</InputLabel>
                         <Select
                             labelId="part-capacitance"
                             id="part-capacitance"
-                            value={capacitance}
-                            onChange={handleCapacitanceChange}
+                            value={props.partData.capacitance}
+                            onChange={props.handleCapacitanceChange}
                         >
-                            <MenuItem value={7}>100 nF</MenuItem>
-                            <MenuItem value={8}>100 nF</MenuItem>
-                            <MenuItem value={9}>100 nF</MenuItem>
+                            <MenuItem value={100}>100 nF</MenuItem>
+                            <MenuItem value={200}>200 nF</MenuItem>
+                            <MenuItem value={300}>300 nF</MenuItem>
                         </Select>
                     </Grid>
                 </Grid>
