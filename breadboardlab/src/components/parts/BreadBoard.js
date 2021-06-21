@@ -74,7 +74,7 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.25,
+				overlap: 0.1,
 				ondragenter: event => {
 					snapConnector(event);
 				},
@@ -97,34 +97,16 @@ export default class BreadBoard extends React.Component {
 			});
 			
 			function snapConnector(event) {
-				let relatedTarget = event.relatedTarget;
-				let breadboardHole = event.currentTarget;
-				breadboardHole.setAttribute("filter", "url(#f3)");
+				event.currentTarget.setAttribute("filter", "url(#f3)");
 
 				const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
-				const relatedTargetTranslate = regexTranslate.exec(relatedTarget.parentNode.getAttribute("transform"));
-				const breadboardTranslate = regexTranslate.exec(breadboardHole.parentNode.parentNode.parentNode.getAttribute("transform"));
+				const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
+				const breadboardTranslate = regexTranslate.exec(event.currentTarget.parentNode.parentNode.parentNode.getAttribute("transform"));
 
-				const xPos = Number(breadboardHole.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
-				const yPos = Number(breadboardHole.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
+				const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
+				const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
 				
-				const wire = event.relatedTarget.parentNode.querySelectorAll("path");
-				const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-				const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-
-				for (let w of wire) {
-					if (relatedTarget.classList.contains("end")) {
-						let startPoint = event.relatedTarget.parentNode.getElementsByClassName("start")[0];
-						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
-						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
-					} else if (relatedTarget.classList.contains("start")) {
-						let endPoint = event.relatedTarget.parentNode.getElementsByClassName("end")[0];
-						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
-						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
-					}
-				}
-				relatedTarget.setAttribute("cx", xPos);
-				relatedTarget.setAttribute("cy", yPos);
+				moveConnector(event.relatedTarget, xPos, yPos);
 			}
 
 			function unHighlight(event) {
@@ -147,8 +129,30 @@ export default class BreadBoard extends React.Component {
 				pt.y = event.dragEvent.client.y;
 			
 				let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
-				event.relatedTarget.setAttribute("cx", cursorpt.x - Number(translate[1]));
-				event.relatedTarget.setAttribute("cy", cursorpt.y - Number(translate[5]));
+				const xPos = cursorpt.x - Number(translate[1]);
+				const yPos = cursorpt.y - Number(translate[5]);
+				moveConnector(event.relatedTarget, xPos, yPos)
+				
+			}
+
+			function moveConnector(connector, xPos, yPos) {
+				const wire = connector.parentNode.querySelectorAll("path");
+				const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
+				const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
+
+				for (let w of wire) {
+					if (connector.classList.contains("end")) {
+						let startPoint = connector.parentNode.getElementsByClassName("start")[0];
+						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
+						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
+					} else if (connector.classList.contains("start")) {
+						let endPoint = connector.parentNode.getElementsByClassName("end")[0];
+						w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
+						w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
+					}
+				}
+				connector.setAttribute("cx", xPos);
+				connector.setAttribute("cy", yPos);
 			}
 		} 
     }

@@ -55,7 +55,7 @@ export default class CanvasPart extends React.Component {
     render() {
         return(
             <Interactable
-                draggable
+                draggable={(this.props.draggable == undefined) ? true : this.props.draggable}
                 draggableOptions={this.draggableOptions}
                 onDoubleTap={this.onDoubleTap}
                 styleCursor={false}

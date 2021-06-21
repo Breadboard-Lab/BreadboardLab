@@ -54,7 +54,7 @@ export default class Wire extends React.Component {
                         </Interactable>
                         
         return(
-            <CanvasPart transform={this.props.transform}>
+            <CanvasPart draggable={false} transform={this.props.transform}>
                 <path stroke="darkred" strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke="red" strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 {this.startPoint}
