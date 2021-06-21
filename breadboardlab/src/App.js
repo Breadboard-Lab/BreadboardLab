@@ -97,17 +97,20 @@ class App extends Component {
             themeState: true,
             selectedTool: 'select_tool',
             theme: {...themeDark},
-            data: null,
         }
     }
 
     handleThemeChange = () => {
+        // Switches between dark theme and light theme.
         this.setState(state => ({themeState: !state.themeState}));
         this.setState(state => ({theme: state.themeState ? {...themeDark} : {...themeLight}}))
     };
+
     handleDrawer = () => {
+        // Switches between drawer opened or closed.
         this.setState(state => ({open: !state.open}));
     };
+
     addPart = (part) => {
         this.state.listOfParts.push(part)
         this.setState(state => ({listOfParts: [...state.listOfParts]}));

@@ -101,8 +101,9 @@ class Drawer extends Component {
                 name: event.target.value
             }
         }))
-        console.log(this.state.data)
+        //console.log(this.state.data)
     }
+
     handleColourChange = (event) => {
         this.setState(prevState => ({
             data: {
@@ -111,6 +112,7 @@ class Drawer extends Component {
             }
         }))
     };
+
     handleResistanceChange = (event) => {
         this.setState(prevState => ({
             data: {
@@ -119,6 +121,7 @@ class Drawer extends Component {
             }
         }))
     };
+
     handleCapacitanceChange = (event) => {
         this.setState(prevState => ({
             data: {
@@ -191,7 +194,11 @@ class Drawer extends Component {
                         </List>
                     </Grid>
 
-                    { /* Properties Panel */}
+                    { /*
+                        Properties Panel
+                            onDoubleTap calls handleProperties
+                                Toggles visibility of panel.
+                    */}
                     <Grid
                         item
                         className={clsx(classes.propertiesPanel, {
