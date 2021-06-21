@@ -1,11 +1,5 @@
 import React, {Component} from "react";
-import {
-    Drawer as MUIDrawer,
-    Divider,
-    Grid,
-    TextField, List, useMediaQuery, useTheme, withStyles
-} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
+import {Drawer as MUIDrawer, Divider, Grid, TextField, List, withStyles, withWidth} from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
@@ -100,7 +94,7 @@ class Drawer extends Component {
         //console.log(this.state.data)
     }
 
-    handleTextField = (event, value) => {
+    handleTextField = (event) => {
         this.setState(prevState => ({
             data: {
                 ...prevState.data,
@@ -137,13 +131,10 @@ class Drawer extends Component {
     render() {
         const {classes} = this.props;
 
-        //const theme = useTheme();
-        //const isNotSmall = useMediaQuery(theme.breakpoints.up('sm'))
-
         return (
             <MUIDrawer
                 variant="persistent"
-                anchor={true ? "left" : "bottom"}
+                anchor={this.props.width < 'xs' ? "left" : "bottom"}
                 open={this.props.open}
                 classes={
                     {
@@ -200,12 +191,6 @@ class Drawer extends Component {
                         </List>
                     </Grid>
 
-                    {/*<Button*/}
-                    {/*    onClick={handleProperties}*/}
-                    {/*>*/}
-                    {/*    Click Me!*/}
-                    {/*</Button>*/}
-
                     { /* Properties Panel */}
                     <Grid
                         item
@@ -228,4 +213,4 @@ class Drawer extends Component {
     }
 }
 
-export default withStyles(styles)(Drawer);
+export default withWidth()(withStyles(styles)(Drawer));
