@@ -13,6 +13,7 @@ export default class Button extends React.Component {
         }
     }
 
+    // Receive partData state from Drawer.js and set it here.
     componentWillReceiveProps(props) {
         // this.setState(prevState => ({
         //     partData: {
@@ -20,7 +21,7 @@ export default class Button extends React.Component {
         //         name: props.partData.name
         //     }
         // }))
-        console.log(props.partData)
+        console.log(props.partData) // TODO fix prop get, currently returns undefined
         console.log(this.state.partData)
     }
 
