@@ -68,12 +68,12 @@ class Drawer extends Component {
         super(props)
         this.state = {
             hideProperties: true,
-            data: {
-                type: null,
-                name: null,
-                colour: null,
-                resistance: null,
-                capacitance: null,
+            partData: {
+                type: "",
+                name: "",
+                colour: "",
+                resistance: 0,
+                capacitance: 0,
                 colourEnabled: false,
                 resistanceEnabled: false,
                 capacitanceEnabled: false,
@@ -90,14 +90,14 @@ class Drawer extends Component {
 
     onDoubleTap = (childData) => {
         this.handleProperties();
-        this.setState({data: childData})
-        //console.log(this.state.data)
+        this.setState({partData: childData})
+        // console.log(this.state.partData)
     }
 
     handleTextField = (event) => {
         this.setState(prevState => ({
-            data: {
-                ...prevState.data,
+            partData: {
+                ...prevState.partData,
                 name: event.target.value
             }
         }))
@@ -106,8 +106,8 @@ class Drawer extends Component {
 
     handleColourChange = (event) => {
         this.setState(prevState => ({
-            data: {
-                ...prevState.data,
+            partData: {
+                ...prevState.partData,
                 colour: event.target.value
             }
         }))
@@ -115,8 +115,8 @@ class Drawer extends Component {
 
     handleResistanceChange = (event) => {
         this.setState(prevState => ({
-            data: {
-                ...prevState.data,
+            partData: {
+                ...prevState.partData,
                 resistance: event.target.value
             }
         }))
@@ -124,8 +124,8 @@ class Drawer extends Component {
 
     handleCapacitanceChange = (event) => {
         this.setState(prevState => ({
-            data: {
-                ...prevState.data,
+            partData: {
+                ...prevState.partData,
                 capacitance: event.target.value
             }
         }))
@@ -188,7 +188,7 @@ class Drawer extends Component {
                             <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
                                          onDoubleTap={this.onDoubleTap}/>
                             <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
-                                         onDoubleTap={this.onDoubleTap}/>
+                                         onDoubleTap={this.onDoubleTap} partData={this.state.partData}/>
                             <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
                                          onDoubleTap={this.onDoubleTap}/>
                         </List>
@@ -210,7 +210,7 @@ class Drawer extends Component {
                             handleColourChange={this.handleColourChange}
                             handleResistanceChange={this.handleResistanceChange}
                             handleCapacitanceChange={this.handleCapacitanceChange}
-                            partData={this.state.data}
+                            partData={this.state.partData}
                         />
                     </Grid>
                 </Grid>

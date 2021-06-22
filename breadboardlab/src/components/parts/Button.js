@@ -1,5 +1,4 @@
 import React from "react";
-import themeDark from "../../themes/themeDark";
 
 export default class Button extends React.Component {
     constructor(props) {
@@ -7,13 +6,26 @@ export default class Button extends React.Component {
         this.node = React.createRef();
         this.onDoubleTap = this.onDoubleTap.bind(this)
         this.state = {
-            type: "MomentaryButton",
-            name: "Lorem Ipsum",
+            partData: {
+                type: "MomentaryButton",
+                name: "Lorem Ipsum",
+            },
         }
     }
 
+    componentWillReceiveProps(props) {
+        // this.setState(prevState => ({
+        //     partData: {
+        //         ...prevState.partData,
+        //         name: props.partData.name
+        //     }
+        // }))
+        console.log(props.partData)
+        console.log(this.state.partData)
+    }
+
     onDoubleTap() {
-        return this.state;
+        return this.state.partData;
     }
     
     render() {

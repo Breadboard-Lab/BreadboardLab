@@ -80,7 +80,7 @@ export default class CanvasPart extends React.Component {
                 <g className={"part"} transform={this.props.transform}>
                     { React.Children.toArray(this.props.children).map(c => React.cloneElement(
                         c,
-                        {ref: (node) => {this.node = node}, addpart: this.props.addPart},
+                        {ref: (node) => {this.node = node}, addpart: this.props.addPart, partData: this.props.partData},
                     ))}
                 </g>
             </Interactable>
