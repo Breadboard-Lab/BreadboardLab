@@ -22,7 +22,7 @@ export default class Button extends React.Component {
         //         name: props.partData.name
         //     }
         // }))
-        console.log(props.partData) // TODO fix prop get, currently returns undefined
+        // console.log(props.partData) // TODO fix prop get, currently returns undefined
         console.log(this.state.partData)
     }
 

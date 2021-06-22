@@ -101,7 +101,7 @@ class Drawer extends Component {
                 name: event.target.value
             }
         }))
-        //console.log(this.state.data)
+        console.log(this.state.partData)
     }
 
     handleColourChange = (event) => {
