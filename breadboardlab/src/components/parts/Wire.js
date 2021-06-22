@@ -44,13 +44,28 @@ export default class Wire extends React.Component {
         })
     }
 
+    onMouseEnter(event) {
+        event.target.setAttribute("stroke-opacity", "0.5");
+        event.target.setAttribute("fill-opacity", "0.5");
+        event.target.setAttribute("style", "cursor: move");
+    }
+
+    onMouseLeave(event) {
+        event.target.setAttribute("stroke-opacity", "0");
+        event.target.setAttribute("fill-opacity", "0");
+        event.target.setAttribute("fill-opacity", "0");
+        event.target.setAttribute("style", "");
+    }
+
     render() {
-        this.startPoint = <Interactable draggable={true} draggableOptions={this.draggableOptionsStartPoint}>
-                              <ellipse className="wire start connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="4.5" ry="4.5"/>
+        this.startPoint = <Interactable styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsStartPoint}>
+                              <ellipse onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
+                                       className="wire start connector" stroke="grey" strokeWidth="1.5" strokeOpacity="0" fill="black" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
                           </Interactable>
         
-        this.endPoint = <Interactable draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
-                            <ellipse className="wire end connector" stroke="grey" strokeWidth="1.5" strokeOpacity="1" fill="black" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="4.5" ry="4.5"/>
+        this.endPoint = <Interactable styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
+                            <ellipse onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} 
+                                     className="wire end connector" stroke="grey" strokeWidth="1.5" strokeOpacity="0" fill="black" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
                         </Interactable>
                         
         return(

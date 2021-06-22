@@ -27,8 +27,10 @@ export default class BreadBoard extends React.Component {
 		
 		for (let i = 0; i < holeLayer.length; i++) {
 			holeLayer[i].addEventListener("mouseover", (e) => {
-				e.srcElement.setAttribute("filter", "url(#f1)");
-				e.srcElement.setAttribute("style", "cursor: pointer");
+				if (e.srcElement.getAttribute("filter") !== "url(#f3)") {
+					e.srcElement.setAttribute("filter", "url(#f1)");
+					e.srcElement.setAttribute("style", "cursor: pointer");
+				}
 			});
 
 			holeLayer[i].addEventListener("mouseleave", (e) => {
@@ -77,7 +79,6 @@ export default class BreadBoard extends React.Component {
 				}
 			})
 			.dropzone({
-				accept: ".connector",
 				overlap: 0.1,
 				ondragenter: event => {
 					this.snapConnector(event);
@@ -109,10 +110,12 @@ export default class BreadBoard extends React.Component {
 		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.parentNode.parentNode.parentNode.getAttribute("transform"));
 
-		const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
-		const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
-		
-		this.moveConnector(event.relatedTarget, xPos, yPos);
+		if (breadboardTranslate && relatedTargetTranslate) {
+			const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
+			const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
+			
+			this.moveConnector(event.relatedTarget, xPos, yPos);
+		}
 
 		if (!this.connectedParts.includes(event.relatedTarget))
 			this.connectedParts.push(event.relatedTarget);
@@ -138,16 +141,19 @@ export default class BreadBoard extends React.Component {
 	moveConnectortoCursor(event) {
 		const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
-		let svg = document.getElementById("AppSVG");
-		let pt = svg.createSVGPoint();
-		pt.x = event.dragEvent.client.x;
-		pt.y = event.dragEvent.client.y;
-	
-		let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
-		const xPos = cursorpt.x - Number(translate[1]);
-		const yPos = cursorpt.y - Number(translate[5]);
 
-		this.moveConnector(event.relatedTarget, xPos, yPos)
+		if (translate) {
+			let svg = document.getElementById("AppSVG");
+			let pt = svg.createSVGPoint();
+			pt.x = event.dragEvent.client.x;
+			pt.y = event.dragEvent.client.y;
+		
+			let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
+			const xPos = cursorpt.x - Number(translate[1]);
+			const yPos = cursorpt.y - Number(translate[5]);
+	
+			this.moveConnector(event.relatedTarget, xPos, yPos);
+		}
 	}
 
 	moveConnector(connector, xPos, yPos) {
