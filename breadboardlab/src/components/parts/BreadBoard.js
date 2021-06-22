@@ -18,6 +18,26 @@ export default class BreadBoard extends React.Component {
 		this.connectedParts = [];
     }
 
+	onAdditionalMove(event) {
+		const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const scale = document.getElementById("AppSVG").getAttribute("scale");
+
+		for (let element of this.connectedParts) {
+			if (element.getAttribute("transform")) {
+				const elementTransform = regex.exec(element.getAttribute("transform"));
+				let xPos = (Number(elementTransform[1]) + event.dx * scale).toPrecision(5);
+				let yPos = (Number(elementTransform[5]) + event.dy * scale).toPrecision(5);
+
+				element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
+			} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
+				let xPos = (Number(element.getAttribute("cx")) + event.dx * scale).toPrecision(5);
+				let yPos = (Number(element.getAttribute("cy")) + event.dy * scale).toPrecision(5);
+				
+				this.moveConnector(element, xPos, yPos);
+			}
+		}
+	}
+
     onDoubleTap() {
 		return this.state;
     }

@@ -22,21 +22,8 @@ export default class CanvasPart extends React.Component {
                     
                     event.target.setAttribute("transform", currentTransform.replace(regex, `translate(${xPos}, ${yPos})`));
 
-                    if (this.node.connectedParts) {
-                        for (let element of this.node.connectedParts) {
-                            if (element.getAttribute("transform")) {
-                                const elementTransform = regex.exec(element.getAttribute("transform"));
-                                xPos = (Number(elementTransform[1]) + event.dx * scale).toPrecision(5);
-                                yPos = (Number(elementTransform[5]) + event.dy * scale).toPrecision(5);
-    
-                                element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
-                            } else if (element.getAttribute("cx") && element.getAttribute("cy")) {
-                                xPos = (Number(element.getAttribute("cx")) + event.dx * scale).toPrecision(5);
-                                yPos = (Number(element.getAttribute("cy")) + event.dy * scale).toPrecision(5);
-                                
-                                this.node.moveConnector(element, xPos, yPos);
-                            }
-                        }
+                    if (this.node.onAdditionalMove) {
+                        this.node.onAdditionalMove(event);
                     }
                 } else {
                     event.target.setAttribute("transform", currentTransform.replace(regex, "translate(0, 0)"));
