@@ -15,6 +15,7 @@ export default class Button extends React.Component {
 
     // Receive partData state from Drawer.js and set it here.
     componentWillReceiveProps(props) {
+        // TODO get state from Drawer.js and setState.
         // this.setState(prevState => ({
         //     partData: {
         //         ...prevState.partData,
