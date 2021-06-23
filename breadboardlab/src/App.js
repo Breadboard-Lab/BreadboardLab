@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import './App.css';
 import {
     AppBar,
-    Button,
     CssBaseline,
     IconButton,
     Toolbar,
     Tooltip,
     Typography,
-    Grid,
     withStyles,withWidth,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
@@ -19,10 +17,9 @@ import themeDark from './themes/themeDark';
 import themeLight from './themes/themeLight';
 import Canvas from './components/Canvas';
 import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
-import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
-import ExportMenu from './components/exportMenu';
 import AppbarToolsMenu from "./components/AppbarToolsMenu";
+import AppbarSettingsMenu from "./components/AppbarSettingsMenu";
 
 const drawerWidth = 240;
 
@@ -147,24 +144,10 @@ class App extends Component {
                                 Breadboard Lab
                             </Typography>
                             {this.props.width < 'xs' ?
-                                <Grid>
-                                    <Tooltip title="Share">
-                                        <Button
-                                            aria-label='Share'
-                                            onClick={this.handleShare}
-                                        >
-                                            Share
-                                        </Button>
-                                    </Tooltip>
-                                    <Tooltip title="Export">
-                                        <ExportMenu/>
-                                    </Tooltip>
-                                    <Tooltip title="Change Theme">
-                                        <IconButton onClick={this.handleThemeChange}>
-                                            <InvertColorsIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                </Grid>
+                                <AppbarSettingsMenu
+                                    handleShare={this.handleShare}
+                                    handleThemeChange={this.handleThemeChange}
+                                />
                                 : <AppbarSettingsCollapseMenu/>
                             }
 
