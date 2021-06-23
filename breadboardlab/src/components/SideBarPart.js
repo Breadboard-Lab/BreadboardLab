@@ -29,7 +29,14 @@ export default class SideBarPart extends React.Component {
                 this.props.ondrag(newPart);
                 this.listening = false;
                 this.added = true;
-                interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(newPart._self.node));
+
+                let element = ReactDOM.findDOMNode(newPart._self.node);
+
+                if (element.querySelectorAll(".connector").length !== 0) {
+                    interaction.start({name: "drag"}, event.interactable, element.querySelectorAll(".connector")[0]);
+                } else {
+                    interaction.start({name: "drag"}, event.interactable, element);
+                }
 
                 
                 if (e.touches) {
@@ -55,8 +62,14 @@ export default class SideBarPart extends React.Component {
         manualStart: true,
         listeners: {
             move: (event) => {
-                if (event.target) {
-                    let element = event.target.getElementsByTagName("g")[0];
+                let el = event.target;
+
+                while (!el.classList.contains("part")) {
+                    el = el.parentNode;
+                }
+                
+                if (el) {
+                    let element = el.getElementsByTagName("g")[0];
                     const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
                     const regexScale = /scale\((([\d]+)?(\.[\d]+)?),?[\s]?(([\d]+)?(\.[\d]+)?)\)/i;
                     const scale = regexScale.exec(element.getAttribute("transform"));
@@ -77,12 +90,12 @@ export default class SideBarPart extends React.Component {
                     });
 
                     let pos = svg.createSVGPoint();
-                    const rect = event.target.getBoundingClientRect();
+                    const rect = el.getBoundingClientRect();
                     pos.x = (e.clientX || e.touches[0].clientX ) - rect.width / 2;
                     pos.y = (e.clientY || e.touches[0].clientY) - rect.height / 2;
                     var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    event.target.setAttribute("transform", `translate(${cursorpt.x.toPrecision(5)}, ${cursorpt.y.toPrecision(5)})`);
+                    el.setAttribute("transform", `translate(${cursorpt.x.toPrecision(5)}, ${cursorpt.y.toPrecision(5)})`);
                 }
             },
             end: () => {
