@@ -1,5 +1,4 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import {ListItemIcon, ListItemText, Menu, MenuItem, SvgIcon} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
@@ -11,16 +10,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 
-const useStyles = makeStyles((theme) => ({
-    buttonCollapse: {
-        [theme.breakpoints.up("sm")]: {
-            display: "none"
-        },
-    }
-}));
-
-const AppbarToolsCollapseMenu = props => {
-    const classes = useStyles();
+const AppbarToolsCollapseMenu = () => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -33,7 +23,7 @@ const AppbarToolsCollapseMenu = props => {
     };
 
     return (
-            <div className={classes.buttonCollapse}>
+            <div>
                 <IconButton onClick={handleClick}>
                     <BusinessCenterIcon />
                 </IconButton>

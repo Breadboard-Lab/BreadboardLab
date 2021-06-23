@@ -211,85 +211,86 @@ class App extends Component {
                                     <MenuIcon/>
                                 </IconButton>
                             </Tooltip>
-                            <AppbarToolsCollapseMenu/>
-                            <Grid container className={classes.collapse}>
-                                <SplitButton>
-                                    <StyledToggleButtonGroup
-                                        value={this.state.selectedTool}
-                                        exclusive
-                                        onChange={this.handleTool}
-                                        aria-label="Tool Menu"
-                                    >
-                                        <ToggleButton
-                                            aria-label="select"
-                                            value="select_tool"
+                            {this.props.width < 'xs' ?
+                                <Grid container>
+                                    <SplitButton>
+                                        <StyledToggleButtonGroup
+                                            value={this.state.selectedTool}
+                                            exclusive
+                                            onChange={this.handleTool}
+                                            aria-label="Tool Menu"
                                         >
-                                            <Tooltip title="Select">
-                                                <SvgIcon>
-                                                    <SelectIcon/>
-                                                </SvgIcon>
-                                            </Tooltip>
-                                        </ToggleButton>
-                                        <ToggleButton
-                                            aria-label="draw wire"
-                                            value="wire_tool"
+                                            <ToggleButton
+                                                aria-label="select"
+                                                value="select_tool"
+                                            >
+                                                <Tooltip title="Select">
+                                                    <SvgIcon>
+                                                        <SelectIcon/>
+                                                    </SvgIcon>
+                                                </Tooltip>
+                                            </ToggleButton>
+                                            <ToggleButton
+                                                aria-label="draw wire"
+                                                value="wire_tool"
+                                            >
+                                                <Tooltip title="Draw Wire">
+                                                    <LinearScaleIcon/>
+                                                </Tooltip>
+                                            </ToggleButton>
+                                        </StyledToggleButtonGroup>
+                                    </SplitButton>
+
+                                    <Divider orientation="vertical" variant="middle" light flexItem/>
+
+                                    <Tooltip title="Rotate">
+                                        <IconButton
+                                            aria-label="rotate"
+                                            value="rotate_tool"
+                                            onClick={this.handleRotate}
                                         >
-                                            <Tooltip title="Draw Wire">
-                                                <LinearScaleIcon/>
-                                            </Tooltip>
-                                        </ToggleButton>
-                                    </StyledToggleButtonGroup>
-                                </SplitButton>
+                                            <RotateRightIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete">
+                                        <IconButton
+                                            aria-label="delete"
+                                            onClick={this.handleDelete}
+                                        >
+                                            <DeleteForeverIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Undo">
+                                        <IconButton
+                                            aria-label="undo"
+                                            onClick={this.handleUndo}
+                                        >
+                                            <UndoIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Redo">
+                                        <IconButton
+                                            aria-label="redo"
+                                            onClick={this.handleRedo}
+                                        >
+                                            <RedoIcon/>
+                                        </IconButton>
+                                    </Tooltip>
 
-                                <Divider orientation="vertical" variant="middle" light flexItem/>
+                                    <Divider orientation="vertical" variant="middle" light flexItem/>
 
-                                <Tooltip title="Rotate">
-                                    <IconButton
-                                        aria-label="rotate"
-                                        value="rotate_tool"
-                                        onClick={this.handleRotate}
-                                    >
-                                        <RotateRightIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Delete">
-                                    <IconButton
-                                        aria-label="delete"
-                                        onClick={this.handleDelete}
-                                    >
-                                        <DeleteForeverIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Undo">
-                                    <IconButton
-                                        aria-label="undo"
-                                        onClick={this.handleUndo}
-                                    >
-                                        <UndoIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Redo">
-                                    <IconButton
-                                        aria-label="redo"
-                                        onClick={this.handleRedo}
-                                    >
-                                        <RedoIcon/>
-                                    </IconButton>
-                                </Tooltip>
-
-                                <Divider orientation="vertical" variant="middle" light flexItem/>
-
-                                <Tooltip title="Start Simulation">
-                                    <Button
-                                        color="inherit"
-                                        aria-label="start simulation"
-                                        startIcon={<PlayArrowIcon/>}
-                                        onClick={this.handleStart}
-                                    >
-                                        Start
-                                    </Button>
-                                </Tooltip>
-                            </Grid>
+                                    <Tooltip title="Start Simulation">
+                                        <Button
+                                            color="inherit"
+                                            aria-label="start simulation"
+                                            startIcon={<PlayArrowIcon/>}
+                                            onClick={this.handleStart}
+                                        >
+                                            Start
+                                        </Button>
+                                    </Tooltip>
+                                </Grid>
+                                : <AppbarToolsCollapseMenu/>}
                         </Toolbar>
                     </AppBar>
 
