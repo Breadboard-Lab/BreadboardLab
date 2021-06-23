@@ -5,7 +5,7 @@ import {
     Tooltip,
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import ExportMenu from "./exportMenu";
+import ExportMenu from "../exportMenu";
 import InvertColorsIcon from "@material-ui/icons/InvertColors";
 
 const AppbarSettingsMenu = (props) => {

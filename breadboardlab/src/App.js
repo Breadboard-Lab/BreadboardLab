@@ -16,10 +16,10 @@ import Drawer from './components/Drawer';
 import themeDark from './themes/themeDark';
 import themeLight from './themes/themeLight';
 import Canvas from './components/Canvas';
-import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
-import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
-import AppbarToolsMenu from "./components/AppbarToolsMenu";
-import AppbarSettingsMenu from "./components/AppbarSettingsMenu";
+import AppbarToolsCollapseMenu from "./components/appbars/AppbarToolsCollapseMenu";
+import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsCollapseMenu";
+import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
+import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
 
 const drawerWidth = 240;
 

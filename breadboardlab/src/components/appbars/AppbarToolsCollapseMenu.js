@@ -3,7 +3,7 @@ import {ListItemIcon, ListItemText, Menu, MenuItem, SvgIcon} from "@material-ui/
 import IconButton from "@material-ui/core/IconButton";
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import {ReactComponent as SelectIcon} from "../assets/select_icon.svg"
+import {ReactComponent as SelectIcon} from "../../assets/select_icon.svg"
 import RotateRightIcon from '@material-ui/icons/RotateRight';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import UndoIcon from '@material-ui/icons/Undo';
