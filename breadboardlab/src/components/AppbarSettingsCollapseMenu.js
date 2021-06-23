@@ -1,5 +1,4 @@
 import React from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import {ListItemIcon, ListItemText, Menu, MenuItem} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -7,16 +6,8 @@ import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import ShareIcon from '@material-ui/icons/Share';
 import InvertColorsIcon from "@material-ui/icons/InvertColors";
 
-const useStyles = makeStyles((theme) => ({
-    buttonCollapse: {
-        [theme.breakpoints.up("sm")]: {
-            display: "none"
-        },
-    }
-}));
 
-const AppbarSettingsCollapseMenu = props => {
-    const classes = useStyles();
+const AppbarSettingsCollapseMenu = () => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -29,7 +20,7 @@ const AppbarSettingsCollapseMenu = props => {
     };
 
     return (
-        <div className={classes.buttonCollapse}>
+        <div>
             <IconButton onClick={handleClick}>
                 <SettingsIcon/>
             </IconButton>

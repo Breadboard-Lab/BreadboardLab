@@ -11,7 +11,7 @@ import {
     Typography,
     Grid,
     withStyles,
-    SvgIcon,
+    SvgIcon, withWidth,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
@@ -167,25 +167,27 @@ class App extends Component {
                             <Typography variant='h4' className={classes.title}>
                                 Breadboard Lab
                             </Typography>
-                            <AppbarSettingsCollapseMenu/>
-                            <Grid className={classes.collapse}>
-                                <Tooltip title="Share">
-                                    <Button
-                                        aria-label='Share'
-                                        onClick={this.handleShare}
-                                    >
-                                        Share
-                                    </Button>
-                                </Tooltip>
-                                <Tooltip title="Export">
-                                    <ExportMenu/>
-                                </Tooltip>
-                                <Tooltip title="Change Theme">
-                                    <IconButton onClick={this.handleThemeChange}>
-                                        <InvertColorsIcon/>
-                                    </IconButton>
-                                </Tooltip>
-                            </Grid>
+                            {this.props.width < 'xs' ?
+                                <Grid>
+                                    <Tooltip title="Share">
+                                        <Button
+                                            aria-label='Share'
+                                            onClick={this.handleShare}
+                                        >
+                                            Share
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip title="Export">
+                                        <ExportMenu/>
+                                    </Tooltip>
+                                    <Tooltip title="Change Theme">
+                                        <IconButton onClick={this.handleThemeChange}>
+                                            <InvertColorsIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Grid>
+                                : <AppbarSettingsCollapseMenu/>
+                            }
 
                         </Toolbar>
                     </AppBar>
@@ -310,4 +312,4 @@ class App extends Component {
     }
 }
 
-export default withStyles(styles, {withTheme: true})(App);
+export default withWidth()(withStyles(styles, {withTheme: true})(App));
