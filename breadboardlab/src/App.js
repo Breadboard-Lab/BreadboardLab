@@ -4,22 +4,15 @@ import {
     AppBar,
     Button,
     CssBaseline,
-    Divider,
     IconButton,
     Toolbar,
     Tooltip,
     Typography,
     Grid,
-    withStyles,
-    SvgIcon, withWidth,
+    withStyles,withWidth,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import RotateRightIcon from '@material-ui/icons/RotateRight';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import UndoIcon from '@material-ui/icons/Undo';
-import RedoIcon from '@material-ui/icons/Redo';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from './components/Drawer';
 import themeDark from './themes/themeDark';
@@ -28,20 +21,10 @@ import Canvas from './components/Canvas';
 import AppbarToolsCollapseMenu from "./components/AppbarToolsCollapseMenu";
 import InvertColorsIcon from '@material-ui/icons/InvertColors';
 import AppbarSettingsCollapseMenu from "./components/AppbarSettingsCollapseMenu";
-import SplitButton from "./components/SplitButton";
-import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
-import LinearScaleIcon from "@material-ui/icons/LinearScale";
-import {ReactComponent as SelectIcon} from "./assets/select_icon.svg";
 import ExportMenu from './components/exportMenu';
+import AppbarToolsMenu from "./components/AppbarToolsMenu";
 
 const drawerWidth = 240;
-
-const StyledToggleButtonGroup = withStyles({
-    grouped: {
-        border: 'none',
-        borderRadius: '0px',
-    },
-})(ToggleButtonGroup);
 
 const styles = theme => ({
     root: {
@@ -190,8 +173,8 @@ class App extends Component {
 
                     { /* Tools Menu Appbar
                             this.props.width
-                                Ternary operator checks width and switches between rendering either the regular tools menu
-                                or the collapsed tool menu, but not both.
+                                Ternary operator checks width and switches between rendering either the regular tools
+                                menu or the collapsed tool menu, but not both.
 
                             @classes appBar, appBarShift
                                 Handles appbar width change & animation on drawer open/close.
@@ -203,6 +186,10 @@ class App extends Component {
                         })}
                     >
                         <Toolbar variant="dense">
+
+                            { /* Drawer Controller Button
+                                    Hides on Drawer opened
+                            */ }
                             <Tooltip title="Open Drawer">
                                 <IconButton
                                     color="inherit"
@@ -214,85 +201,18 @@ class App extends Component {
                                     <MenuIcon/>
                                 </IconButton>
                             </Tooltip>
+
+                            { /* Tools */ }
                             {this.props.width < 'xs' ?
-                                <Grid container>
-                                    <SplitButton>
-                                        <StyledToggleButtonGroup
-                                            value={this.state.selectedTool}
-                                            exclusive
-                                            onChange={this.handleTool}
-                                            aria-label="Tool Menu"
-                                        >
-                                            <ToggleButton
-                                                aria-label="select"
-                                                value="select_tool"
-                                            >
-                                                <Tooltip title="Select">
-                                                    <SvgIcon>
-                                                        <SelectIcon/>
-                                                    </SvgIcon>
-                                                </Tooltip>
-                                            </ToggleButton>
-                                            <ToggleButton
-                                                aria-label="draw wire"
-                                                value="wire_tool"
-                                            >
-                                                <Tooltip title="Draw Wire">
-                                                    <LinearScaleIcon/>
-                                                </Tooltip>
-                                            </ToggleButton>
-                                        </StyledToggleButtonGroup>
-                                    </SplitButton>
-
-                                    <Divider orientation="vertical" variant="middle" light flexItem/>
-
-                                    <Tooltip title="Rotate">
-                                        <IconButton
-                                            aria-label="rotate"
-                                            value="rotate_tool"
-                                            onClick={this.handleRotate}
-                                        >
-                                            <RotateRightIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Delete">
-                                        <IconButton
-                                            aria-label="delete"
-                                            onClick={this.handleDelete}
-                                        >
-                                            <DeleteForeverIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Undo">
-                                        <IconButton
-                                            aria-label="undo"
-                                            onClick={this.handleUndo}
-                                        >
-                                            <UndoIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Redo">
-                                        <IconButton
-                                            aria-label="redo"
-                                            onClick={this.handleRedo}
-                                        >
-                                            <RedoIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-
-                                    <Divider orientation="vertical" variant="middle" light flexItem/>
-
-                                    <Tooltip title="Start Simulation">
-                                        <Button
-                                            color="inherit"
-                                            aria-label="start simulation"
-                                            startIcon={<PlayArrowIcon/>}
-                                            onClick={this.handleStart}
-                                        >
-                                            Start
-                                        </Button>
-                                    </Tooltip>
-                                </Grid>
+                                <AppbarToolsMenu
+                                    selectedTool={this.state.selectedTool}
+                                    handleTool={this.handleTool}
+                                    handleRotate={this.handleRotate}
+                                    handleDelete={this.handleDelete}
+                                    handleUndo={this.handleUndo}
+                                    handleRedo={this.handleRedo}
+                                    handleStart={this.handleStart}
+                                />
                                 : <AppbarToolsCollapseMenu/>}
                         </Toolbar>
                     </AppBar>
