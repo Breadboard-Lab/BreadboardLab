@@ -1,4 +1,5 @@
 import React from "react";
+import interact from "interactjs";
 
 export default class Resistor extends React.Component {
     constructor(props) {
@@ -11,6 +12,16 @@ export default class Resistor extends React.Component {
             resistance: 330,
             resistanceEnabled: true,
         }
+        this.scale = {x: 100, y: 75};
+        this.offSet = {x: 0.5, y: 0.53};
+    }
+
+    componentDidMount() {
+        interact(this.node.current.parentNode).styleCursor(false).draggable({
+			listeners: {
+				move: this.props.movePart
+			},
+		})
     }
 
     onDoubleTap() {
@@ -19,7 +30,7 @@ export default class Resistor extends React.Component {
 
     render() {
         return(
-            <g ref={this.node} transform="translate(20,40), scale(100,75)">
+            <g ref={this.node} transform="translate(100,105), scale(200,150)">
                 <path fill="#A08968" d="M-0.5-0.435c0.025,0,0.036,0.053,0.053,0.053h0.028c0.009-0.005,0.017-0.007,0.021-0.007h0.071h0.043
                     c0.009,0.005,0.017,0.007,0.021,0.007h0.028c0.018,0,0.028-0.053,0.053-0.053v-0.036c-0.025,0-0.036-0.053-0.053-0.053h-0.027
                     c-0.005,0-0.012,0.002-0.021,0.007h-0.122c0,0-0.005-0.002-0.014-0.007h-0.029c-0.018,0-0.028,0.053-0.053,0.053"/>

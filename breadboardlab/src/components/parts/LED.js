@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import interact from "interactjs";
 
 export default class LED extends React.Component {
     constructor(props) {
@@ -11,6 +12,16 @@ export default class LED extends React.Component {
             colour: "red",
             colourEnabled: true,
         }
+        this.scale = {x: 20, y: 20};
+        this.offSet = {x: 0.3, y: 0.5};
+    }
+
+    componentDidMount() {
+        interact(this.node.current.parentNode).styleCursor(false).draggable({
+			listeners: {
+				move: this.props.movePart
+			},
+		})
     }
 
     onDoubleTap() {
@@ -19,7 +30,7 @@ export default class LED extends React.Component {
     
     render() {
         return(
-            <g ref={this.node} transform="translate(10,40), scale(20,20)">
+            <g ref={this.node} transform="translate(17,28) scale(40,40)">
                 <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
                         fill="#a00000" stroke-opacity="0" />
                 <circle cx="0.4" cy="0.2" r="0.6" fill="#ff8080" />

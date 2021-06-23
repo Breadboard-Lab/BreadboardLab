@@ -9,6 +9,8 @@ export default class BreadBoard extends React.Component {
 		this.node = React.createRef();
 		this.onDoubleTap = this.onDoubleTap.bind(this);
 		this.moveConnector = this.moveConnector.bind(this);
+		this.scale = {x: 6, y: 6};
+		this.offSet = {x: 0.45604399, y: 0}
 		
 		this.state = {
 			type: "Breadboard",
@@ -18,34 +20,38 @@ export default class BreadBoard extends React.Component {
 		this.connectedParts = new Map();
     }
 
-	onAdditionalMove(event) {
-		const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const scale = document.getElementById("AppSVG").getAttribute("scale");
-
-		this.connectedParts.forEach((listOfElements, key) => {
-			for (let element of listOfElements) {
-				if (element.getAttribute("transform")) {
-					const elementTransform = regex.exec(element.getAttribute("transform"));
-					let xPos = (Number(elementTransform[1]) + event.dx * scale).toPrecision(5);
-					let yPos = (Number(elementTransform[5]) + event.dy * scale).toPrecision(5);
-	
-					element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
-				} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
-					let xPos = (Number(element.getAttribute("cx")) + event.dx * scale).toPrecision(5);
-					let yPos = (Number(element.getAttribute("cy")) + event.dy * scale).toPrecision(5);
-					
-					this.moveConnector(element, xPos, yPos);
-				}
-			}
-		})
-	}
-
     onDoubleTap() {
 		return this.state;
     }
 
     componentDidMount() {
 		const holeLayer = this.node.current.querySelectorAll("ellipse");
+
+		interact(this.node.current.parentNode).styleCursor(false).draggable({
+			listeners: {
+				move: event => {
+					let {dx, dy} = this.props.movePart(event);
+					const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+
+					this.connectedParts.forEach((listOfElements, key) => {
+						for (let element of listOfElements) {
+							if (element.getAttribute("transform")) {
+								const elementTransform = regex.exec(element.getAttribute("transform"));
+								let xPos = (Number(elementTransform[1]) + dx).toPrecision(5);
+								let yPos = (Number(elementTransform[5]) + dy).toPrecision(5);
+				
+								element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
+							} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
+								let xPos = (Number(element.getAttribute("cx")) + dx).toPrecision(5);
+								let yPos = (Number(element.getAttribute("cy")) + dy).toPrecision(5);
+								
+								this.moveConnector(element, xPos, yPos);
+							}
+						}
+					});
+				}
+			},
+		})
 		
 		for (let i = 0; i < holeLayer.length; i++) {
 			holeLayer[i].addEventListener("mouseover", (e) => {
@@ -66,13 +72,12 @@ export default class BreadBoard extends React.Component {
 				manualStart: true,
 				listeners: {
 					move: (event) => {
-						const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+						const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 						const translate = regexTranslate.exec(event.currentTarget.parentNode.getAttribute("transform"));
 						let svg = document.getElementById("AppSVG");
 						let pt = svg.createSVGPoint();
 						pt.x = event.client.x;
 						pt.y = event.client.y;
-					
 						let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
 						
 						this.wire.setPoints(this.wire.state.startPoint, {x: cursorpt.x - Number(translate[1]), y: cursorpt.y - Number(translate[5])});
@@ -83,17 +88,17 @@ export default class BreadBoard extends React.Component {
 				const {interaction} = event;
         
        			if (interaction.pointerIsDown && !interaction.interacting()) {
-					let startPoint = {x: Number(event.currentTarget.getAttribute("cx")) * 6, y: Number(event.currentTarget.getAttribute("cy")) * 6};
-					const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+					const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 					const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
-							
+					let startPoint = {x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x, y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y};
+					
 					if (translate) {
 						let wire = React.createElement(Wire, {ref: node => this.wire = node,
 															  startPoint: startPoint,
 															  endPoint: startPoint,
-															  transform: `translate(${Number(translate[1]) + 3}, ${Number(translate[5]) + 3})`});
+															  transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`});
 															  
-						this.props.addpart(wire);
+						this.props.addPart(wire);
 						interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(this.wire).getElementsByClassName("end")[0]);
 						event.currentTarget.setAttribute("filter", "url(#f3)");
 						
@@ -150,8 +155,8 @@ export default class BreadBoard extends React.Component {
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.parentNode.parentNode.parentNode.getAttribute("transform"));
 
 		if (breadboardTranslate && relatedTargetTranslate) {
-			const xPos = Number(event.currentTarget.getAttribute("cx")) * 6 - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]) + 3;
-			const yPos = Number(event.currentTarget.getAttribute("cy")) * 6 - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]) + 3;
+			const xPos = (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]);
+			const yPos = (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]);
 			
 			this.moveConnector(event.relatedTarget, xPos, yPos);
 		}
@@ -220,7 +225,7 @@ export default class BreadBoard extends React.Component {
 
     render() {
 		return (
-			<g ref={this.node} transform="translate(10, 40) scale(6, 6)">
+			<g ref={this.node} transform={`translate(0, 30) scale(0.3, 0.3)`}>
 				<g id="layer1">
 					<rect
 						stroke-width="0"
@@ -229,8 +234,7 @@ export default class BreadBoard extends React.Component {
 						width="178.2547"
 						height="55.881859"
 						x="-0.45604399"
-						y="9.6281099e-08"
-						transform="matrix(1,0,0.00816086,0.9999667,0,0)" />
+						y="9.6281099e-08" />
 					<rect
 						stroke-width="0"
 						fill="#e6deb9"

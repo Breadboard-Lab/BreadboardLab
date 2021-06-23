@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import interact from "interactjs";
 
 export default class Button extends React.Component {
     constructor(props) {
@@ -12,6 +13,8 @@ export default class Button extends React.Component {
                 name: "Lorem Ipsum",
             },
         }
+        this.scale = {x: 50, y: 50};
+        this.offSet = {x: 0.3, y: 0.35};
     }
 
     // Receive partData state from Drawer.js and set it here.
@@ -24,25 +27,15 @@ export default class Button extends React.Component {
         //     }
         // }))
         // console.log(props.partData) // TODO fix prop get, currently returns undefined
-        console.log(this.state.partData)
+        //console.log(this.state.partData)
     }
 
     componentDidMount() {
-        this.onSpecificMove = {
-            element: ReactDOM.findDOMNode(this.node.current).getElementsByClassName("connector")[0],
-            function: (event) => {
-                const element = event.currentTarget.parentNode;
-                const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-                const currentTransform = element.getAttribute("transform");
-                const transform = regex.exec(currentTransform);
-    
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let xPos = (Number(transform[1]) + event.dx * scale).toPrecision(5);
-                let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5);
-                
-                element.setAttribute("transform", currentTransform.replace(regex, `translate(${xPos}, ${yPos})`));
-            }
-        }
+        interact(this.node.current.parentNode).styleCursor(false).draggable({
+			listeners: {
+				move: this.props.movePart
+			},
+		})
     }
 
     onDoubleTap() {
@@ -51,7 +44,7 @@ export default class Button extends React.Component {
     
     render() {
         return(
-            <g ref={this.node} transform="translate(20, 40) scale(50,50)">
+            <g ref={this.node} transform="translate(30, 33) scale(90,90)">
                 <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
                 <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />
                 <rect className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
