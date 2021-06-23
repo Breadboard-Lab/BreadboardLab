@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 
 export default class Button extends React.Component {
     constructor(props) {
@@ -24,6 +25,24 @@ export default class Button extends React.Component {
         // }))
         // console.log(props.partData) // TODO fix prop get, currently returns undefined
         console.log(this.state.partData)
+    }
+
+    componentDidMount() {
+        this.onSpecificMove = {
+            element: ReactDOM.findDOMNode(this.node.current).getElementsByClassName("connector")[0],
+            function: (event) => {
+                const element = event.currentTarget.parentNode;
+                const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+                const currentTransform = element.getAttribute("transform");
+                const transform = regex.exec(currentTransform);
+    
+                let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let xPos = (Number(transform[1]) + event.dx * scale).toPrecision(5);
+                let yPos = (Number(transform[5]) + event.dy * scale).toPrecision(5);
+                
+                element.setAttribute("transform", currentTransform.replace(regex, `translate(${xPos}, ${yPos})`));
+            }
+        }
     }
 
     onDoubleTap() {

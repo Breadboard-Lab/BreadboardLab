@@ -15,27 +15,29 @@ export default class BreadBoard extends React.Component {
 			name: "Lorem Ipsum",
 		}
 
-		this.connectedParts = [];
+		this.connectedParts = new Map();
     }
 
 	onAdditionalMove(event) {
 		const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const scale = document.getElementById("AppSVG").getAttribute("scale");
 
-		for (let element of this.connectedParts) {
-			if (element.getAttribute("transform")) {
-				const elementTransform = regex.exec(element.getAttribute("transform"));
-				let xPos = (Number(elementTransform[1]) + event.dx * scale).toPrecision(5);
-				let yPos = (Number(elementTransform[5]) + event.dy * scale).toPrecision(5);
-
-				element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
-			} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
-				let xPos = (Number(element.getAttribute("cx")) + event.dx * scale).toPrecision(5);
-				let yPos = (Number(element.getAttribute("cy")) + event.dy * scale).toPrecision(5);
-				
-				this.moveConnector(element, xPos, yPos);
+		this.connectedParts.forEach((listOfElements, key) => {
+			for (let element of listOfElements) {
+				if (element.getAttribute("transform")) {
+					const elementTransform = regex.exec(element.getAttribute("transform"));
+					let xPos = (Number(elementTransform[1]) + event.dx * scale).toPrecision(5);
+					let yPos = (Number(elementTransform[5]) + event.dy * scale).toPrecision(5);
+	
+					element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
+				} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
+					let xPos = (Number(element.getAttribute("cx")) + event.dx * scale).toPrecision(5);
+					let yPos = (Number(element.getAttribute("cy")) + event.dy * scale).toPrecision(5);
+					
+					this.moveConnector(element, xPos, yPos);
+				}
 			}
-		}
+		})
 	}
 
     onDoubleTap() {
@@ -94,18 +96,35 @@ export default class BreadBoard extends React.Component {
 						this.props.addpart(wire);
 						interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(this.wire).getElementsByClassName("end")[0]);
 						event.currentTarget.setAttribute("filter", "url(#f3)");
-						this.connectedParts.push(ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]);
+						
+						let list = this.connectedParts.get(event.currentTarget.id)
+						if (list) {
+							this.connectedParts.set(event.currentTarget.id, list.push(ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]));
+						} else {
+							let element = ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]
+							this.connectedParts.set(event.currentTarget.id, [element]);
+						}
 					}
 				}
 			})
 			.dropzone({
-				overlap: 0.1,
+				accept: ".connector",
+				overlap: 0.01,
 				ondragenter: event => {
 					this.snapConnector(event);
 				},
 				ondropmove: event => {
-					let listOfElements = document.elementsFromPoint(event.dragmove.client.x, event.dragmove.client.y);
-
+					let x, y;
+					if (event.relatedTarget.classList.contains("wire")) {
+						x = event.dragEvent.client.x;
+						y = event.dragEvent.client.y;
+					} else {
+						x = event.relatedTarget.getBoundingClientRect().x + event.relatedTarget.getBoundingClientRect().width / 2;
+						y = event.relatedTarget.getBoundingClientRect().y + event.relatedTarget.getBoundingClientRect().height / 2;
+					}
+					
+					let listOfElements = document.elementsFromPoint(x, y);
+					
 					for (let breadboardHole of holeLayer) {
 						if (listOfElements.includes(breadboardHole)) {
 							this.snapConnector(event);
@@ -137,24 +156,27 @@ export default class BreadBoard extends React.Component {
 			this.moveConnector(event.relatedTarget, xPos, yPos);
 		}
 
-		if (!this.connectedParts.includes(event.relatedTarget))
-			this.connectedParts.push(event.relatedTarget);
+		let list = this.connectedParts.get(event.currentTarget.id);
+
+		if (list) {
+			if (!list.includes(event.relatedTarget)) {
+				list.push(event.relatedTarget);
+			}
+		} else {
+			this.connectedParts.set(event.currentTarget.id, [event.relatedTarget]);
+		}
 	}
 
 	unHighlight(event) {
-		let listOfElements = document.elementsFromPoint(event.currentTarget.getBoundingClientRect().x, event.currentTarget.getBoundingClientRect().y);
-
-		for (let element of listOfElements) {
-			if (element.classList.contains("connector") && element !== event.relatedTarget) {
-				return;
-			}
-		}
-		event.currentTarget.setAttribute("filter", "");
-
-		const index = this.connectedParts.indexOf(event.relatedTarget);
+		let list = this.connectedParts.get(event.currentTarget.id);
+		const index = list.indexOf(event.relatedTarget);
 
 		if (index > -1) {
-			this.connectedParts.splice(index, 1);
+			list.splice(index, 1);
+		}
+
+		if (list.length === 0) {	
+			event.currentTarget.setAttribute("filter", "");
 		}
 	}
 
