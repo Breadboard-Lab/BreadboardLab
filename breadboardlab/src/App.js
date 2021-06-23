@@ -67,9 +67,6 @@ const styles = theme => ({
             }),
         }
     },
-    appBarSpacer: {
-        minHeight: 48
-    },
     menuHide: {
         display: 'none',
     },
@@ -81,11 +78,6 @@ const styles = theme => ({
     title: {
         flexGrow: 1,
     },
-    collapse: {
-        [theme.breakpoints.down("xs")]: {
-            display: "none"
-        },
-    }
 });
 
 class App extends Component {
@@ -158,7 +150,11 @@ class App extends Component {
                 <div className={classes.root}>
                     <CssBaseline/>
 
-                    { /* Header Appbar */}
+                    { /* Header Appbar
+                            this.props.width
+                                Ternary operator checks width and switches between rendering either the regular settings
+                                menu or the collapsed settings menu, but not both.
+                    */}
                     <AppBar
                         position="fixed"
                         color='secondary'
@@ -192,7 +188,14 @@ class App extends Component {
                         </Toolbar>
                     </AppBar>
 
-                    { /* Tools Menu Appbar */}
+                    { /* Tools Menu Appbar
+                            this.props.width
+                                Ternary operator checks width and switches between rendering either the regular tools menu
+                                or the collapsed tool menu, but not both.
+
+                            @classes appBar, appBarShift
+                                Handles appbar width change & animation on drawer open/close.
+                    */}
                     <AppBar
                         position="fixed"
                         className={clsx(classes.appBar, {
@@ -303,7 +306,6 @@ class App extends Component {
 
                     { /* Canvas */}
                     <div className={classes.canvas}>
-                        { /* Content */}
                         <Canvas listOfParts={this.state.listOfParts}/>
                     </div>
 
