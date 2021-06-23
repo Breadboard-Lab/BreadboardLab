@@ -14,83 +14,94 @@ import {saveSvgAsPng, saveSvg} from '../utils/saveSvg';
 const options = ['Export as SVG', 'Export as PNG'];
 
 export default function ExportMenu() {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-  const handleClick = () => {
-      console.log(`handleClick::selectedIndex = ${selectedIndex}`);
-    exportToFile(options[selectedIndex]);
-  };
+    const handleClick = () => {
+        console.log(`handleClick::selectedIndex = ${selectedIndex}`);
+        exportToFile(options[selectedIndex]);
+    };
 
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
-    setOpen(false);
-  };
+    const handleMenuItemClick = (event, index) => {
+        setSelectedIndex(index);
+        setOpen(false);
+    };
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+    const handleToggle = () => {
+        setOpen((prevOpen) => !prevOpen);
+    };
 
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
 
-    setOpen(false);
-  };
+        setOpen(false);
+    };
 
-  const exportToFile = (exportFormat) => {
-    console.log(`exportToFile(${exportFormat})`);
-    if (exportFormat === 'Export as SVG') {
-        saveSvg(document.getElementById('AppSVG'), 'breadboard_lab_export.svg');
-    } else {
-        saveSvgAsPng(document.getElementById('AppSVG'), 'breadboard_lab_export.png');
-    }
-  };
+    const exportToFile = (exportFormat) => {
+        console.log(`exportToFile(${exportFormat})`);
+        if (exportFormat === 'Export as SVG') {
+            saveSvg(document.getElementById('AppSVG'), 'breadboard_lab_export.svg');
+        } else {
+            saveSvgAsPng(document.getElementById('AppSVG'), 'breadboard_lab_export.png');
+        }
+    };
 
-  return (
-    <>
-        <ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="export">
-            <Button onClick={handleClick}>{options[selectedIndex]}</Button>
-          <Button
-            color="primary"
-            size="small"
-            aria-controls={open ? 'split-button-menu' : undefined}
-            aria-expanded={open ? 'true' : undefined}
-            aria-label="select export format"
-            aria-haspopup="menu"
-            onClick={handleToggle}
-          >
-            <ArrowDropDownIcon />
-          </Button>
-        </ButtonGroup>
-        <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition style={{zIndex: 2000}}>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              style={{
-                transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
-              }}
+    return (
+        <>
+            <ButtonGroup
+                variant="text"
+                color="primary"
+                ref={anchorRef}
+                disableElevation
+                aria-label="export"
             >
-              <Paper>
-                <ClickAwayListener onClickAway={handleClose}>
-                  <MenuList id="split-button-menu">
-                    {options.map((option, index) => (
-                      <MenuItem
-                        key={option}
-                        selected={index === selectedIndex}
-                        onClick={(event) => handleMenuItemClick(event, index)}
-                      >
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-    </>
-  );
+                <Button
+                    color="inherit"
+                    onClick={handleClick}
+                >
+                    {options[selectedIndex]}
+                </Button>
+                <Button
+                    color="inherit"
+                    size="small"
+                    aria-controls={open ? 'split-button-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-label="select export format"
+                    aria-haspopup="menu"
+                    onClick={handleToggle}
+                >
+                    <ArrowDropDownIcon/>
+                </Button>
+            </ButtonGroup>
+            <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition style={{zIndex: 2000}}>
+                {({TransitionProps, placement}) => (
+                    <Grow
+                        {...TransitionProps}
+                        style={{
+                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                        }}
+                    >
+                        <Paper>
+                            <ClickAwayListener onClickAway={handleClose}>
+                                <MenuList id="split-button-menu">
+                                    {options.map((option, index) => (
+                                        <MenuItem
+                                            key={option}
+                                            selected={index === selectedIndex}
+                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                        >
+                                            {option}
+                                        </MenuItem>
+                                    ))}
+                                </MenuList>
+                            </ClickAwayListener>
+                        </Paper>
+                    </Grow>
+                )}
+            </Popper>
+        </>
+    );
 };
