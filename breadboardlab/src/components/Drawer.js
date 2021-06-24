@@ -83,6 +83,7 @@ class Drawer extends Component {
         this.handleProperties();
 
         this.setState({partData: childData})
+        console.log(this.state.partData)
     }
 
     handleTextField = (event) => {
@@ -179,7 +180,7 @@ class Drawer extends Component {
                             <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
                                          onDoubleTap={this.onDoubleTap}/>
                             <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
-                                         onDoubleTap={this.onDoubleTap} partData={this.state.partData}/>
+                                         onDoubleTap={this.onDoubleTap}/>
                             <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
                                          onDoubleTap={this.onDoubleTap}/>
                         </List>

@@ -18,21 +18,12 @@ const styles = theme => ({
 });
 
 class PropertiesPanel extends React.Component {
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {
-    //         partData: {
-    //             type: "",
-    //             name: "",
-    //             colour: "",
-    //             resistance: 0,
-    //             capacitance: 0,
-    //             colourEnabled: false,
-    //             resistanceEnabled: false,
-    //             capacitanceEnabled: false,
-    //         },
-    //     }
-    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            selectedValue: "",
+        }
+    }
 
     // componentWillReceiveProps(props) {
     //     this.setState(prevState => ({
@@ -49,6 +40,10 @@ class PropertiesPanel extends React.Component {
     //         }
     //     }))
     // }
+
+    handleTextField = (event) => {
+        this.setState({selectedValue: event.target.value})
+    }
 
     render() {
         const {classes} = this.props;
@@ -76,13 +71,15 @@ class PropertiesPanel extends React.Component {
                     for (let option of prop.options) {
                         options.push(<MenuItem value={option}>{option}</MenuItem>)
                     }
-    
+
                     properties.push(
                         <Grid item>
-                            <InputLabel id="part-resistance">{prop.propName}</InputLabel>
+                            <InputLabel id={prop.propName}>{prop.propName}</InputLabel>
                             <Select
-                                labelId="part-resistance"
-                                id="part-resistance"
+                                labelId={prop.propName}
+                                id={prop.propName}
+                                value={this.state.selectedValue}
+                                onChange={this.handleTextField}
                             >
                                 {options}
                             </Select>
