@@ -55,40 +55,42 @@ class PropertiesPanel extends React.Component {
         let properties = [];
         let key = 0;
 
-        for (let prop of this.props.partData.props) {
-            console.log(prop)
-            if (prop.propType === "string") {
-                properties.push(<Typography key={key} variant={'h6'}>{prop.value}</Typography>)
-            } else if (prop.propType === "textfield") {
-                properties.push(
-                    <Grid key={key} item>
-                        <TextField
-                            id="part-name"
-                            label="Part Name"
-                            value={prop.value}
-                        />
-                    </Grid>
-                )
-            } else if (prop.propType === "select") {
-                let options = [];
-
-                for (let option of prop.options) {
-                    options.push(<MenuItem value={option}>{option}</MenuItem>)
+        if (this.props.partData.props) {
+            for (let prop of this.props.partData.props) {
+                console.log(prop)
+                if (prop.propType === "string") {
+                    properties.push(<Typography key={key} variant={'h6'}>{prop.value}</Typography>)
+                } else if (prop.propType === "textfield") {
+                    properties.push(
+                        <Grid key={key} item>
+                            <TextField
+                                id="part-name"
+                                label="Part Name"
+                                value={prop.value}
+                            />
+                        </Grid>
+                    )
+                } else if (prop.propType === "select") {
+                    let options = [];
+    
+                    for (let option of prop.options) {
+                        options.push(<MenuItem value={option}>{option}</MenuItem>)
+                    }
+    
+                    properties.push(
+                        <Grid item>
+                            <InputLabel id="part-resistance">{prop.propName}</InputLabel>
+                            <Select
+                                labelId="part-resistance"
+                                id="part-resistance"
+                            >
+                                {options}
+                            </Select>
+                        </Grid>
+                    )
                 }
-
-                properties.push(
-                    <Grid item>
-                        <InputLabel id="part-resistance">{prop.propName}</InputLabel>
-                        <Select
-                            labelId="part-resistance"
-                            id="part-resistance"
-                        >
-                            {options}
-                        </Select>
-                    </Grid>
-                )
+                key++;
             }
-            key++;
         }
 
         return (

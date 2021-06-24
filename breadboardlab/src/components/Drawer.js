@@ -190,22 +190,21 @@ class Drawer extends Component {
                             onDoubleTap calls handleProperties
                                 Toggles visibility of panel.
                     */}
-                    {Object.keys(this.state.partData).length !== 0 &&
-                        <Grid
-                            item
-                            className={clsx(classes.propertiesPanel, {
-                                [classes.propertiesPanelHide]: this.state.hideProperties,
-                            })}
-                        >
-                            <PropertiesPanel
-                                handleTextField={this.handleTextField}
-                                handleColourChange={this.handleColourChange}
-                                handleResistanceChange={this.handleResistanceChange}
-                                handleCapacitanceChange={this.handleCapacitanceChange}
-                                partData={this.state.partData}
-                            />
-                        </Grid>
-                    }
+                    <Grid
+                        item
+                        className={clsx(classes.propertiesPanel, {
+                            [classes.propertiesPanelHide]: this.state.hideProperties,
+                        })}
+                    >
+                        <PropertiesPanel
+                            handleTextField={this.handleTextField}
+                            handleColourChange={this.handleColourChange}
+                            handleResistanceChange={this.handleResistanceChange}
+                            handleCapacitanceChange={this.handleCapacitanceChange}
+                            partData={this.state.partData}
+                        />
+                    </Grid>
+                    
                 </Grid>
             </MUIDrawer>
         );
