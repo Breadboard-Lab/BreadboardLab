@@ -17,7 +17,9 @@ export default class SideBarPart extends React.Component {
 
     addPart = (e, event, interaction) => {
         let part = React.cloneElement(this.props.part, {ref: (node) => this.node = node, addPart: this.props.ondrag, movePart: movePart, onDoubleTap: this.props.onDoubleTap});
-        let hoverElement = document.elementFromPoint(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
+        let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
+        let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
+        let hoverElement = document.elementFromPoint(xPos, yPos);
         let element = hoverElement.parentNode;
 
         while (element) {
