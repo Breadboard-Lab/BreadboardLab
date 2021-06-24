@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Interactable from "./Interactable";
-import interact from "interactjs";
+//import interact from "interactjs";
 
 let svg;
 
@@ -30,16 +30,14 @@ export default class SideBarPart extends React.Component {
                 this.props.ondrag(<g className="part">{part}</g>);
                 this.listening = false;
                 this.added = true;
-
                 let element = this.node.node.current;
+
                 if (element) {
                     if (this.node.scale && this.node.offSet) {
-                        let scaleX = this.node.scale.x;
-                        let scaleY = this.node.scale.y;
-                        let offSetX = this.node.offSet.x;
-                        let offSetY = this.node.offSet.y;
+                        let scale = this.node.scale;
+                        let offSet = this.node.offSet;
                     
-                        element.setAttribute("transform", `translate(${offSetX * scaleX} ${offSetY * scaleY}) scale(${scaleX} ${scaleY})`);
+                        element.setAttribute("transform", `translate(${offSet.x * scale.x} ${offSet.y * scale.y}) scale(${scale.x} ${scale.y})`);
                     } else {
                         element.setAttribute("transform", `translate(0 0) scale(1 1)`);
                     }
@@ -57,8 +55,8 @@ export default class SideBarPart extends React.Component {
         listeners: {
             move: (event) => {
                 let pos = svg.createSVGPoint();
-                pos.x = (event.clientX || event.touches[0].clientX) - event.rect.width / 2;
-                pos.y = (event.clientY || event.touches[0].clientY) - event.rect.height / 2;
+                pos.x = event.client.x - event.rect.width / 2;
+                pos.y = event.client.y - event.rect.height / 2;
                 var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
             
                 if (cursorpt.x && cursorpt.y) {
