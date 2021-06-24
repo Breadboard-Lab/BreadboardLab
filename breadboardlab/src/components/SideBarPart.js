@@ -16,7 +16,7 @@ export default class SideBarPart extends React.Component {
     listening = false;   
 
     addPart = (e, event, interaction) => {
-        let part = React.cloneElement(this.props.part, {ref: (node) => this.node = node, addPart: this.props.ondrag, movePart: movePart});
+        let part = React.cloneElement(this.props.part, {ref: (node) => this.node = node, addPart: this.props.ondrag, movePart: movePart, onDoubleTap: this.props.onDoubleTap});
         let hoverElement = document.elementFromPoint(e.pageX || e.touches[0].pageX, e.pageY || e.touches[0].pageY);
         let element = hoverElement.parentNode;
 
@@ -24,11 +24,12 @@ export default class SideBarPart extends React.Component {
             if (element === svg) {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
-                this.props.ondrag(<g className="part" onDoubleClick={this.props.onDoubleTap}>{part}</g>);
+
+                this.props.ondrag(<g className="part">{part}</g>);
                 this.listening = false;
                 this.added = true;
 
-                let element = this.node.node.current
+                let element = this.node.node.current;
                 if (element) {
                     if (this.node.scale && this.node.offSet) {
                         let scaleX = this.node.scale.x;
@@ -40,28 +41,12 @@ export default class SideBarPart extends React.Component {
                     } else {
                         element.setAttribute("transform", `translate(0 0) scale(1 1)`);
                     }
-                }
-                // if (element.querySelectorAll(".connector").length !== 0) {
-                //     interaction.start({name: "drag"}, event.interactable, element.querySelectorAll(".connector")[0]);
-                // } else {
-                //     interaction.start({name: "drag"}, event.interactable, element);
-                // }
-                
-                if (e.touches) {
-                    let mobileAddPart = (e1) => {
-                        document.addEventListener("touchend", function f() {
-                            document.removeEventListener("touchend", f)
-                            document.removeEventListener("touchmove", mobileAddPart);
-                        });
-                        this.draggingOptions.listeners.move(e1);
-                    }
-                    document.addEventListener("touchmove", mobileAddPart);
-                } else {
+                    interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element);
                 }
                 break;
             }
-            element = element.parentNode
+            element = element.parentNode;
         }
     }
 
@@ -106,7 +91,7 @@ export default class SideBarPart extends React.Component {
 
     onMove = (event) => {
         const {interaction} = event;
-        
+
         if (interaction.pointerIsDown && !interaction.interacting() && !this.listening && this.mousedown) {
             this.listening = true;
             this.mousemove = (e) => this.addPart(e, event, interaction);

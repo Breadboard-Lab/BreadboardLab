@@ -5,7 +5,7 @@ export default class LED extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.onDoubleTap = this.onDoubleTap.bind(this)
+        
         this.state = {
             type: "LED",
             name: "Lorem Ipsum",
@@ -22,10 +22,6 @@ export default class LED extends React.Component {
 				move: this.props.movePart
 			},
 		})
-    }
-
-    onDoubleTap() {
-        return this.state;
     }
     
     render() {

@@ -1,12 +1,11 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import interact from "interactjs";
 
 export default class Button extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.onDoubleTap = this.onDoubleTap.bind(this)
+        
         this.state = {
             partData: {
                 type: "MomentaryButton",
@@ -36,10 +35,6 @@ export default class Button extends React.Component {
 				move: this.props.movePart
 			},
 		})
-    }
-
-    onDoubleTap() {
-        return this.state.partData;
     }
     
     render() {

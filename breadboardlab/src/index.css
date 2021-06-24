@@ -1,4 +1,5 @@
 * {
+  touch-action: none;
   box-sizing: border-box;
   user-select: none;
 }

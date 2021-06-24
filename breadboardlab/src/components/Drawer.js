@@ -68,16 +68,7 @@ class Drawer extends Component {
         super(props)
         this.state = {
             hideProperties: true,
-            partData: {
-                type: "",
-                name: "",
-                colour: "",
-                resistance: 0,
-                capacitance: 0,
-                colourEnabled: false,
-                resistanceEnabled: false,
-                capacitanceEnabled: false,
-            },
+            partData: {},
         }
 
     }
@@ -90,8 +81,8 @@ class Drawer extends Component {
 
     onDoubleTap = (childData) => {
         this.handleProperties();
+
         this.setState({partData: childData})
-        // console.log(this.state.partData)
     }
 
     handleTextField = (event) => {
@@ -133,7 +124,7 @@ class Drawer extends Component {
 
     render() {
         const {classes} = this.props;
-
+        
         return (
             <MUIDrawer
                 variant="persistent"
@@ -199,22 +190,23 @@ class Drawer extends Component {
                             onDoubleTap calls handleProperties
                                 Toggles visibility of panel.
                     */}
-                    <Grid
-                        item
-                        className={clsx(classes.propertiesPanel, {
-                            [classes.propertiesPanelHide]: this.state.hideProperties,
-                        })}
-                    >
-                        <PropertiesPanel
-                            handleTextField={this.handleTextField}
-                            handleColourChange={this.handleColourChange}
-                            handleResistanceChange={this.handleResistanceChange}
-                            handleCapacitanceChange={this.handleCapacitanceChange}
-                            partData={this.state.partData}
-                        />
-                    </Grid>
+                    {Object.keys(this.state.partData).length !== 0 &&
+                        <Grid
+                            item
+                            className={clsx(classes.propertiesPanel, {
+                                [classes.propertiesPanelHide]: this.state.hideProperties,
+                            })}
+                        >
+                            <PropertiesPanel
+                                handleTextField={this.handleTextField}
+                                handleColourChange={this.handleColourChange}
+                                handleResistanceChange={this.handleResistanceChange}
+                                handleCapacitanceChange={this.handleCapacitanceChange}
+                                partData={this.state.partData}
+                            />
+                        </Grid>
+                    }
                 </Grid>
-
             </MUIDrawer>
         );
     }
