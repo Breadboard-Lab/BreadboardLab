@@ -15,7 +15,7 @@ export default class BreadBoard extends React.Component {
 			type: "Breadboard",
 			name: "Lorem Ipsum",
 		}
-
+		this.mousedown = false;
 		this.connectedParts = new Map();
     }
 
@@ -71,6 +71,10 @@ export default class BreadBoard extends React.Component {
 		})
 		
 		for (let i = 0; i < holeLayer.length; i++) {
+			holeLayer[i].addEventListener("mousedown", (e) => {
+				this.mousedown = true;
+			});
+
 			holeLayer[i].addEventListener("mouseover", (e) => {
 				if (e.srcElement.getAttribute("filter") !== "url(#f3)") {
 					e.srcElement.setAttribute("filter", "url(#f1)");
@@ -83,6 +87,7 @@ export default class BreadBoard extends React.Component {
 					e.srcElement.setAttribute("filter", "");
 
 				e.srcElement.setAttribute("style", "");
+				this.mousedown = false;
 			});
 
 			interact(holeLayer[i]).styleCursor(false).draggable({
@@ -104,7 +109,7 @@ export default class BreadBoard extends React.Component {
 			.on("move", (event) => {
 				const {interaction} = event;
         
-       			if (interaction.pointerIsDown && !interaction.interacting()) {
+       			if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown) {
 					const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 					const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
 					let startPoint = {x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x, y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y};
@@ -117,15 +122,15 @@ export default class BreadBoard extends React.Component {
 															  
 						this.props.addPart(wire);
 						interaction.start({name: "drag"}, event.interactable, this.wire.node.current.getElementsByClassName("end")[0]);
-						event.currentTarget.setAttribute("filter", "url(#f3)");
 						
 						let list = this.connectedParts.get(event.currentTarget.id)
-						if (list) {
+						if (list && list.length > 0) {
 							this.connectedParts.set(event.currentTarget.id, list.push(this.wire.node.current.getElementsByClassName("start")[0]));
 						} else {
 							let element = this.wire.node.current.getElementsByClassName("start")[0]
 							this.connectedParts.set(event.currentTarget.id, [element]);
 						}
+						event.currentTarget.setAttribute("filter", "url(#f3)");
 					}
 				}
 			})
@@ -179,12 +184,13 @@ export default class BreadBoard extends React.Component {
 
 		let list = this.connectedParts.get(event.currentTarget.id);
 
-		if (list) {
+		if (list && list.length > 0) {
 			if (!list.includes(event.relatedTarget)) {
 				list.push(event.relatedTarget);
 			}
 		} else {
 			this.connectedParts.set(event.currentTarget.id, [event.relatedTarget]);
+			console.log(this.connectedParts)
 		}
 	}
 
