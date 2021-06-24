@@ -20,7 +20,7 @@ export default class SideBarPart extends React.Component {
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
         let hoverElement = document.elementFromPoint(xPos, yPos);
-        let element = hoverElement.parentNode;
+        let element = hoverElement;
 
         while (element) {
             if (element === svg) {
@@ -147,9 +147,15 @@ function movePart(event) {
     const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
     const currentTransform = event.currentTarget.getAttribute("transform");
     const transform = regex.exec(currentTransform);
-    let xPos = Number(transform[1]) + event.dx * scale;
-    let yPos = Number(transform[5]) + event.dy * scale;
 
-    event.currentTarget.setAttribute("transform", `translate(${xPos} ${yPos})`);
-    return {dx: event.dx * scale, dy: event.dy * scale}
+    if (transform) {
+        let xPos = Number(transform[1]) + event.dx * scale;
+        let yPos = Number(transform[5]) + event.dy * scale;
+    
+        event.currentTarget.setAttribute("transform", `translate(${xPos} ${yPos})`);
+        return {dx: event.dx * scale, dy: event.dy * scale}
+    } else {
+        event.currentTarget.setAttribute("transform", `translate(0 0)`);
+        return {dx: 0, dy: 0}
+    }
 }
