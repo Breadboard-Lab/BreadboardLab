@@ -4,6 +4,7 @@ import Interactable from "../Interactable";
 export default class Wire extends React.Component {
     constructor(props) {
         super(props);
+        this.node = React.createRef();
 
         this.state = {
             startPoint: this.props.startPoint,
@@ -68,7 +69,7 @@ export default class Wire extends React.Component {
                         </Interactable>
                         
         return(
-            <g transform={this.props.transform}>
+            <g ref={this.node} transform={this.props.transform}>
                 <path stroke="darkred" strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke="red" strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 {this.startPoint}

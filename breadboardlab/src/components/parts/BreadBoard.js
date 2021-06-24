@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import interact from "interactjs";
 import Wire from "./Wire";
 
@@ -117,14 +116,14 @@ export default class BreadBoard extends React.Component {
 															  transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`});
 															  
 						this.props.addPart(wire);
-						interaction.start({name: "drag"}, event.interactable, ReactDOM.findDOMNode(this.wire).getElementsByClassName("end")[0]);
+						interaction.start({name: "drag"}, event.interactable, this.wire.node.current.getElementsByClassName("end")[0]);
 						event.currentTarget.setAttribute("filter", "url(#f3)");
 						
 						let list = this.connectedParts.get(event.currentTarget.id)
 						if (list) {
-							this.connectedParts.set(event.currentTarget.id, list.push(ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]));
+							this.connectedParts.set(event.currentTarget.id, list.push(this.wire.node.current.getElementsByClassName("start")[0]));
 						} else {
-							let element = ReactDOM.findDOMNode(this.wire).getElementsByClassName("start")[0]
+							let element = this.wire.node.current.getElementsByClassName("start")[0]
 							this.connectedParts.set(event.currentTarget.id, [element]);
 						}
 					}
