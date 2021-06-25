@@ -125,12 +125,7 @@ export default class BreadBoard extends React.Component {
 							this.connectedParts.set(event.currentTarget.id, [element]);
 						}
 						event.currentTarget.setAttribute("filter", "url(#f3)");
-						this.mousedown = true;
 					}
-				}
-
-				if (this.wire && interaction.pointerIsDown && this.mousedown) {
-					this.moveConnectortoCursor(this.wire.node.current.getElementsByClassName("end")[0], event.clientX, event.clientY);
 				}
 			})
 			.dropzone({
@@ -148,14 +143,11 @@ export default class BreadBoard extends React.Component {
 						x = event.relatedTarget.getBoundingClientRect().x + event.relatedTarget.getBoundingClientRect().width / 2;
 						y = event.relatedTarget.getBoundingClientRect().y + event.relatedTarget.getBoundingClientRect().height / 2;
 					}
-					
 					let listOfElements = document.elementsFromPoint(x, y);
 					
-					for (let breadboardHole of holeLayer) {
-						if (listOfElements.includes(breadboardHole)) {
-							this.snapConnector(event);
-							return;
-						}
+					if (listOfElements.includes(event.currentTarget)) {
+						this.snapConnector(event);
+						return;
 					}
 					this.unHighlight(event);
 					this.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);

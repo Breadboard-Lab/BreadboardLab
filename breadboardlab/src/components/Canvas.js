@@ -2,9 +2,7 @@ import React from "react";
 import Interactable from "./Interactable";
 
 export default class Canvas extends React.Component {
-    previousTouch = null;
     mouseIsDown = false;
-    prevDiff = 0;
     scale = 1;
 
     draggableOptions = {
