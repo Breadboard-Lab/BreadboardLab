@@ -87,24 +87,18 @@ export default class BreadBoard extends React.Component {
 					e.srcElement.setAttribute("filter", "");
 
 				e.srcElement.setAttribute("style", "");
-				this.mousedown = false;
 			});
 
 			interact(holeLayer[i]).styleCursor(false).draggable({
 				manualStart: true,
 				listeners: {
-					move: (event) => {
-						const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-						const translate = regexTranslate.exec(event.currentTarget.parentNode.getAttribute("transform"));
-						let svg = document.getElementById("AppSVG");
-						let pt = svg.createSVGPoint();
-						pt.x = event.client.x;
-						pt.y = event.client.y;
-						let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
-						
-						this.wire.setPoints(this.wire.state.startPoint, {x: cursorpt.x - Number(translate[1]), y: cursorpt.y - Number(translate[5])});
+					move: event => {
+						this.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
+					},
+					end: event => {
+						this.mousedown = false;
 					}
-				},
+				}
 			})
 			.on("move", (event) => {
 				const {interaction} = event;
@@ -122,7 +116,7 @@ export default class BreadBoard extends React.Component {
 															  
 						this.props.addPart(wire);
 						interaction.start({name: "drag"}, event.interactable, this.wire.node.current.getElementsByClassName("end")[0]);
-						
+
 						let list = this.connectedParts.get(event.currentTarget.id)
 						if (list && list.length > 0) {
 							this.connectedParts.set(event.currentTarget.id, list.push(this.wire.node.current.getElementsByClassName("start")[0]));
@@ -131,7 +125,12 @@ export default class BreadBoard extends React.Component {
 							this.connectedParts.set(event.currentTarget.id, [element]);
 						}
 						event.currentTarget.setAttribute("filter", "url(#f3)");
+						this.mousedown = true;
 					}
+				}
+
+				if (this.wire && interaction.pointerIsDown && this.mousedown) {
+					this.moveConnectortoCursor(this.wire.node.current.getElementsByClassName("end")[0], event.clientX, event.clientY);
 				}
 			})
 			.dropzone({
@@ -159,11 +158,11 @@ export default class BreadBoard extends React.Component {
 						}
 					}
 					this.unHighlight(event);
-					this.moveConnectortoCursor(event);
+					this.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				},
 				ondragleave: event => {
 					this.unHighlight(event);
-					this.moveConnectortoCursor(event);
+					this.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				}
 			});
 		} 
@@ -190,7 +189,6 @@ export default class BreadBoard extends React.Component {
 			}
 		} else {
 			this.connectedParts.set(event.currentTarget.id, [event.relatedTarget]);
-			console.log(this.connectedParts)
 		}
 	}
 
@@ -207,21 +205,21 @@ export default class BreadBoard extends React.Component {
 		}
 	}
 
-	moveConnectortoCursor(event) {
+	moveConnectortoCursor(element, clientX, clientY) {
 		const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const translate = regexTranslate.exec(event.relatedTarget.parentNode.getAttribute("transform"));
+		const translate = regexTranslate.exec(element.parentNode.getAttribute("transform"));
 
 		if (translate) {
 			let svg = document.getElementById("AppSVG");
 			let pt = svg.createSVGPoint();
-			pt.x = event.dragEvent.client.x;
-			pt.y = event.dragEvent.client.y;
+			pt.x = clientX;
+			pt.y = clientY;
 		
 			let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
 			const xPos = cursorpt.x - Number(translate[1]);
 			const yPos = cursorpt.y - Number(translate[5]);
 	
-			this.moveConnector(event.relatedTarget, xPos, yPos);
+			this.moveConnector(element, xPos, yPos);
 		}
 	}
 
