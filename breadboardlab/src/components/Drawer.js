@@ -175,6 +175,7 @@ class Drawer extends Component {
                         container
                         direction={this.props.width < 'xs' ? "column" : "row"}
                         item
+                        wrap="nowrap"
                     >
                         <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
                                      onDoubleTap={this.onDoubleTap}/>
