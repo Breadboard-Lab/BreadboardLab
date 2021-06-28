@@ -20,7 +20,9 @@ const AppbarSettingsMenu = (props) => {
                 </Button>
             </Tooltip>
             <Tooltip title="Export">
-                <ExportMenu/>
+                <span>
+                    <ExportMenu/>
+                </span>
             </Tooltip>
             <Tooltip title="Change Theme">
                 <IconButton onClick={props.handleThemeChange}>
