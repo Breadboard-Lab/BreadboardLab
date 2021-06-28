@@ -86,23 +86,11 @@ export default class Wire extends React.Component {
 	}
 
 	moveConnector(connector, xPos, yPos) {
-		const wire = connector.parentNode.querySelectorAll("path");
-		const pathEndRegex = /L ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-		const pathStartRegex = /M ((-)?([\d]+)(\.[\d]+)?) ((-)?([\d]+)(\.[\d]+)?)/i;
-
-		for (let w of wire) {
-			if (connector.classList.contains("end")) {
-				let startPoint = connector.parentNode.getElementsByClassName("start")[0];
-				w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${startPoint.getAttribute("cx")} ${startPoint.getAttribute("cy")}`));
-				w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${xPos} ${yPos}`));
-			} else if (connector.classList.contains("start")) {
-				let endPoint = connector.parentNode.getElementsByClassName("end")[0];
-				w.setAttribute("d", w.getAttribute("d").replace(pathStartRegex, `M ${xPos} ${yPos}`));
-				w.setAttribute("d", w.getAttribute("d").replace(pathEndRegex, `L ${endPoint.getAttribute("cx")} ${endPoint.getAttribute("cy")}`));
-			}
-		}
-		connector.setAttribute("cx", xPos);
-		connector.setAttribute("cy", yPos);
+		if (connector === this.startPoint.current.node) {
+            this.setState({startPoint: {x: xPos, y: yPos}});
+        } else {
+            this.setState({endPoint: {x: xPos, y: yPos}});
+        }
 	}
 
     disconnect(event, id, attachRef, callback) {
