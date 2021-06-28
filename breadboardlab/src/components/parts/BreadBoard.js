@@ -80,6 +80,7 @@ export default class BreadBoard extends React.Component {
 					e.srcElement.setAttribute("filter", "");
 
 				e.srcElement.setAttribute("style", "");
+				this.mousedown = false;
 			});
 
 			interact(holeLayer[i]).styleCursor(false).draggable({
@@ -109,7 +110,7 @@ export default class BreadBoard extends React.Component {
 															  transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`});
 															  
 						this.props.addPart(wire);
-						interaction.start({name: "drag"}, event.interactable, this.wire.node.current.getElementsByClassName("end")[0]);
+						interaction.start({name: "drag"}, event.interactable, this.wire.endPoint.current.node);
 						SideBarPart.listOfRefs.push(this.wire);
 						this.connectPart(event, event.currentTarget.id, "start", this.wire);
 						this.connectPart(event, event.currentTarget.id, "end", this.wire);

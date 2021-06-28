@@ -120,7 +120,7 @@ export default class Wire extends React.Component {
     }
 
     movePart(dx, dy) {
-        if (this.attachTo.get("start") && this.attachTo.get("end")) {
+        if (this.attachTo.get("start") && this.attachTo.get("end") && this.attachTo.get("start").ref === this.attachTo.get("end").ref) {
             this.setPoints({x: this.state.startPoint.x + dx / 2, y: this.state.startPoint.y + dy / 2}, {x: this.state.endPoint.x + dx / 2, y: this.state.endPoint.y + dy / 2});
         } else {
             this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
