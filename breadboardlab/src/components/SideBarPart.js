@@ -13,10 +13,20 @@ let svg;
 
 export default class SideBarPart extends React.Component {
     added = false;
-    listening = false;   
+    listening = false;
+    static listOfRefs =[]
 
     addPart = (e, event, interaction) => {
-        let part = React.cloneElement(this.props.part, {ref: (node) => this.node = node, addPart: this.props.ondrag, movePart: movePart, onDoubleTap: this.props.onDoubleTap});
+        let part = React.cloneElement(
+            this.props.part,
+            {
+                ref: (node) => this.node = node,
+                addPart: this.props.ondrag,
+                movePart: movePart,
+                onDoubleTap: this.props.onDoubleTap
+            },
+        );
+        
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
         let hoverElement = document.elementFromPoint(xPos, yPos);
@@ -43,6 +53,7 @@ export default class SideBarPart extends React.Component {
                     }
                     interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element);
+                    SideBarPart.listOfRefs.push(this.node);
                 }
                 break;
             }
