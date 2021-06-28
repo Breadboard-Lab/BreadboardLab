@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Drawer as MUIDrawer, Divider, Grid, TextField, List, withStyles, withWidth} from "@material-ui/core";
+import {Drawer as MUIDrawer, Divider, Grid, TextField, withStyles, withWidth} from "@material-ui/core";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
@@ -125,7 +125,7 @@ class Drawer extends Component {
 
     render() {
         const {classes} = this.props;
-        
+
         return (
             <MUIDrawer
                 variant="persistent"
@@ -171,19 +171,21 @@ class Drawer extends Component {
                     className={classes.grid}
                 >
                     { /* Components List */}
-                    <Grid item>
-                        <List dense>
-                            <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
-                                         onDoubleTap={this.onDoubleTap}/>
-                            <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
-                                         onDoubleTap={this.onDoubleTap}/>
-                            <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
-                                         onDoubleTap={this.onDoubleTap}/>
-                            <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
-                                         onDoubleTap={this.onDoubleTap}/>
-                            <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
-                                         onDoubleTap={this.onDoubleTap}/>
-                        </List>
+                    <Grid
+                        container
+                        direction={this.props.width < 'xs' ? "column" : "row"}
+                        item
+                    >
+                        <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
+                                     onDoubleTap={this.onDoubleTap}/>
+                        <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
+                                     onDoubleTap={this.onDoubleTap}/>
+                        <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
+                                     onDoubleTap={this.onDoubleTap}/>
+                        <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
+                                     onDoubleTap={this.onDoubleTap}/>
+                        <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
+                                     onDoubleTap={this.onDoubleTap}/>
                     </Grid>
 
                     { /*
@@ -205,7 +207,7 @@ class Drawer extends Component {
                             partData={this.state.partData}
                         />
                     </Grid>
-                    
+
                 </Grid>
             </MUIDrawer>
         );

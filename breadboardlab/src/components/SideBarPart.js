@@ -3,7 +3,7 @@ import InfoIcon from "@material-ui/icons/Info";
 import {
     SvgIcon,
     ListItem,
-    ListItemAvatar, ListItemText, ListItemSecondaryAction
+    ListItemAvatar, ListItemText, ListItemSecondaryAction, withWidth,
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Interactable from "./Interactable";
@@ -11,10 +11,10 @@ import Interactable from "./Interactable";
 
 let svg;
 
-export default class SideBarPart extends React.Component {
+class SideBarPart extends React.Component {
     added = false;
     listening = false;
-    static listOfRefs =[]
+    static listOfRefs = []
 
     addPart = (e, event, interaction) => {
         let part = React.cloneElement(
@@ -26,7 +26,7 @@ export default class SideBarPart extends React.Component {
                 onDoubleTap: this.props.onDoubleTap
             },
         );
-        
+
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
         let hoverElement = document.elementFromPoint(xPos, yPos);
@@ -46,7 +46,7 @@ export default class SideBarPart extends React.Component {
                     if (this.node.scale && this.node.offSet) {
                         let scale = this.node.scale;
                         let offSet = this.node.offSet;
-                    
+
                         element.setAttribute("transform", `translate(${offSet.x * scale.x} ${offSet.y * scale.y}) scale(${scale.x} ${scale.y})`);
                     } else {
                         element.setAttribute("transform", `translate(0 0) scale(1 1)`);
@@ -69,7 +69,7 @@ export default class SideBarPart extends React.Component {
                 pos.x = event.client.x - event.rect.width / 2;
                 pos.y = event.client.y - event.rect.height / 2;
                 var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
-            
+
                 if (cursorpt.x && cursorpt.y) {
                     this.node.node.current.parentNode.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
                 }
@@ -129,7 +129,8 @@ export default class SideBarPart extends React.Component {
 
     render() {
         return (
-            <Interactable draggable={true} draggableOptions={this.draggingOptions} onMove={this.onMove} onDown={this.onDown}>
+            <Interactable draggable={true} draggableOptions={this.draggingOptions} onMove={this.onMove}
+                          onDown={this.onDown}>
                 <div className={"part-container"}>
                     <ListItem button>
                         <ListItemAvatar>
@@ -137,15 +138,18 @@ export default class SideBarPart extends React.Component {
                                 {this.props.part}
                             </SvgIcon>
                         </ListItemAvatar>
-                        <ListItemText
-                            primary={this.props.name}
-                            primaryTypographyProps={{variant: "body2"}}
-                        />
-                        <ListItemSecondaryAction>
-                            <IconButton edge="end" aria-label="delete">
-                                <InfoIcon/>
-                            </IconButton>
-                        </ListItemSecondaryAction>
+                        {this.props.width < 'xs' ?
+                            <>
+                                <ListItemText
+                                    primary={this.props.name}
+                                    primaryTypographyProps={{variant: "body2"}}
+                                />
+                                <ListItemSecondaryAction>
+                                    <IconButton edge="end" aria-label="delete">
+                                        <InfoIcon/>
+                                    </IconButton>
+                                </ListItemSecondaryAction>
+                            </> : null}
                     </ListItem>
                 </div>
             </Interactable>
@@ -153,7 +157,7 @@ export default class SideBarPart extends React.Component {
     }
 }
 
-function movePart(event) {    
+function movePart(event) {
     let scale = svg.getAttribute("scale")
     const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
     const currentTransform = event.currentTarget.getAttribute("transform");
@@ -162,7 +166,7 @@ function movePart(event) {
     if (transform) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
-    
+
         event.currentTarget.setAttribute("transform", `translate(${xPos} ${yPos})`);
         return {dx: event.dx * scale, dy: event.dy * scale}
     } else {
@@ -170,3 +174,5 @@ function movePart(event) {
         return {dx: 0, dy: 0}
     }
 }
+
+export default withWidth()(SideBarPart);
