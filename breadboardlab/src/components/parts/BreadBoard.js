@@ -50,24 +50,14 @@ export default class BreadBoard extends React.Component {
 				move: event => {
 					if (this.props.movePart) {
 						let {dx, dy} = this.props.movePart(event);
-						// const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 	
-						// this.connectedParts.forEach((listOfElements, key) => {
-						// 	for (let element of listOfElements) {
-						// 		if (element.getAttribute("transform")) {
-						// 			const elementTransform = regex.exec(element.getAttribute("transform"));
-						// 			let xPos = (Number(elementTransform[1]) + dx).toPrecision(5);
-						// 			let yPos = (Number(elementTransform[5]) + dy).toPrecision(5);
-					
-						// 			element.setAttribute("transform", elementTransform.replace(regex, `translate(${xPos}, ${yPos})`));
-						// 		} else if (element.getAttribute("cx") && element.getAttribute("cy")) {
-						// 			let xPos = (Number(element.getAttribute("cx")) + dx).toPrecision(5);
-						// 			let yPos = (Number(element.getAttribute("cy")) + dy).toPrecision(5);
-									
-						// 			this.moveConnector(element, xPos, yPos);
-						// 		}
-						// 	}
-						// });
+						this.connectedParts.forEach((listOfItems, key) => {
+							for (let item of listOfItems) {
+								if (item.ref.movePart) {
+									item.ref.movePart(dx, dy);
+								}
+							}
+						});
 					}
 				}
 			},
@@ -97,12 +87,7 @@ export default class BreadBoard extends React.Component {
 				listeners: {
 					move: event => {
 						let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.currentTarget.closest(".part"));
-						if (ref) {
-
-							ref.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
-						} else {
-							console.log(SideBarPart.listOfRefs)
-						}
+						ref.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
 					},
 					end: event => {
 						this.mousedown = false;

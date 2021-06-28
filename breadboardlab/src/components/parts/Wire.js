@@ -13,6 +13,7 @@ export default class Wire extends React.Component {
             endPoint: this.props.endPoint
         }
         this.setPoints = this.setPoints.bind(this);
+        this.movePart = this.movePart.bind(this);
 
         this.attachTo = new Map();
     }
@@ -21,7 +22,7 @@ export default class Wire extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let endPoint = event.currentTarget.parentNode.getElementsByClassName("end")[0];
+                let endPoint = this.endPoint.current.node;
 
                 this.setPoints({x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale},
                                {x: Number(endPoint.getAttribute("cx")), y: Number(endPoint.getAttribute("cy"))});
@@ -33,7 +34,7 @@ export default class Wire extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let startPoint = event.currentTarget.parentNode.getElementsByClassName("start")[0];
+                let startPoint = this.startPoint.current.node;
 
                 this.setPoints({x: Number(startPoint.getAttribute("cx")), y: Number(startPoint.getAttribute("cy"))},
                                {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale});
@@ -116,6 +117,14 @@ export default class Wire extends React.Component {
             startPoint: startPoint,
             endPoint: endPoint
         })
+    }
+
+    movePart(dx, dy) {
+        if (this.attachTo.get("start") && this.attachTo.get("end")) {
+            this.setPoints({x: this.state.startPoint.x + dx / 2, y: this.state.startPoint.y + dy / 2}, {x: this.state.endPoint.x + dx / 2, y: this.state.endPoint.y + dy / 2});
+        } else {
+            this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
+        }
     }
 
     onMouseEnter(event) {
