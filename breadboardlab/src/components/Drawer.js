@@ -66,6 +66,7 @@ const styles = theme => ({
 class Drawer extends Component {
     constructor(props) {
         super(props);
+        this.previousPartState = undefined;
         this.selectedPart = undefined;
 
         this.state = {
@@ -81,17 +82,19 @@ class Drawer extends Component {
     }
 
     onDoubleTap = (childData) => {
-        if (this.selectedPart === childData) {
+        if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
             this.setState({
-                hideProperties: false,
+                hideProperties: true,
                 partData: {},
             });
+            this.previousPartState = undefined;
             this.selectedPart = undefined;
         } else {
             this.setState({
                 hideProperties: false,
                 partData: childData
             });
+            this.previousPartState = childData.ref.state;
             this.selectedPart = childData;
         }
     }

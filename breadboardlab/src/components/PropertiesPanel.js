@@ -57,7 +57,8 @@ class PropertiesPanel extends React.Component {
         if (this.props.partData.props) {
             for (let prop of this.props.partData.props) {
                 if (prop.propType === "string") {
-                    properties.push(<Typography key={key} variant={'h6'}>{prop.value}</Typography>)
+                    properties.push(<Typography key={key} variant={'h6'}>{prop.value}</Typography>);
+                    key++;
                 } else if (prop.propType === "textfield") {
                     properties.push(
                         <Grid key={key} item>
@@ -65,20 +66,24 @@ class PropertiesPanel extends React.Component {
                                 id="part-name"
                                 label="Part Name"
                                 value={prop.value}
+                                key={key + 1}
                             />
                         </Grid>
                     )
+                    key += 2;
                 } else if (prop.propType === "select") {
                     let options = [];
     
                     for (let option of prop.options) {
-                        options.push(<MenuItem value={option}>{option}</MenuItem>)
+                        options.push(<MenuItem key={key} value={option}>{option}</MenuItem>);
+                        key++;
                     }
 
                     properties.push(
-                        <Grid item>
-                            <InputLabel id={prop.propName}>{prop.propName}</InputLabel>
+                        <Grid key={key} item>
+                            <InputLabel key={key + 1} id={prop.propName}>{prop.propName}</InputLabel>
                             <Select
+                                key={key + 2}
                                 labelId={prop.propName}
                                 id={prop.propName}
                                 value={prop.value}
@@ -88,9 +93,8 @@ class PropertiesPanel extends React.Component {
                             </Select>
                         </Grid>
                     )
-                    
+                    key += 3;
                 }
-                key++;
             }
         }
 
