@@ -33,11 +33,12 @@ export default class BreadBoard extends React.Component {
 	getProps() {
 		return(
             {
+				ref: this,
                 callBack: this.updateProp,
                 props:  [   
-							{propName: "type", propType: "string", value: "BreadBoard"},
-							{propName: "name", propType: "textfield", value: "Lorem Ipsum"},
-                        ]
+					{propName: "type", propType: "string", value: "BreadBoard"},
+					{propName: "name", propType: "textfield", value: "Lorem Ipsum"},
+                ]
             }
         )
 	}

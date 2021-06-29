@@ -65,12 +65,13 @@ const styles = theme => ({
 
 class Drawer extends Component {
     constructor(props) {
-        super(props)
+        super(props);
+        this.selectedPart = undefined;
+
         this.state = {
             hideProperties: true,
             partData: {},
         }
-
     }
 
     handleProperties = () => {
@@ -80,10 +81,19 @@ class Drawer extends Component {
     }
 
     onDoubleTap = (childData) => {
-        this.handleProperties();
-
-        this.setState({partData: childData})
-        console.log(this.state.partData)
+        if (this.selectedPart === childData) {
+            this.setState({
+                hideProperties: false,
+                partData: {},
+            });
+            this.selectedPart = undefined;
+        } else {
+            this.setState({
+                hideProperties: false,
+                partData: childData
+            });
+            this.selectedPart = childData;
+        }
     }
 
     handleTextField = (event) => {

@@ -41,8 +41,12 @@ class PropertiesPanel extends React.Component {
     //     }))
     // }
 
-    handleTextField = (event) => {
-        this.setState({selectedValue: event.target.value})
+    handleTextField = (event, propName) => {
+        this.setState({selectedValue: event.target.value});
+
+        if (this.props.partData.callback) {
+            this.props.partData.callback(propName, event.target.value);
+        }
     }
 
     render() {
@@ -52,7 +56,6 @@ class PropertiesPanel extends React.Component {
 
         if (this.props.partData.props) {
             for (let prop of this.props.partData.props) {
-                console.log(prop)
                 if (prop.propType === "string") {
                     properties.push(<Typography key={key} variant={'h6'}>{prop.value}</Typography>)
                 } else if (prop.propType === "textfield") {
@@ -78,13 +81,14 @@ class PropertiesPanel extends React.Component {
                             <Select
                                 labelId={prop.propName}
                                 id={prop.propName}
-                                value={this.state.selectedValue}
-                                onChange={this.handleTextField}
+                                value={prop.value}
+                                onChange={event => this.handleTextField(event, prop.propName)}
                             >
                                 {options}
                             </Select>
                         </Grid>
                     )
+                    
                 }
                 key++;
             }

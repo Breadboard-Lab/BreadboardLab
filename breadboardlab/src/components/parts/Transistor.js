@@ -35,6 +35,7 @@ export default class Transistor extends React.Component {
     getProps() {
         return(
             {
+                ref: this,
                 callBack: this.updateProp,
                 props:  [
                     {propName: "Type", propType: "string", value: "Transistor"},

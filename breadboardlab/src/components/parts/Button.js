@@ -37,8 +37,9 @@ export default class Button extends React.Component {
     getProps() {
         return(
             {
+                ref: this,
                 callBack: this.updateProp,
-                props:  [
+                props: [
                     {propName: "Type", propType: "string", value: "MomentaryButton"},
                     {propName: "Name", propType: "textfield", value: "Lorem Ipsum"},
                 ]

@@ -5,14 +5,16 @@ export default class Resistor extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.onDoubleClick = this.onDoubleClick.bind(this);
         
         this.state = {
             type: "Resistor",
             name: "Lorem Ipsum",
-            resistance: 220,
+            resistance: "470 Ω",
             resistanceEnabled: true,
         }
+        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.updateProp = this.updateProp.bind(this);
+
         this.scale = {x: 100, y: 75};
         this.offSet = {x: 0.5, y: 0.53};
     }
@@ -29,19 +31,26 @@ export default class Resistor extends React.Component {
         this.props.onDoubleTap(this.getProps());
     }
 
-    updateProp(props) {
-        console.log(props)
+    updateProp(propName, value) {
+        if (propName.toLowerCase() === "type") {
+            this.setState({type: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "name") {
+            this.setState({name: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "resistance") {
+            this.setState({resistance: value}, this.onDoubleClick);
+        }
     }
 
     getProps() {
         return(
             {
-                callBack: this.updateProp,
-                props:  [   
-                            {propName: "Type", propType: "string", value: "Resistor"},
-                            {propName: "Name", propType: "textfield", value: "Lorem Ipsum"},
-                            {propName: "Resistance", propType: "select", options: ["220 Ω", "470 Ω", "1 kΩ", "10 kΩ"]}
-                        ]
+                ref: this,
+                callback: this.updateProp,
+                props: [   
+                    {propName: "Type", propType: "string", value: this.state.type},
+                    {propName: "Name", propType: "textfield", value: this.state.name},
+                    {propName: "Resistance", propType: "select", value: this.state.resistance, options: ["220 Ω", "470 Ω", "1 kΩ", "10 kΩ"]}
+                ]
             }
             
         )
