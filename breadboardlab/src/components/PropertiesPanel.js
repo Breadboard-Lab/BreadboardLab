@@ -41,7 +41,7 @@ class PropertiesPanel extends React.Component {
     //     }))
     // }
 
-    handleTextField = (event, propName) => {
+    handleChanges = (event, propName) => {
         this.setState({selectedValue: event.target.value});
 
         if (this.props.partData.callback) {
@@ -66,7 +66,7 @@ class PropertiesPanel extends React.Component {
                                 id="part-name"
                                 label="Part Name"
                                 value={prop.value}
-                                onChange={event => this.handleTextField(event, prop.propName)}
+                                onChange={event => this.handleChanges(event, prop.propName)}
                                 key={key + 1}
                             />
                         </Grid>
@@ -88,7 +88,7 @@ class PropertiesPanel extends React.Component {
                                 labelId={prop.propName}
                                 id={prop.propName}
                                 value={prop.value}
-                                onChange={event => this.handleTextField(event, prop.propName)}
+                                onChange={event => this.handleChanges(event, prop.propName)}
                             >
                                 {options}
                             </Select>
