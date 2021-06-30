@@ -141,17 +141,22 @@ export default class BreadBoard extends React.Component {
 
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					
-					if (listOfElements.includes(event.currentTarget)) {
+					if (listOfElements.includes(event.currentTarget) && ref.snapConnector) {
 						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 						return;
 					}
-					ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
-					ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+
+					if (ref.disconnect)
+						ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
+					if (ref.moveConnectortoCursor)
+						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
-					ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+					if (ref.disconnect)
+						ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
+					if (ref.moveConnectortoCursor)
+						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				}
 			});
 		} 
@@ -188,7 +193,7 @@ export default class BreadBoard extends React.Component {
 
     render() {
 		return (
-			<g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(5, 30) scale(0.3, 0.3)`}>
+			<g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(6, 30) scale(0.3, 0.3)`}>
 				<g id="layer1">
 					<rect
 						strokeWidth="0"

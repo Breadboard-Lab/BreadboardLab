@@ -5,7 +5,6 @@ export default class LED extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.onDoubleClick = this.onDoubleClick.bind(this);
         
         this.state = {
             type: "LED",
@@ -13,6 +12,8 @@ export default class LED extends React.Component {
             colour: "red",
             colourEnabled: true,
         }
+        this.onDoubleClick = this.onDoubleClick.bind(this);
+        
         this.scale = {x: 20, y: 20};
         this.offSet = {x: 0.3, y: 0.5};
     }

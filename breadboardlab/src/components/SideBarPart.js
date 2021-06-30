@@ -158,19 +158,20 @@ class SideBarPart extends React.Component {
 }
 
 function movePart(event) {
-    let scale = svg.getAttribute("scale")
+    const scale = svg.getAttribute("scale");
+    const part = event.currentTarget.closest(".part");
     const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-    const currentTransform = event.currentTarget.getAttribute("transform");
+    const currentTransform = part.getAttribute("transform");
     const transform = regex.exec(currentTransform);
 
     if (transform) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
 
-        event.currentTarget.setAttribute("transform", `translate(${xPos} ${yPos})`);
+        part.setAttribute("transform", `translate(${xPos} ${yPos})`);
         return {dx: event.dx * scale, dy: event.dy * scale}
     } else {
-        event.currentTarget.setAttribute("transform", `translate(0 0)`);
+        part.setAttribute("transform", `translate(0 0)`);
         return {dx: 0, dy: 0}
     }
 }

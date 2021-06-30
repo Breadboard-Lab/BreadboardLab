@@ -5,12 +5,13 @@ export default class Transistor extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.onDoubleClick = this.onDoubleClick.bind(this);
         
         this.state = {
             type: "Transistor",
             name: "Lorem Ipsum",
         }
+        this.onDoubleClick = this.onDoubleClick.bind(this);
+
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.5, y: 0.45};
     }
