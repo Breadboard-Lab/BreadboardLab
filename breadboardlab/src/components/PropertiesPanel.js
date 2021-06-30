@@ -66,6 +66,7 @@ class PropertiesPanel extends React.Component {
                                 id="part-name"
                                 label="Part Name"
                                 value={prop.value}
+                                onChange={event => this.handleTextField(event, prop.propName)}
                                 key={key + 1}
                             />
                         </Grid>
