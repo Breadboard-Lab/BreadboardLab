@@ -8,12 +8,11 @@ export default class Button extends React.Component {
         this.refConnector = React.createRef();
         
         this.state = {
-            partData: {
-                type: "MomentaryButton",
-                name: "Lorem Ipsum",
-            },
+            type: "Momentary Button",
+            name: "Momentary Button",
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
@@ -40,18 +39,22 @@ export default class Button extends React.Component {
         this.props.onDoubleTap(this.getProps());
     }
 
-    updateProp(props) {
-        console.log(props)
+    updateProp(propName, value) {
+        if (propName.toLowerCase() === "type") {
+            this.setState({type: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "name") {
+            this.setState({name: value}, this.onDoubleClick);
+        }
     }
 
     getProps() {
         return(
             {
                 ref: this,
-                callBack: this.updateProp,
+                callback: this.updateProp,
                 props: [
-                    {propName: "Type", propType: "string", value: "MomentaryButton"},
-                    {propName: "Name", propType: "textfield", value: "Lorem Ipsum"},
+                    {propName: "Type", propType: "string", value: this.state.type},
+                    {propName: "Name", propType: "textfield", value: this.state.name},
                 ]
             }
 

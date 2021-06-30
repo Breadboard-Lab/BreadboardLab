@@ -10,11 +10,12 @@ export default class BreadBoard extends React.Component {
 		
 		this.state = {
 			type: "Breadboard",
-			name: "Lorem Ipsum",
+			name: "Breadboard",
 		}
 		this.onDoubleClick = this.onDoubleClick.bind(this);
         this.connectPart = this.connectPart.bind(this);
         this.disconnectPart = this.disconnectPart.bind(this);
+		this.updateProp = this.updateProp.bind(this);
 
 		this.scale = {x: 6, y: 6};
 		this.offSet = {x: 0.45604399, y: 0};
@@ -26,21 +27,26 @@ export default class BreadBoard extends React.Component {
         this.props.onDoubleTap(this.getProps());
     }
 
-	updateProp(props) {
-        console.log(props)
-    }
+	updateProp(propName, value) {
+		if (propName.toLowerCase() === "type") {
+			this.setState({type: value}, this.onDoubleClick);
+		} else if (propName.toLowerCase() === "name") {
+			this.setState({name: value}, this.onDoubleClick);
+		}
+	}
 
 	getProps() {
 		return(
-            {
+			{
 				ref: this,
-                callBack: this.updateProp,
-                props:  [   
-					{propName: "type", propType: "string", value: "BreadBoard"},
-					{propName: "name", propType: "textfield", value: "Lorem Ipsum"},
-                ]
-            }
-        )
+				callback: this.updateProp,
+				props: [
+					{propName: "Type", propType: "string", value: this.state.type},
+					{propName: "Name", propType: "textfield", value: this.state.name},
+				]
+			}
+
+		)
 	}
 
     componentDidMount() {

@@ -8,9 +8,10 @@ export default class Transistor extends React.Component {
         
         this.state = {
             type: "Transistor",
-            name: "Lorem Ipsum",
+            name: "Transistor",
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.5, y: 0.45};
@@ -29,18 +30,22 @@ export default class Transistor extends React.Component {
         this.props.onDoubleTap(this.getProps());
     }
 
-    updateProp(props) {
-        console.log(props)
+    updateProp(propName, value) {
+        if (propName.toLowerCase() === "type") {
+            this.setState({type: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "name") {
+            this.setState({name: value}, this.onDoubleClick);
+        }
     }
 
     getProps() {
         return(
             {
                 ref: this,
-                callBack: this.updateProp,
-                props:  [
-                    {propName: "Type", propType: "string", value: "Transistor"},
-                    {propName: "Name", propType: "textfield", value: "Lorem Ipsum"},
+                callback: this.updateProp,
+                props: [
+                    {propName: "Type", propType: "string", value: this.state.type},
+                    {propName: "Name", propType: "textfield", value: this.state.name},
                 ]
             }
 
