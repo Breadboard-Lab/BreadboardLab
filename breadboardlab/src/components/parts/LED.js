@@ -8,11 +8,12 @@ export default class LED extends React.Component {
         
         this.state = {
             type: "LED",
-            name: "Lorem Ipsum",
-            colour: "red",
+            name: "LED",
+            colour: "Red",
             colourEnabled: true,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.updateProp = this.updateProp.bind(this);
         
         this.scale = {x: 20, y: 20};
         this.offSet = {x: 0.3, y: 0.5};
@@ -27,23 +28,28 @@ export default class LED extends React.Component {
     }
 
     onDoubleClick() {
-        console.log("test")
         this.props.onDoubleTap(this.getProps());
     }
 
-    updateProp(props) {
-        console.log(props)
+    updateProp(propName, value) {
+        if (propName.toLowerCase() === "type") {
+            this.setState({type: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "name") {
+            this.setState({name: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "colour") {
+            this.setState({colour: value}, this.onDoubleClick);
+        }
     }
 
     getProps() {
         return(
             {
                 ref: this,
-                callBack: this.updateProp,
+                callback: this.updateProp,
                 props:  [
-                    {propName: "Type", propType: "string", value: "LED"},
-                    {propName: "Name", propType: "textfield", value: "Lorem Ipsum"},
-                    {propName: "Colour", propType: "select", options: ["Red", "Blue", "Green", "Yellow"]}
+                    {propName: "Type", propType: "string", value: this.state.type},
+                    {propName: "Name", propType: "textfield", value: this.state.name},
+                    {propName: "Colour", propType: "select", value: this.state.colour, options: ["Red", "Blue", "Green", "Yellow"]}
                 ]
             }
 
