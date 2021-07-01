@@ -132,8 +132,6 @@ export default class BreadBoard extends React.Component {
 
 						this.wire.attachTo.set("start", {id: event.currentTarget.id, ref: this});
 						this.wire.attachTo.set("end", {id: event.currentTarget.id, ref: this});
-
-						event.currentTarget.setAttribute("filter", "url(#f3)");
 					}
 				}
 			})
@@ -147,8 +145,7 @@ export default class BreadBoard extends React.Component {
 				ondropmove: event => {			
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					let rect1 = event.relatedTarget.getBoundingClientRect();
-					let rect2 = event.currentTarget.getBoundingClientRect();	
-					
+					let rect2 = event.currentTarget.getBoundingClientRect();
 					let overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
 					
 					if (!overlap) {
@@ -166,12 +163,13 @@ export default class BreadBoard extends React.Component {
 
 					if (overlap && typeof ref.snapConnector === "function") {
 						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
-					}
+					}	
 					delta.x += event.dragEvent.delta.x;
 					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+					
 					if (ref.disconnect)
 						ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
 					if (ref.moveConnectortoCursor)

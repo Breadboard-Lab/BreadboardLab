@@ -65,13 +65,21 @@ class SideBarPart extends React.Component {
         manualStart: true,
         listeners: {
             move: (event) => {
-                let pos = svg.createSVGPoint();
-                pos.x = event.client.x - event.rect.width / 2;
-                pos.y = event.client.y - event.rect.height / 2;
-                var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
-
-                if (cursorpt.x && cursorpt.y) {
-                    this.node.node.current.parentNode.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
+                let part = this.node.node.current.closest(".part");
+                let findConnector = part.querySelector(".connector");
+                
+                if (findConnector && !event.currentTarget.classList.contains("connector")) {
+                    event.interaction.stop();
+                    event.interaction.start({name: "drag"}, event.interactable, findConnector);
+                } else {
+                    let pos = svg.createSVGPoint();
+                    pos.x = event.client.x - part.getBoundingClientRect().width / 2;
+                    pos.y = event.client.y - part.getBoundingClientRect().height / 2;
+                    var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
+    
+                    if (cursorpt.x && cursorpt.y) {
+                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
+                    }
                 }
             },
             end: () => {

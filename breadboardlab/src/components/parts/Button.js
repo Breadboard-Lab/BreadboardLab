@@ -16,13 +16,17 @@ export default class Button extends React.Component {
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
+        this.attachTo = new Map();
     }
 
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
+                start: event => {
+                    this.snap = false;
+                },
 				move: event => {
-                    if (event.currentTarget.classList.contains("connector") && typeof this.props.movePart === "function") {
+                    if (event.currentTarget === this.refConnector.current && typeof this.props.movePart === "function" && !this.snap) {
                         this.props.movePart(event);
                     } else {
                         const {interaction} = event;
@@ -62,7 +66,6 @@ export default class Button extends React.Component {
     }
 
     snapConnector(event, id, attachRef, callback) {
-        event.dragEvent.interaction.stop();
         event.currentTarget.setAttribute("filter", "url(#f3)");
 
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
@@ -75,7 +78,7 @@ export default class Button extends React.Component {
 
             this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
 		}
-        event.dragEvent.interaction.start({name: "drag"}, event.dragEvent.interactable, event.currentTarget);
+        this.snap = true;
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
@@ -92,6 +95,10 @@ export default class Button extends React.Component {
             element.closest(".part").setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
 		}
     }
+
+    disconnect() {
+        this.snap = false;
+    }
     
     render() {
         return(
@@ -99,9 +106,9 @@ export default class Button extends React.Component {
                 <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
                 <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />
                 <rect ref={this.refConnector} className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                <rect className="connector" x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                <rect className="connector" x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
-                <rect className="connector" x="0.14" y="0.3" width="0.06" height="0.05" fill="#707070" />
+                <rect x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
+                <rect x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
+                <rect x="0.14" y="0.3" width="0.06" height="0.05" fill="#707070" />
                 <circle cx="0" cy="0" r="0.15" fill="#000000" />
                 <circle cx="0" cy="0" r="0.1" fill="#202020" />
                 <circle cx="-0.18" cy="-0.18" r="0.03" fill="#202020" />
