@@ -51,6 +51,7 @@ export default class BreadBoard extends React.Component {
 
     componentDidMount() {
 		const holeLayer = this.node.current.querySelectorAll("ellipse");
+		let delta = {x: 0, y: 0}
 
 		interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
@@ -129,33 +130,33 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.01,
+				overlap: 0.5,
 				ondragenter: event => {
-					//let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					//ref.snapConnector(event, this);
+					// let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+					// ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 				},
-				ondropmove: event => {
-					let x, y;
-					if (event.relatedTarget.classList.contains("wire")) {
-						x = event.dragEvent.client.x;
-						y = event.dragEvent.client.y;
-					} else {
-						x = event.relatedTarget.getBoundingClientRect().x + event.relatedTarget.getBoundingClientRect().width / 2;
-						y = event.relatedTarget.getBoundingClientRect().y + event.relatedTarget.getBoundingClientRect().height / 2;
-					}
-					let listOfElements = document.elementsFromPoint(x, y);
-
+				ondropmove: event => {			
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					
-					if (listOfElements.includes(event.currentTarget) && ref.snapConnector) {
-						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
-						return;
-					}
+					let rect1 = event.relatedTarget.getBoundingClientRect();
+					let rect2 = event.currentTarget.getBoundingClientRect();	
+					let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
-					if (ref.disconnect)
-						ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
-					if (ref.moveConnectortoCursor)
-						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+					if (overlap && typeof ref.snapConnector === "function")
+						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
+					
+					overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
+
+					if (!overlap) {
+						if (typeof ref.disconnect === "function")
+							ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
+						if (typeof ref.moveConnectortoCursor === "function")
+							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+						
+						delta.x = 0;
+						delta.y = 0;
+					}
+					delta.x += event.dragEvent.delta.x / 1.8;
+					delta.y += event.dragEvent.delta.y / 1.8;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));

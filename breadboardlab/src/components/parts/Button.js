@@ -61,8 +61,34 @@ export default class Button extends React.Component {
         )
     }
 
-    snapConnector() {
-        // TODO: snap button
+    snapConnector(event, id, attachRef, callback) {
+        event.currentTarget.setAttribute("filter", "url(#f3)");
+
+		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
+		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
+
+        if (breadboardTranslate && relatedTargetTranslate) {
+			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
+			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
+
+            this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
+		}
+    }
+
+    moveConnectortoCursor(element, clientX, clientY) {
+        const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const translate = regexTranslate.exec(element.closest(".part").getAttribute("transform"));
+
+		if (translate) {
+			let svg = document.getElementById("AppSVG");
+			let pt = svg.createSVGPoint();
+			pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;;
+			pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;;
+		
+			let cursorpt = pt.matrixTransform(svg.getScreenCTM().inverse());
+            element.closest(".part").setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
+		}
     }
     
     render() {
