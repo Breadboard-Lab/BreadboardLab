@@ -62,7 +62,7 @@ export default class BreadBoard extends React.Component {
 						this.connectedParts.forEach((listOfItems, key) => {
 							for (let item of listOfItems) {
 								if (item.ref.movePart) {
-									item.ref.movePart(dx, dy);
+									item.ref.movePart(item.id, dx, dy);
 								}
 							}
 						});
@@ -96,7 +96,9 @@ export default class BreadBoard extends React.Component {
 				listeners: {
 					move: event => {
 						let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.currentTarget.closest(".part"));
-						ref.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
+
+						if (typeof ref.moveConnectortoCursor === "function")
+							ref.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
 					},
 					end: event => {
 						this.mousedown = false;
@@ -112,18 +114,25 @@ export default class BreadBoard extends React.Component {
 					let startPoint = {x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x, y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y};
 					
 					if (translate) {
-						let wire = React.createElement(Wire, {ref: node => this.wire = node,
-															  startPoint: startPoint,
-															  endPoint: startPoint,
-															  transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`});
-															  
+						let wire = React.createElement(
+							Wire,
+							{
+								ref: node => this.wire = node,
+								startPoint: startPoint,
+								endPoint: startPoint,
+								transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`
+							}
+						);							  
 						this.props.addPart(wire);
 						interaction.start({name: "drag"}, event.interactable, this.wire.endPoint.current.node);
 						SideBarPart.listOfRefs.push(this.wire);
+
 						this.connectPart(event, event.currentTarget.id, "start", this.wire);
 						this.connectPart(event, event.currentTarget.id, "end", this.wire);
+
 						this.wire.attachTo.set("start", {id: event.currentTarget.id, ref: this});
 						this.wire.attachTo.set("end", {id: event.currentTarget.id, ref: this});
+
 						event.currentTarget.setAttribute("filter", "url(#f3)");
 					}
 				}
@@ -139,24 +148,27 @@ export default class BreadBoard extends React.Component {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					let rect1 = event.relatedTarget.getBoundingClientRect();
 					let rect2 = event.currentTarget.getBoundingClientRect();	
-					let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
-					if (overlap && typeof ref.snapConnector === "function")
-						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 					
-					overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
-
+					let overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
+					
 					if (!overlap) {
-						if (typeof ref.disconnect === "function")
+						if (typeof ref.disconnect === "function") {
 							ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
-						if (typeof ref.moveConnectortoCursor === "function")
+						}
+						if (typeof ref.moveConnectortoCursor === "function") {
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
-						
+						}
 						delta.x = 0;
 						delta.y = 0;
+						return;
 					}
-					delta.x += event.dragEvent.delta.x / 1.8;
-					delta.y += event.dragEvent.delta.y / 1.8;
+					overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+					if (overlap && typeof ref.snapConnector === "function") {
+						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
+					}
+					delta.x += event.dragEvent.delta.x;
+					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));

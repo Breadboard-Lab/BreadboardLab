@@ -22,7 +22,7 @@ export default class Button extends React.Component {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
-                    if (event.currentTarget.classList.contains("connector")) {
+                    if (event.currentTarget.classList.contains("connector") && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
                     } else {
                         const {interaction} = event;
@@ -62,6 +62,7 @@ export default class Button extends React.Component {
     }
 
     snapConnector(event, id, attachRef, callback) {
+        event.dragEvent.interaction.stop();
         event.currentTarget.setAttribute("filter", "url(#f3)");
 
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
@@ -74,10 +75,11 @@ export default class Button extends React.Component {
 
             this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
 		}
+        event.dragEvent.interaction.start({name: "drag"}, event.dragEvent.interactable, event.currentTarget);
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
-        const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(element.closest(".part").getAttribute("transform"));
 
 		if (translate) {

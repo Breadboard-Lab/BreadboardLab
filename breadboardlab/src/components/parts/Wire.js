@@ -69,15 +69,15 @@ export default class Wire extends React.Component {
 	}
 
     moveConnectortoCursor(element, clientX, clientY) {
-		const regexTranslate = /translate\((([\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(element.parentNode.getAttribute("transform"));
-
+        
 		if (translate) {
 			let svg = document.getElementById("AppSVG");
 			let pt = svg.createSVGPoint();
 			pt.x = clientX;
 			pt.y = clientY;
-		
+
 			let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
 			const xPos = cursorpt.x - Number(translate[1]);
 			const yPos = cursorpt.y - Number(translate[5]);
@@ -98,12 +98,12 @@ export default class Wire extends React.Component {
         let item = this.attachTo.get("start");
 
         if (item) {
-            if (this.startPoint.current.node === event.relatedTarget && item.ref === attachRef) {
+            if (this.startPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("start", undefined);
     
                 if (callback)
                     callback(event, id, "start", this);
-            } else if (this.endPoint.current.node === event.relatedTarget && item.ref === attachRef) {
+            } else if (this.endPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("end", undefined);
     
                 if (callback)
@@ -119,11 +119,11 @@ export default class Wire extends React.Component {
         })
     }
 
-    movePart(dx, dy) {
-        if (this.attachTo.get("start") && this.attachTo.get("end") && this.attachTo.get("start").ref === this.attachTo.get("end").ref) {
-            this.setPoints({x: this.state.startPoint.x + dx / 2, y: this.state.startPoint.y + dy / 2}, {x: this.state.endPoint.x + dx / 2, y: this.state.endPoint.y + dy / 2});
-        } else {
-            this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
+    movePart(id, dx, dy) {
+        if (id === "start") {
+            this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, this.state.endPoint);
+        } else if (id === "end") {
+            this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
         }
     }
 
