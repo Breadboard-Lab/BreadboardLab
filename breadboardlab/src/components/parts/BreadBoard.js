@@ -138,10 +138,6 @@ export default class BreadBoard extends React.Component {
 			.dropzone({
 				accept: ".connector",
 				overlap: 0.5,
-				ondragenter: event => {
-					// let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					// ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
-				},
 				ondropmove: event => {			
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					let rect1 = event.relatedTarget.getBoundingClientRect();
@@ -164,16 +160,8 @@ export default class BreadBoard extends React.Component {
 					if (overlap && typeof ref.snapConnector === "function") {
 						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 					}	
-					delta.x += event.dragEvent.delta.x;
-					delta.y += event.dragEvent.delta.y;
-				},
-				ondragleave: event => {
-					// let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					
-					// if (ref.disconnect)
-					// 	ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
-					// if (ref.moveConnectortoCursor)
-					// 	ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+					delta.x += event.dragEvent.delta.x / 1.1;
+					delta.y += event.dragEvent.delta.y / 1.1;
 				}
 			});
 		} 
@@ -210,7 +198,7 @@ export default class BreadBoard extends React.Component {
 	checkSpace() {
 
 	}
-	
+
     render() {
 		return (
 			<g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(6, 30) scale(0.3, 0.3)`}>

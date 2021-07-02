@@ -80,6 +80,9 @@ export default class Button extends React.Component {
 
 
             this.attachTo.set("topLeft", {id: id, ref: attachRef});
+
+            if (typeof callback === "function")
+                    callback(id, "topLeft", this);
             this.snap = true;
 		}
     }
@@ -99,9 +102,12 @@ export default class Button extends React.Component {
 		}
     }
 
-    disconnect() {
+    disconnect(event, id, callback) {
         this.snap = false;
         this.attachTo.set("topLeft", undefined);
+
+        if (typeof callback === "function")
+            callback(id, "topLeft", this);
     }
     
     render() {
