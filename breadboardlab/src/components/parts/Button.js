@@ -77,8 +77,11 @@ export default class Button extends React.Component {
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
 
             this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
+
+
+            this.attachTo.set("topLeft", {id: id, ref: attachRef});
+            this.snap = true;
 		}
-        this.snap = true;
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
@@ -98,6 +101,7 @@ export default class Button extends React.Component {
 
     disconnect() {
         this.snap = false;
+        this.attachTo.set("topLeft", undefined);
     }
     
     render() {

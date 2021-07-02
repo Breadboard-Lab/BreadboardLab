@@ -127,8 +127,8 @@ export default class BreadBoard extends React.Component {
 						interaction.start({name: "drag"}, event.interactable, this.wire.endPoint.current.node);
 						SideBarPart.listOfRefs.push(this.wire);
 
-						this.connectPart(event, event.currentTarget.id, "start", this.wire);
-						this.connectPart(event, event.currentTarget.id, "end", this.wire);
+						this.connectPart(event.currentTarget.id, "start", this.wire);
+						this.connectPart(event.currentTarget.id, "end", this.wire);
 
 						this.wire.attachTo.set("start", {id: event.currentTarget.id, ref: this});
 						this.wire.attachTo.set("end", {id: event.currentTarget.id, ref: this});
@@ -150,7 +150,7 @@ export default class BreadBoard extends React.Component {
 					
 					if (!overlap) {
 						if (typeof ref.disconnect === "function") {
-							ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
+							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 						}
 						if (typeof ref.moveConnectortoCursor === "function") {
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
@@ -168,18 +168,18 @@ export default class BreadBoard extends React.Component {
 					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
-					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+					// let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					
-					if (ref.disconnect)
-						ref.disconnect(event, event.currentTarget.id, this, this.disconnectPart);
-					if (ref.moveConnectortoCursor)
-						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+					// if (ref.disconnect)
+					// 	ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
+					// if (ref.moveConnectortoCursor)
+					// 	ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				}
 			});
 		} 
     }
 
-	connectPart(event, id, partID, ref) {
+	connectPart(id, partID, ref) {
 		let list = this.connectedParts.get(id);
 
 		if (list) {
@@ -189,10 +189,10 @@ export default class BreadBoard extends React.Component {
 		} else {
 			this.connectedParts.set(id, [{id: partID, ref: ref}]);
 		}
-		event.currentTarget.setAttribute("filter", "url(#f3)");
+		this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 	}
 
-	disconnectPart(event, id, partID, ref) {
+	disconnectPart(id, partID, ref) {
 		let list = this.connectedParts.get(id);
 
 		if (list) {
@@ -202,12 +202,15 @@ export default class BreadBoard extends React.Component {
 				list.splice(list.indexOf(item), 1);
 			}
 			if (list.length === 0) {
-				event.currentTarget.setAttribute("filter", "");
+				this.node.current.querySelector("#" + id).setAttribute("filter", "");
 			}
 		}
 	}
 
+	checkSpace() {
 
+	}
+	
     render() {
 		return (
 			<g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(6, 30) scale(0.3, 0.3)`}>

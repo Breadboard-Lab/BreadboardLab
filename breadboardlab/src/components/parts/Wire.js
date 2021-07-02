@@ -57,13 +57,13 @@ export default class Wire extends React.Component {
             if (this.startPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("start", {id: id, ref: attachRef});
 
-                if (callback)
-                    callback(event, id, "start", this);
+                if (typeof callback === "function")
+                    callback(id, "start", this);
             } else if (this.endPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("end", {id: id, ref: attachRef});
 
-                if (callback)
-                    callback(event, id, "end", this);
+                if (typeof callback === "function")
+                    callback(id, "end", this);
             }
 		}
 	}
@@ -94,20 +94,20 @@ export default class Wire extends React.Component {
         }
 	}
 
-    disconnect(event, id, attachRef, callback) {
+    disconnect(event, id, callback) {
         let item = this.attachTo.get("start");
 
         if (item) {
             if (this.startPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("start", undefined);
     
-                if (callback)
-                    callback(event, id, "start", this);
+                if (typeof callback === "function")
+                    callback(id, "start", this);
             } else if (this.endPoint.current.node === event.relatedTarget) {
                 this.attachTo.set("end", undefined);
     
-                if (callback)
-                    callback(event, id, "end", this);
+                if (typeof callback === "function")
+                    callback(id, "end", this);
             }
         }
     }
