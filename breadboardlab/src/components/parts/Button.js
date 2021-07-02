@@ -109,6 +109,15 @@ export default class Button extends React.Component {
         if (typeof callback === "function")
             callback(id, "topLeft", this);
     }
+
+    movePart(id, dx, dy) {
+        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
+        
+        if (translate) {
+            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
+        }
+    }
     
     render() {
         return(

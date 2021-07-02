@@ -112,19 +112,19 @@ export default class Wire extends React.Component {
         }
     }
 
-    setPoints(startPoint, endPoint) {
-        this.setState({
-            startPoint: startPoint,
-            endPoint: endPoint
-        })
-    }
-
     movePart(id, dx, dy) {
         if (id === "start") {
             this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, this.state.endPoint);
         } else if (id === "end") {
             this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
         }
+    }
+    
+    setPoints(startPoint, endPoint) {
+        this.setState({
+            startPoint: startPoint,
+            endPoint: endPoint
+        })
     }
 
     onMouseEnter(event) {
