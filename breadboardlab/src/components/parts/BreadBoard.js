@@ -145,12 +145,10 @@ export default class BreadBoard extends React.Component {
 					let overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
 					
 					if (!overlap) {
-						if (typeof ref.disconnect === "function") {
+						if (typeof ref.disconnect === "function") 
 							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
-						}
-						if (typeof ref.moveConnectortoCursor === "function") {
+						if (typeof ref.moveConnectortoCursor === "function") 
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
-						}
 						delta.x = 0;
 						delta.y = 0;
 						return;
@@ -162,6 +160,14 @@ export default class BreadBoard extends React.Component {
 					}	
 					delta.x += event.dragEvent.delta.x / 1.1;
 					delta.y += event.dragEvent.delta.y / 1.1;
+				},
+				ondragleave: event => {
+					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+					
+					if (typeof ref.disconnect === "function") 
+							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
+					if (typeof ref.moveConnectortoCursor === "function") 
+						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				}
 			});
 		} 
