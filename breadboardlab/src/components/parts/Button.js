@@ -31,13 +31,18 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
+                start: event => {
+                    this.snap = false
+                },
 				move: event => {
-                    if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
-                        this.props.movePart(event);
-                    } else {
-                        const {interaction} = event;
-                        interaction.stop();
-                        interaction.start({name: "drag"}, event.interactable, this.topLeftConector.current)
+                    if (!this.snap) {
+                        if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
+                            this.props.movePart(event);
+                        } else {
+                            const {interaction} = event;
+                            interaction.stop();
+                            interaction.start({name: "drag"}, event.interactable, this.topLeftConector.current)
+                        }
                     }
                 }
 			},
@@ -100,8 +105,8 @@ export default class Button extends React.Component {
             if (connectors) {
                 for (let refData of this.refArray) {
                     const refPos = {
-                        x: refData.ref.current.getBoundingClientRect().x + (relatedPosition.x - breadboardHolePosition.x) + refData.ref.current.getBoundingClientRect().width / 2,
-                        y: refData.ref.current.getBoundingClientRect().y + (relatedPosition.y - breadboardHolePosition.y) + refData.ref.current.getBoundingClientRect().height / 2,
+                        x: refData.ref.current.getBoundingClientRect().x + relatedPosition.x - breadboardHolePosition.x + refData.ref.current.getBoundingClientRect().width / 2,
+                        y: refData.ref.current.getBoundingClientRect().y + relatedPosition.y - breadboardHolePosition.y + refData.ref.current.getBoundingClientRect().height / 2,
                     };
                     const element = document.elementsFromPoint(refPos.x, refPos.y)[1];
     

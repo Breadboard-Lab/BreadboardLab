@@ -61,7 +61,7 @@ export default class BreadBoard extends React.Component {
 	
 						this.connectedParts.forEach((listOfItems, key) => {
 							for (let item of listOfItems) {
-								if (item.ref.movePart) {
+								if (typeof item.ref.movePart === "function") {
 									item.ref.movePart(item.id, dx, dy);
 								}
 							}
@@ -142,8 +142,15 @@ export default class BreadBoard extends React.Component {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					let rect1 = event.relatedTarget.getBoundingClientRect();
 					let rect2 = event.currentTarget.getBoundingClientRect();
-					let overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
+					let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 					
+					if (overlap && typeof ref.snapConnector === "function") {
+						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
+					}	
+					delta.x += event.dragEvent.delta.x;
+					delta.y += event.dragEvent.delta.y;
+					overlap = !(rect1.right + delta.x < rect2.left - 10 || rect1.left + delta.x > rect2.right + 10 || rect1.bottom + delta.y < rect2.top - 10 || rect1.top + delta.y > rect2.bottom + 10);
+
 					if (!overlap) {
 						if (typeof ref.disconnect === "function") {
 							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
@@ -153,15 +160,7 @@ export default class BreadBoard extends React.Component {
 						}
 						delta.x = 0;
 						delta.y = 0;
-						return;
 					}
-					overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-					
-					if (overlap && typeof ref.snapConnector === "function") {
-						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
-					}	
-					delta.x += event.dragEvent.delta.x;
-					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
