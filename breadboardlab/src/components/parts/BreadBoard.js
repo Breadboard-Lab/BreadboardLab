@@ -56,7 +56,7 @@ export default class BreadBoard extends React.Component {
 		interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
-					if (this.props.movePart) {
+					if (typeof this.props.movePart === "function") {
 						let {dx, dy} = this.props.movePart(event);
 	
 						this.connectedParts.forEach((listOfItems, key) => {

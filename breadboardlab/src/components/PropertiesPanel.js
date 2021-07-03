@@ -44,7 +44,7 @@ class PropertiesPanel extends React.Component {
     handleChanges = (event, propName) => {
         this.setState({selectedValue: event.target.value});
 
-        if (this.props.partData.callback) {
+        if (typeof this.props.partData.callback === "function") {
             this.props.partData.callback(propName, event.target.value);
         }
     }
