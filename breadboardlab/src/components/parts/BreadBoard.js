@@ -50,7 +50,7 @@ export default class BreadBoard extends React.Component {
 	}
 
     componentDidMount() {
-		const holeLayer = this.node.current.querySelectorAll("ellipse");
+		this.connectors = this.node.current.querySelectorAll("ellipse");
 		let delta = {x: 0, y: 0}
 
 		interact(this.node.current.parentNode).styleCursor(false).draggable({
@@ -71,19 +71,19 @@ export default class BreadBoard extends React.Component {
 			},
 		})
 		
-		for (let i = 0; i < holeLayer.length; i++) {
-			holeLayer[i].addEventListener("mousedown", (e) => {
+		for (let i = 0; i < this.connectors.length; i++) {
+			this.connectors[i].addEventListener("mousedown", (e) => {
 				this.mousedown = true;
 			});
 
-			holeLayer[i].addEventListener("mouseover", (e) => {
+			this.connectors[i].addEventListener("mouseover", (e) => {
 				if (e.srcElement.getAttribute("filter") !== "url(#f3)") {
 					e.srcElement.setAttribute("filter", "url(#f1)");
 					e.srcElement.setAttribute("style", "cursor: pointer");
 				}
 			});
 
-			holeLayer[i].addEventListener("mouseleave", (e) => {
+			this.connectors[i].addEventListener("mouseleave", (e) => {
 				if (e.srcElement.getAttribute("filter") !== "url(#f3)")
 					e.srcElement.setAttribute("filter", "");
 
@@ -91,7 +91,7 @@ export default class BreadBoard extends React.Component {
 				this.mousedown = false;
 			});
 
-			interact(holeLayer[i]).styleCursor(false).draggable({
+			interact(this.connectors[i]).styleCursor(false).draggable({
 				manualStart: true,
 				listeners: {
 					move: event => {
@@ -145,16 +145,18 @@ export default class BreadBoard extends React.Component {
 					let overlap = !(rect1.right + delta.x < rect2.left || rect1.left + delta.x > rect2.right || rect1.bottom + delta.y < rect2.top || rect1.top + delta.y > rect2.bottom);
 					
 					if (!overlap) {
-						if (typeof ref.disconnect === "function") 
+						if (typeof ref.disconnect === "function") {
 							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
-						if (typeof ref.moveConnectortoCursor === "function") 
+						}
+						if (typeof ref.moveConnectortoCursor === "function") {
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+						}
 						delta.x = 0;
 						delta.y = 0;
 						return;
 					}
 					overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
+					
 					if (overlap && typeof ref.snapConnector === "function") {
 						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 					}	
