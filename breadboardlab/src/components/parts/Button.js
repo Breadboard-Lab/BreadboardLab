@@ -73,20 +73,26 @@ export default class Button extends React.Component {
 
     snapConnector(event, id, attachRef, callback) {
         this.snap = true;
-        const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
-        event.dragEvent.interaction.stop();
 
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+        const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
 		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
 
         if (breadboardTranslate && relatedTargetTranslate) {
+            let svg = document.getElementById("AppSVG");
+            let pt = svg.createSVGPoint();
 			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
 
-            this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
+            pt.x = Number(relatedTargetTranslate[1]);
+            pt.y = Number(relatedTargetTranslate[5]);
+            const relatedPosition = pt.matrixTransform(svg.getScreenCTM().inverse());
 
-            
+            pt.x = xPos;
+            pt.y = yPos;
+            const breadboardHolePosition = pt.matrixTransform(svg.getScreenCTM().inverse());
+
             let allConnected = true;
             let elementID = [];
             let connectors  = Array.prototype.slice.call(attachRef.connectors);
@@ -94,8 +100,8 @@ export default class Button extends React.Component {
             if (connectors) {
                 for (let refData of this.refArray) {
                     const refPos = {
-                        x: refData.ref.current.getBoundingClientRect().x + refData.ref.current.getBoundingClientRect().width / 2,
-                        y: refData.ref.current.getBoundingClientRect().y + refData.ref.current.getBoundingClientRect().height / 2,
+                        x: refData.ref.current.getBoundingClientRect().x + (relatedPosition.x - breadboardHolePosition.x) + refData.ref.current.getBoundingClientRect().width / 2,
+                        y: refData.ref.current.getBoundingClientRect().y + (relatedPosition.y - breadboardHolePosition.y) + refData.ref.current.getBoundingClientRect().height / 2,
                     };
                     const element = document.elementsFromPoint(refPos.x, refPos.y)[1];
     
@@ -116,11 +122,11 @@ export default class Button extends React.Component {
                         callback(elementID[i], this.refArray[i].id, this);
                     }
                 }
+                this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
             } else {
-                this.node.current.closest(".part").setAttribute("transform", currentTranslate);
+                this.moveConnectortoCursor(this.node.current, event.dragEvent.client.x, event.dragEvent.client.y);
             }
 		}
-        event.interaction.start({name: "drag"}, event.dragEvent.interactable, event.currentTarget);
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
