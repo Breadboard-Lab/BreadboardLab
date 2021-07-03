@@ -19,6 +19,7 @@ export default class Button extends React.Component {
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
+        this.snapOffset = {top: 10, bottom: 10, left: 10, right: 10};
         this.attachTo = new Map();
         this.refArray = [
             {id: "topLeft", ref: this.topLeftConector},

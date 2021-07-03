@@ -149,7 +149,11 @@ export default class BreadBoard extends React.Component {
 					}	
 					delta.x += event.dragEvent.delta.x;
 					delta.y += event.dragEvent.delta.y;
-					overlap = !(rect1.right + delta.x < rect2.left - 10 || rect1.left + delta.x > rect2.right + 10 || rect1.bottom + delta.y < rect2.top - 10 || rect1.top + delta.y > rect2.bottom + 10);
+					let snapOffset = ref.snapOffset || {top: 0, bottom: 0, left: 0, right: 0};
+					overlap = !(rect1.right + delta.x < rect2.left - snapOffset.left ||
+							    rect1.left + delta.x > rect2.right + snapOffset.right ||
+								rect1.bottom + delta.y < rect2.top - snapOffset.top ||
+								rect1.top + delta.y > rect2.bottom + snapOffset.bottom);
 
 					if (!overlap) {
 						if (typeof ref.disconnect === "function") {
