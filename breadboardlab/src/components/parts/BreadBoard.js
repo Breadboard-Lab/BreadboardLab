@@ -158,14 +158,14 @@ export default class BreadBoard extends React.Component {
 					if (overlap && typeof ref.snapConnector === "function") {
 						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
 					}	
-					delta.x += event.dragEvent.delta.x / 1.1;
-					delta.y += event.dragEvent.delta.y / 1.1;
+					delta.x += event.dragEvent.delta.x;
+					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					
 					if (typeof ref.disconnect === "function") 
-							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
+						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 					if (typeof ref.moveConnectortoCursor === "function") 
 						ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 				}

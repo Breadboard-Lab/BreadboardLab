@@ -22,11 +22,8 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
-                start: event => {
-                    this.snap = false;
-                },
 				move: event => {
-                    if (event.currentTarget === this.refConnector.current && typeof this.props.movePart === "function" && !this.snap) {
+                    if (event.currentTarget === this.refConnector.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
                     } else {
                         const {interaction} = event;
@@ -66,6 +63,8 @@ export default class Button extends React.Component {
     }
 
     snapConnector(event, id, attachRef, callback) {
+        this.snap = true;
+        event.dragEvent.interaction.stop();
         event.currentTarget.setAttribute("filter", "url(#f3)");
 
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
@@ -83,19 +82,20 @@ export default class Button extends React.Component {
 
             if (typeof callback === "function")
                     callback(id, "topLeft", this);
-            this.snap = true;
 		}
+        event.interaction.start({name: "drag"}, event.dragEvent.interactable, event.currentTarget);
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
+        this.snap = false;
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(element.closest(".part").getAttribute("transform"));
 
 		if (translate) {
 			let svg = document.getElementById("AppSVG");
 			let pt = svg.createSVGPoint();
-			pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;;
-			pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;;
+			pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;
+			pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;
 		
 			let cursorpt = pt.matrixTransform(svg.getScreenCTM().inverse());
             element.closest(".part").setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
@@ -103,7 +103,6 @@ export default class Button extends React.Component {
     }
 
     disconnect(event, id, callback) {
-        this.snap = false;
         this.attachTo.set("topLeft", undefined);
 
         if (typeof callback === "function")
