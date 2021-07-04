@@ -140,6 +140,7 @@ export default class BreadBoard extends React.Component {
 				overlap: 0.5,
 				ondropmove: event => {			
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+					let scale = document.getElementById("AppSVG").getAttribute("scale");
 					let rect1 = event.relatedTarget.getBoundingClientRect();
 					let rect2 = event.currentTarget.getBoundingClientRect();
 					let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
@@ -150,10 +151,10 @@ export default class BreadBoard extends React.Component {
 					delta.x += event.dragEvent.delta.x;
 					delta.y += event.dragEvent.delta.y;
 					let snapOffset = ref.snapOffset || {top: 0, bottom: 0, left: 0, right: 0};
-					overlap = !(rect1.right + delta.x < rect2.left - snapOffset.left ||
-							    rect1.left + delta.x > rect2.right + snapOffset.right ||
-								rect1.bottom + delta.y < rect2.top - snapOffset.top ||
-								rect1.top + delta.y > rect2.bottom + snapOffset.bottom);
+					overlap = !(rect1.right + delta.x < rect2.left - snapOffset.left / scale ||
+							    rect1.left + delta.x > rect2.right + snapOffset.right / scale ||
+								rect1.bottom + delta.y < rect2.top - snapOffset.top / scale ||
+								rect1.top + delta.y > rect2.bottom + snapOffset.bottom / scale);
 
 					if (!overlap) {
 						if (typeof ref.disconnect === "function") {

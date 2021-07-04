@@ -19,7 +19,7 @@ export default class Button extends React.Component {
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
-        this.snapOffset = {top: 10, bottom: 10, left: 10, right: 10};
+        this.snapOffset = {top: 3, bottom: 1, left: 3, right: 1};
         this.attachTo = new Map();
         this.refArray = [
             {id: "topLeft", ref: this.topLeftConector},
@@ -32,18 +32,13 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
-                start: event => {
-                    this.snap = false
-                },
 				move: event => {
-                    if (!this.snap) {
-                        if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
-                            this.props.movePart(event);
-                        } else {
-                            const {interaction} = event;
-                            interaction.stop();
-                            interaction.start({name: "drag"}, event.interactable, this.topLeftConector.current)
-                        }
+                    if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
+                        this.props.movePart(event);
+                    } else {
+                        const {interaction} = event;
+                        interaction.stop();
+                        interaction.start({name: "drag"}, event.interactable, this.topLeftConector.current)
                     }
                 }
 			},
@@ -78,8 +73,6 @@ export default class Button extends React.Component {
     }
 
     snapConnector(event, id, attachRef, callback) {
-        this.snap = true;
-
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
         const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
 		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
@@ -136,7 +129,6 @@ export default class Button extends React.Component {
     }
 
     moveConnectortoCursor(element, clientX, clientY) {
-        this.snap = false;
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(element.closest(".part").getAttribute("transform"));
 
