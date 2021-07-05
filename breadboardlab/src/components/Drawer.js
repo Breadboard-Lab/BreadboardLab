@@ -99,43 +99,6 @@ class Drawer extends Component {
         }
     }
 
-    handleTextField = (event) => {
-        this.setState(prevState => ({
-            partData: {
-                ...prevState.partData,
-                name: event.target.value
-            }
-        }))
-        console.log(this.state.partData)
-    }
-
-    handleColourChange = (event) => {
-        this.setState(prevState => ({
-            partData: {
-                ...prevState.partData,
-                colour: event.target.value
-            }
-        }))
-    };
-
-    handleResistanceChange = (event) => {
-        this.setState(prevState => ({
-            partData: {
-                ...prevState.partData,
-                resistance: event.target.value
-            }
-        }))
-    };
-
-    handleCapacitanceChange = (event) => {
-        this.setState(prevState => ({
-            partData: {
-                ...prevState.partData,
-                capacitance: event.target.value
-            }
-        }))
-    };
-
     render() {
         const {classes} = this.props;
 
@@ -214,10 +177,6 @@ class Drawer extends Component {
                         })}
                     >
                         <PropertiesPanel
-                            handleTextField={this.handleTextField}
-                            handleColourChange={this.handleColourChange}
-                            handleResistanceChange={this.handleResistanceChange}
-                            handleCapacitanceChange={this.handleCapacitanceChange}
                             partData={this.state.partData}
                         />
                     </Grid>
