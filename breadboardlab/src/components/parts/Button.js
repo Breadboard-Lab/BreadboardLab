@@ -19,7 +19,7 @@ export default class Button extends React.Component {
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
-        this.snapOffset = {top: 3, bottom: 1, left: 3, right: 1};
+        this.snapOffset = {top: 5, bottom: 5, left: 5, right: 5};
         this.attachTo = new Map();
         this.refArray = [
             {id: "topLeft", ref: this.topLeftConector},
@@ -103,12 +103,16 @@ export default class Button extends React.Component {
                         y: refData.ref.current.getBoundingClientRect().y + relatedPosition.y - breadboardHolePosition.y + refData.ref.current.getBoundingClientRect().height / 2,
                     };
                     const element = document.elementsFromPoint(refPos.x, refPos.y)[1];
-    
                     if (!connectors.includes(element)) {
                         allConnected = false;
                         break;
                     } else {
-                        elementID.push(element.id);
+                        if (attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                            elementID.push(element.id);
+                        } else {
+                            allConnected = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -146,7 +150,7 @@ export default class Button extends React.Component {
     disconnect(event, id, callback) {
         for (let refData of this.refArray) {
             if (typeof callback === "function" && this.attachTo.get(refData.id)) {
-                callback(this.attachTo.get(refData.id).id, refData.id, this);
+                callback(this.attachTo.get(refData.id).id, this);
             }
             
             this.attachTo.set(refData.id, undefined);

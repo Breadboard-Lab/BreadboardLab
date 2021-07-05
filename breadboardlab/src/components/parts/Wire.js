@@ -52,15 +52,16 @@ export default class Wire extends React.Component {
 		if (breadboardTranslate && relatedTargetTranslate) {
 			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]);
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]);
-			this.moveConnector(event.relatedTarget, xPos, yPos);
-
-            if (this.startPoint.current.node === event.relatedTarget) {
+            
+            if (this.startPoint.current.node === event.relatedTarget && (!this.attachTo.get("end") || this.attachTo.get("end").id !== id)) {
                 this.attachTo.set("start", {id: id, ref: attachRef});
+                this.moveConnector(event.relatedTarget, xPos, yPos);
 
                 if (typeof callback === "function")
                     callback(id, "start", this);
-            } else if (this.endPoint.current.node === event.relatedTarget) {
+            } else if (this.endPoint.current.node === event.relatedTarget && (!this.attachTo.get("start") || this.attachTo.get("start").id !== id)) {
                 this.attachTo.set("end", {id: id, ref: attachRef});
+                this.moveConnector(event.relatedTarget, xPos, yPos);
 
                 if (typeof callback === "function")
                     callback(id, "end", this);
@@ -98,16 +99,16 @@ export default class Wire extends React.Component {
         let item = this.attachTo.get("start");
 
         if (item) {
-            if (this.startPoint.current.node === event.relatedTarget) {
+            if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
                 this.attachTo.set("start", undefined);
     
                 if (typeof callback === "function")
-                    callback(id, "start", this);
-            } else if (this.endPoint.current.node === event.relatedTarget) {
+                    callback(id, this);
+            } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
                 this.attachTo.set("end", undefined);
     
                 if (typeof callback === "function")
-                    callback(id, "end", this);
+                    callback(id, this);
             }
         }
     }
@@ -128,15 +129,10 @@ export default class Wire extends React.Component {
     }
 
     onMouseEnter(event) {
-        event.target.setAttribute("stroke-opacity", "0.5");
-        event.target.setAttribute("fill-opacity", "0.5");
         event.target.setAttribute("style", "cursor: move");
     }
 
     onMouseLeave(event) {
-        event.target.setAttribute("stroke-opacity", "0");
-        event.target.setAttribute("fill-opacity", "0");
-        event.target.setAttribute("fill-opacity", "0");
         event.target.setAttribute("style", "");
     }
 
@@ -147,13 +143,17 @@ export default class Wire extends React.Component {
                 <path stroke="red" strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 
                 <Interactable ref={this.startPoint} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsStartPoint}>
-                    <ellipse onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}
-                            className="wire start connector" stroke="grey" strokeWidth="1.5" strokeOpacity="0" fill="black" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
+                    <ellipse 
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        className="wire start connector" strokeWidth="1.5" strokeOpacity="0" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
                 </Interactable>
                 
                 <Interactable ref={this.endPoint} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
-                    <ellipse onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} 
-                                className="wire end connector" stroke="grey" strokeWidth="1.5" strokeOpacity="0" fill="black" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
+                    <ellipse
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        className="wire end connector" strokeWidth="1.5" strokeOpacity="0" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
                 </Interactable>
             </g>
         );
