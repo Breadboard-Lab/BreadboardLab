@@ -69,6 +69,9 @@ class PropertiesPanel extends React.Component {
                                 onChange={event => this.handleChanges(event, prop.propName)}
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">{prop.adornment}</InputAdornment>,
+                                    inputProps: {
+                                        min: 0
+                                    }
                                 }}
                                 type={prop.type}
                                 key={key + 1}
