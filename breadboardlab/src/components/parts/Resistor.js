@@ -11,10 +11,10 @@ export default class Resistor extends React.Component {
             name: "Resistor",
             resistance: "220",
             resistanceEnabled: true,
-            band1Colour: "#CC0000",
-            band2Colour: "#CC0000",
-            band3Colour: "#512627",
-            band4Colour: "#C08327",
+            band1Colour: "#ff0000",
+            band2Colour: "#ff0000",
+            band3Colour: "#964b00",
+            band4Colour: "#cfb53b",
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -68,28 +68,28 @@ export default class Resistor extends React.Component {
                 this.setState({band1Colour: '#000'})
                 break
             case '1':
-                this.setState({band1Colour: '#964B00'})
+                this.setState({band1Colour: '#964b00'})
                 break
             case '2':
-                this.setState({band1Colour: '#CC0000'})
+                this.setState({band1Colour: '#ff0000'})
                 break
             case '3':
-                this.setState({band1Colour: '#D87347'})
+                this.setState({band1Colour: '#ffa500'})
                 break
             case '4':
-                this.setState({band1Colour: '#E6C951'})
+                this.setState({band1Colour: '#ffff00'})
                 break
             case '5':
-                this.setState({band1Colour: '#528F65'})
+                this.setState({band1Colour: '#9acd32'})
                 break
             case '6':
-                this.setState({band1Colour: '#0F5190'})
+                this.setState({band1Colour: '#6495ed'})
                 break
             case '7':
-                this.setState({band1Colour: '#9400D3'})
+                this.setState({band1Colour: '#9400d3'})
                 break
             case '8':
-                this.setState({band1Colour: '#7D7D7D'})
+                this.setState({band1Colour: '#a0a0a0'})
                 break
             case '9':
                 this.setState({band1Colour: '#fff'})
@@ -103,69 +103,67 @@ export default class Resistor extends React.Component {
                 this.setState({band2Colour: '#000'})
                 break
             case '1':
-                this.setState({band2Colour: '#964B00'})
+                this.setState({band2Colour: '#964b00'})
                 break
             case '2':
-                this.setState({band2Colour: '#CC0000'})
+                this.setState({band2Colour: '#ff0000'})
                 break
             case '3':
-                this.setState({band2Colour: '#D87347'})
+                this.setState({band2Colour: '#ffa500'})
                 break
             case '4':
-                this.setState({band2Colour: '#E6C951'})
+                this.setState({band2Colour: '#ffff00'})
                 break
             case '5':
-                this.setState({band2Colour: '#528F65'})
+                this.setState({band2Colour: '#9acd32'})
                 break
             case '6':
-                this.setState({band2Colour: '#0F5190'})
+                this.setState({band2Colour: '#6495ed'})
                 break
             case '7':
-                this.setState({band2Colour: '#9400D3'})
+                this.setState({band2Colour: '#9400d3'})
                 break
             case '8':
-                this.setState({band2Colour: '#7D7D7D'})
+                this.setState({band2Colour: '#a0a0a0'})
                 break
             case '9':
-                this.setState({band1Colour: '#fff'})
+                this.setState({band2Colour: '#fff'})
                 break
             default:
                 this.setState({band2Colour: '#000'})
         }
+        console.log(value.slice(2).length >= 9)
         // Third Band
         switch(value.slice(2).length) {
             case 0:
                 this.setState({band3Colour: '#000'})
                 break
             case 1:
-                this.setState({band3Colour: '#964B00'})
+                this.setState({band3Colour: '#964b00'})
                 break
             case 2:
-                this.setState({band3Colour: '#CC0000'})
+                this.setState({band3Colour: '#ff0000'})
                 break
             case 3:
-                this.setState({band3Colour: '#D87347'})
+                this.setState({band3Colour: '#ffa500'})
                 break
             case 4:
-                this.setState({band3Colour: '#E6C951'})
+                this.setState({band3Colour: '#ffff00'})
                 break
             case 5:
-                this.setState({band3Colour: '#528F65'})
+                this.setState({band3Colour: '#9acd32'})
                 break
             case 6:
-                this.setState({band3Colour: '#0F5190'})
+                this.setState({band3Colour: '#6495ed'})
                 break
             case 7:
-                this.setState({band3Colour: '#9400D3'})
+                this.setState({band3Colour: '#9400d3'})
                 break
             case 8:
-                this.setState({band3Colour: '#7D7D7D'})
-                break
-            case (value.slice(2).length > 9):
-                this.setState({band3Colour: '#fff'})
+                this.setState({band3Colour: '#a0a0a0'})
                 break
             default:
-                this.setState({band3Colour: '#000'})
+                this.setState({band3Colour: '#fff'})
         }
 
 
