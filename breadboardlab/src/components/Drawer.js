@@ -75,12 +75,6 @@ class Drawer extends Component {
         }
     }
 
-    handleProperties = () => {
-        this.setState(state => ({
-            hideProperties: !state.hideProperties
-        }))
-    }
-
     onDoubleTap = (childData) => {
         if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
             this.setState({
