@@ -2,7 +2,7 @@ import React from "react";
 import {
     Container,
     Divider,
-    Grid,
+    Grid, InputAdornment,
     InputLabel,
     MenuItem,
     Select,
@@ -67,6 +67,9 @@ class PropertiesPanel extends React.Component {
                                 label="Part Name"
                                 value={prop.value}
                                 onChange={event => this.handleChanges(event, prop.propName)}
+                                InputProps={{
+                                    endAdornment: <InputAdornment position="end">{prop.adornment}</InputAdornment>,
+                                }}
                                 key={key + 1}
                             />
                         </Grid>
