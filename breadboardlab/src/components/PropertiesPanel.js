@@ -70,6 +70,7 @@ class PropertiesPanel extends React.Component {
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">{prop.adornment}</InputAdornment>,
                                 }}
+                                type={prop.type}
                                 key={key + 1}
                             />
                         </Grid>

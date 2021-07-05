@@ -189,7 +189,7 @@ export default class Resistor extends React.Component {
                 props: [   
                     {propName: "Type", propType: "string", value: this.state.type},
                     {propName: "Name", propType: "textfield", value: this.state.name},
-                    {propName: "Resistance", propType: "textfield", value: this.state.resistance, adornment: 'Ω'},
+                    {propName: "Resistance", propType: "textfield", value: this.state.resistance, adornment: 'Ω', type: 'number'},
                 ]
             }
             
