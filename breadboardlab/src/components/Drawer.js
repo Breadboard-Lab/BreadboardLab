@@ -72,6 +72,7 @@ class Drawer extends Component {
         this.state = {
             hideProperties: true,
             partData: {},
+            selectedCategory: "basics"
         }
     }
 
@@ -93,6 +94,12 @@ class Drawer extends Component {
         }
     }
 
+    handleCategorySelect = event => {
+        this.setState({selectedCategory: event.target.value})
+
+        console.log(this.state)
+    }
+
     render() {
         const {classes} = this.props;
 
@@ -109,7 +116,8 @@ class Drawer extends Component {
             >
                 { /* Drawer Header */}
                 <div className={classes.toolbarIcon}>
-                    <CategorySelect/>
+                    <CategorySelect handleCategorySelect={this.handleCategorySelect}
+                                    category={this.state.selectedCategory}/>
                     <IconButton
                         onClick={this.props.handleDrawerClose}
                         aria-label="close drawer"
@@ -147,16 +155,24 @@ class Drawer extends Component {
                         item
                         wrap="nowrap"
                     >
-                        <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
-                                     onDoubleTap={this.onDoubleTap}/>
-                        <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
-                                     onDoubleTap={this.onDoubleTap}/>
-                        <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
-                                     onDoubleTap={this.onDoubleTap}/>
-                        <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>} name={"MomentaryButton"}
-                                     onDoubleTap={this.onDoubleTap}/>
-                        <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
-                                     onDoubleTap={this.onDoubleTap}/>
+                        {
+                            {
+                                'all': <></>,
+                                'basics': <>
+                                    <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
+                                                 onDoubleTap={this.onDoubleTap}/>
+                                    <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
+                                                 onDoubleTap={this.onDoubleTap}/>
+                                    <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
+                                                 onDoubleTap={this.onDoubleTap}/>
+                                    <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>}
+                                                 name={"MomentaryButton"}
+                                                 onDoubleTap={this.onDoubleTap}/>
+                                    <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
+                                                 onDoubleTap={this.onDoubleTap}/></>,
+                                'gates': <></>,
+                            }[this.state.selectedCategory]
+                        }
                     </Grid>
 
                     { /*

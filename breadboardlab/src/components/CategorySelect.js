@@ -9,20 +9,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CategorySelect = () => {
+const CategorySelect = (props) => {
     const classes = useStyles();
-    const [category, setCategory] = React.useState(2);  // Defaults category to Basic
-    const handleChange = (event) => {
-        setCategory(event.target.value);
-    };
 
     return (
         <FormControl className={classes.formControl}>
             <Select
                 labelId="category-select"
                 id="category-select"
-                value={category}
-                onChange={handleChange}
+                value={props.category}
+                onChange={props.handleCategorySelect}
                 MenuProps={{
                     anchorOrigin: {
                         vertical: "bottom",
@@ -31,9 +27,9 @@ const CategorySelect = () => {
                     getContentAnchorEl: null
                 }}
             >
-                <MenuItem value={1}>All</MenuItem>
-                <MenuItem value={2}>Basics</MenuItem>
-                <MenuItem value={3}>Gates</MenuItem>
+                <MenuItem value={"all"}>All</MenuItem>
+                <MenuItem value={"basics"}>Basics</MenuItem>
+                <MenuItem value={"gates"}>Gates</MenuItem>
             </Select>
         </FormControl>
     );
