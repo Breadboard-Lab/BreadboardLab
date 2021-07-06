@@ -51,7 +51,7 @@ const styles = theme => ({
         marginRight: theme.spacing(1),
     },
     propertiesPanel: {
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('xs')]: {
             display: 'none'
         },
     },

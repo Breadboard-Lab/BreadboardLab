@@ -35,7 +35,7 @@ export default class Resistor extends React.Component {
         this.props.onDoubleTap(this.getProps());
     }
 
-    changeBandColours(band, value) {
+    setBandColour(band, value) {
         /*
             black  == 0 | x1    Ω
             brown  == 1 | x10   Ω
@@ -101,33 +101,33 @@ export default class Resistor extends React.Component {
                     /* If resistor is 0 Ohms, switch to 1 band resistor by setting rest of bands to colour of resistor
                     and band 2 to black */
                     this.setState({band1Colour: '#A08968'})
-                    this.changeBandColours('band2Colour', '0')
+                    this.setBandColour('band2Colour', '0')
                     this.setState({band3Colour: '#A08968'})
                     this.setState({band4Colour: '#A08968'})
                 } else {
                     // If resistor is not 0, change band 1 colour, default band 2 to black and band 3 to gold multiplier
-                    this.changeBandColours('band1Colour', value[0])
-                    this.changeBandColours('band2Colour', '0')
-                    this.changeBandColours('band3Colour', 'gold')
-                    this.changeBandColours('band4Colour', 'gold')
+                    this.setBandColour('band1Colour', value[0])
+                    this.setBandColour('band2Colour', '0')
+                    this.setBandColour('band3Colour', 'gold')
+                    this.setBandColour('band4Colour', 'gold')
                 }
             } else if (value.length === 2) {
                 // If resistance is 2 digits length, default band 3 to black
-                this.changeBandColours('band1Colour', value[0])
-                this.changeBandColours('band2Colour', value[1])
-                this.changeBandColours('band3Colour', '0')
-                this.changeBandColours('band4Colour', 'gold')
+                this.setBandColour('band1Colour', value[0])
+                this.setBandColour('band2Colour', value[1])
+                this.setBandColour('band3Colour', '0')
+                this.setBandColour('band4Colour', 'gold')
 
             } else if (value.length > 2) {
                 // If resistance is n digits length greater than 2
-                this.changeBandColours('band1Colour', value[0])
-                this.changeBandColours('band2Colour', value[1])
-                this.changeBandColours('band3Colour', value.slice(2).length.toString())
-                this.changeBandColours('band4Colour', 'gold')
+                this.setBandColour('band1Colour', value[0])
+                this.setBandColour('band2Colour', value[1])
+                this.setBandColour('band3Colour', value.slice(2).length.toString())
+                this.setBandColour('band4Colour', 'gold')
             } else {
                 // If resistance is undefined, default to 0 Ohm resistor
                 this.setState({band1Colour: '#A08968'})
-                this.changeBandColours('band2Colour', '0')
+                this.setBandColour('band2Colour', '0')
                 this.setState({band3Colour: '#A08968'})
                 this.setState({band4Colour: '#A08968'})
             }
