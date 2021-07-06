@@ -6,8 +6,12 @@ import clsx from "clsx";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import PropertiesPanel from "./PropertiesPanel";
-import CategoryBasics from "./parts/categories/CategoryBasics";
-import CategoryGates from "./parts/categories/CategoryGates";
+Test imimport BreadBoard from "./parts/BreadBoard";
+import Resistor from "./parts/Resistor";
+import LED from "./parts/LED";
+import MomentaryButton from "./parts/Button";
+import Transistor from "./parts/Transistor";
+import SideBarPart from "./SideBarPart";
 
 const drawerWidth = 240;
 
@@ -59,6 +63,21 @@ const styles = theme => ({
     },
 });
 
+const listParts = {
+    all: {
+        basics: [
+            {name: 'Breadboard', component: <BreadBoard/>},
+            {name: 'MomentaryButton', component: <MomentaryButton/>},
+            {name: 'LED', component: <LED/>},
+            {name: 'Resistor', component: <Resistor/>},
+            {name: 'Transistor', component: <Transistor/>},
+        ],
+        gates: [
+
+        ]
+    }
+}
+
 class Drawer extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +87,8 @@ class Drawer extends Component {
         this.state = {
             hideProperties: true,
             partData: {},
-            selectedCategory: "basics"
+            selectedCategory: "basics",
+            searchFilter: "",
         }
     }
 
@@ -92,6 +112,10 @@ class Drawer extends Component {
 
     handleCategorySelect = event => {
         this.setState({selectedCategory: event.target.value})
+    }
+
+    handleSearchChange = event => {
+        this.setState({searchFilter: event.target.value})
     }
 
     render() {
@@ -131,7 +155,12 @@ class Drawer extends Component {
                             <SearchIcon/>
                         </Grid>
                         <Grid item xs={10}>
-                            <TextField id="search" label="Search"/>
+                            <TextField
+                                id="search"
+                                label="Search"
+                                type="search"
+                                onChange={this.handleSearchChange}
+                            />
                         </Grid>
                     </Grid>
                 </div>
@@ -150,10 +179,17 @@ class Drawer extends Component {
                         wrap="nowrap"
                     >
                         {
+                            this.state.searchFilter != null ? (
+                                listParts.all.basics.filter(part => part.name.toLowerCase().includes(this.state.searchFilter)).map(filteredPart => (
+                                    <SideBarPart ondrag={this.props.addPart} part={filteredPart.component}
+                                                 name={filteredPart.name} onDoubleTap={this.onDoubleTap}/>
+                                ))
+                            ) : <></>
+
                             /* Inline Switch-Case
                                     Gets selectedCategory state and displays the list of parts from the selected category
                              */
-                            {
+                            /*{
                                 'all':
                                     <>
                                         <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
@@ -161,7 +197,7 @@ class Drawer extends Component {
                                     </>,
                                 'basics': <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>,
                                 'gates': <CategoryGates onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
-                            }[this.state.selectedCategory]
+                            }[this.state.selectedCategory]*/
                         }
                     </Grid>
 
