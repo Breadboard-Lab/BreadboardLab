@@ -65,7 +65,7 @@ export default class Canvas extends React.Component {
         }
         let newScale = Math.round(Number((this.scale * scale).toPrecision(2)) * 100) / 100;
         
-        if (newScale <= 1.0 && newScale >= 0.15) { 
+        if (newScale <= 1.0 && newScale >= 0.2) { 
             this.scale = newScale;
             let pos = this.svg.createSVGPoint();
             pos.x = e.clientX;

@@ -1,5 +1,6 @@
 import React from "react";
 import interact from "interactjs";
+import Interactable from "../Interactable";
 
 export default class LED extends React.Component {
     constructor(props) {
@@ -85,14 +86,36 @@ export default class LED extends React.Component {
         )
     }
 
+    onMouseEnter(event) {
+        event.target.setAttribute("style", "cursor: move");
+    }
+
+    onMouseLeave(event) {
+        event.target.setAttribute("style", "");
+    }
+
     render() {
         return (
             <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(17,28) scale(40,40)">
                 <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
                       fill={this.state.visualColourOuter} strokeOpacity="0"/>
                 <circle cx="0.4" cy="0.2" r="0.6" fill={this.state.visualColourInner}/>
-                <circle cx="0.4" cy="-0.1" r="0.08" fill="#707070"/>
-                <circle cx="0.4" cy="0.5" r="0.08" fill="#707070"/>
+                {/* <circle cx="0.4" cy="-0.1" r="0.08" fill="#707070"/>
+                <circle cx="0.4" cy="0.5" r="0.08" fill="#707070"/> */}
+                <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round" d="M 0.4 -0.1 L 0.4 -0.1"/>
+                <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round" d="M 0.4 0.5 L 0.4 0.5"/>
+                <Interactable styleCursor={false} draggable={true}>
+                    <ellipse 
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        strokeOpacity="0" fillOpacity="0" cx="0.4" cy="-0.1" rx="0.08" ry="0.08"/>
+                </Interactable>
+                <Interactable styleCursor={false} draggable={true}>
+                    <ellipse 
+                        onMouseEnter={this.onMouseEnter}
+                        onMouseLeave={this.onMouseLeave}
+                        strokeOpacity="0" fillOpacity="0" cx="0.4" cy="0.5" rx="0.08" ry="0.08"/>
+                </Interactable>
             </g>
         )
     }
