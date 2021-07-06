@@ -6,7 +6,7 @@ import clsx from "clsx";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import PropertiesPanel from "./PropertiesPanel";
-Test imimport BreadBoard from "./parts/BreadBoard";
+import BreadBoard from "./parts/BreadBoard";
 import Resistor from "./parts/Resistor";
 import LED from "./parts/LED";
 import MomentaryButton from "./parts/Button";
