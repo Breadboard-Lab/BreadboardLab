@@ -5,13 +5,9 @@ import IconButton from "@material-ui/core/IconButton";
 import clsx from "clsx";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
-import SideBarPart from "./SideBarPart";
-import Resistor from "./parts/Resistor";
-import BreadBoard from "./parts/BreadBoard";
-import LED from "./parts/LED";
-import Transistor from "./parts/Transistor";
-import MomentaryButton from "./parts/Button";
 import PropertiesPanel from "./PropertiesPanel";
+import CategoryBasics from "./parts/categories/CategoryBasics";
+import CategoryGates from "./parts/categories/CategoryGates";
 
 const drawerWidth = 240;
 
@@ -96,8 +92,6 @@ class Drawer extends Component {
 
     handleCategorySelect = event => {
         this.setState({selectedCategory: event.target.value})
-
-        console.log(this.state)
     }
 
     render() {
@@ -156,21 +150,17 @@ class Drawer extends Component {
                         wrap="nowrap"
                     >
                         {
+                            /* Inline Switch-Case
+                                    Gets selectedCategory state and displays the list of parts from the selected category
+                             */
                             {
-                                'all': <></>,
-                                'basics': <>
-                                    <SideBarPart ondrag={this.props.addPart} part={<BreadBoard/>} name={"Breadboard"}
-                                                 onDoubleTap={this.onDoubleTap}/>
-                                    <SideBarPart ondrag={this.props.addPart} part={<Resistor/>} name={"Resistor"}
-                                                 onDoubleTap={this.onDoubleTap}/>
-                                    <SideBarPart ondrag={this.props.addPart} part={<LED/>} name={"LED"}
-                                                 onDoubleTap={this.onDoubleTap}/>
-                                    <SideBarPart ondrag={this.props.addPart} part={<MomentaryButton/>}
-                                                 name={"MomentaryButton"}
-                                                 onDoubleTap={this.onDoubleTap}/>
-                                    <SideBarPart ondrag={this.props.addPart} part={<Transistor/>} name={"Transistor"}
-                                                 onDoubleTap={this.onDoubleTap}/></>,
-                                'gates': <></>,
+                                'all':
+                                    <>
+                                        <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
+                                        <CategoryGates onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
+                                    </>,
+                                'basics': <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>,
+                                'gates': <CategoryGates onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
                             }[this.state.selectedCategory]
                         }
                     </Grid>
