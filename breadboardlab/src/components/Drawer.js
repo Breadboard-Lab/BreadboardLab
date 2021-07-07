@@ -64,6 +64,13 @@ const styles = theme => ({
 });
 
 const listParts = {
+    all: [
+        {name: 'Breadboard', component: <BreadBoard/>},
+        {name: 'MomentaryButton', component: <MomentaryButton/>},
+        {name: 'LED', component: <LED/>},
+        {name: 'Resistor', component: <Resistor/>},
+        {name: 'Transistor', component: <Transistor/>},
+    ],
     basics: [
         {name: 'Breadboard', component: <BreadBoard/>},
         {name: 'MomentaryButton', component: <MomentaryButton/>},
@@ -175,21 +182,30 @@ class Drawer extends Component {
                         wrap="nowrap"
                     >
                         {
+                            /*
+                                if searchFilter is empty, resort to Category rendering
+                                    get selectedCategory state for inline switch case
+                                if searchFilter is not empty, check through All category for matching parts
+                             */
                             this.state.searchFilter !== "" ? (
-                                listParts.basics.filter(part => part.name.toLowerCase().includes(this.state.searchFilter)).map(filteredPart => (
-                                    <SideBarPart ondrag={this.props.addPart} part={filteredPart.component}
+                                listParts.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
+                                    <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component}
                                                  name={filteredPart.name} onDoubleTap={this.onDoubleTap}/>
                                 ))
                             ) : ({
-                                'all':<></>,
+                                'all':
+                                    listParts.all.map((part, index) => (
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
+                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                    )),
                                 'basics':
-                                    listParts.basics.map(part => (
-                                        <SideBarPart ondrag={this.props.addPart} part={part.component}
+                                    listParts.basics.map((part, index) => (
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
                                                      name={part.name} onDoubleTap={this.onDoubleTap}/>
                                     )),
                                 'gates':
-                                    listParts.gates.map(part => (
-                                        <SideBarPart ondrag={this.props.addPart} part={part.component}
+                                    listParts.gates.map((part, index) => (
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
                                                      name={part.name} onDoubleTap={this.onDoubleTap}/>
                                     )),
                             }[this.state.selectedCategory])
