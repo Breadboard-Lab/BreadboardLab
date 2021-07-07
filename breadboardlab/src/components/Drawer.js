@@ -64,18 +64,14 @@ const styles = theme => ({
 });
 
 const listParts = {
-    all: {
-        basics: [
-            {name: 'Breadboard', component: <BreadBoard/>},
-            {name: 'MomentaryButton', component: <MomentaryButton/>},
-            {name: 'LED', component: <LED/>},
-            {name: 'Resistor', component: <Resistor/>},
-            {name: 'Transistor', component: <Transistor/>},
-        ],
-        gates: [
-
-        ]
-    }
+    basics: [
+        {name: 'Breadboard', component: <BreadBoard/>},
+        {name: 'MomentaryButton', component: <MomentaryButton/>},
+        {name: 'LED', component: <LED/>},
+        {name: 'Resistor', component: <Resistor/>},
+        {name: 'Transistor', component: <Transistor/>},
+    ],
+    gates: []
 }
 
 class Drawer extends Component {
@@ -179,25 +175,24 @@ class Drawer extends Component {
                         wrap="nowrap"
                     >
                         {
-                            this.state.searchFilter != null ? (
-                                listParts.all.basics.filter(part => part.name.toLowerCase().includes(this.state.searchFilter)).map(filteredPart => (
+                            this.state.searchFilter !== "" ? (
+                                listParts.basics.filter(part => part.name.toLowerCase().includes(this.state.searchFilter)).map(filteredPart => (
                                     <SideBarPart ondrag={this.props.addPart} part={filteredPart.component}
                                                  name={filteredPart.name} onDoubleTap={this.onDoubleTap}/>
                                 ))
-                            ) : <></>
-
-                            /* Inline Switch-Case
-                                    Gets selectedCategory state and displays the list of parts from the selected category
-                             */
-                            /*{
-                                'all':
-                                    <>
-                                        <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
-                                        <CategoryGates onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
-                                    </>,
-                                'basics': <CategoryBasics onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>,
-                                'gates': <CategoryGates onDoubleTap={this.onDoubleTap} addPart={this.props.addPart}/>
-                            }[this.state.selectedCategory]*/
+                            ) : ({
+                                'all':<></>,
+                                'basics':
+                                    listParts.basics.map(part => (
+                                        <SideBarPart ondrag={this.props.addPart} part={part.component}
+                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                    )),
+                                'gates':
+                                    listParts.gates.map(part => (
+                                        <SideBarPart ondrag={this.props.addPart} part={part.component}
+                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                    )),
+                            }[this.state.selectedCategory])
                         }
                     </Grid>
 
