@@ -15,6 +15,7 @@ export default class Resistor extends React.Component {
             band2Colour: "#ff0000",
             band3Colour: "#964b00",
             band4Colour: "#cfb53b",
+            isSelected: false,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -32,6 +33,7 @@ export default class Resistor extends React.Component {
     }
 
     onDoubleClick() {
+        this.setState({isSelected: !this.state.isSelected})
         this.props.onDoubleTap(this.getProps());
     }
 
@@ -157,7 +159,7 @@ export default class Resistor extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(100,105), scale(200,150)">                
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(100,105), scale(200,150)">
                 <path fill="#A08968" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043 
                     c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                     c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
@@ -167,6 +169,9 @@ export default class Resistor extends React.Component {
                 <path fill={this.state.band3Colour} d="M-0.325-0.389H-0.3v-0.129h-0.025"/>
                 <path fill={this.state.band4Colour}
                       d="M-0.261-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
+                <path fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.015" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
+                    c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
+                    c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
             </g>
         )
     }
