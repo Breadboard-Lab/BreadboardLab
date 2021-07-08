@@ -20,6 +20,7 @@ export default class Button extends React.Component {
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
         this.snapOffset = {top: 5, bottom: 5, left: 5, right: 5};
+        this.cursorOffset = {x: undefined, y: undefined};
         this.attachTo = new Map();
         this.refArray = [
             {id: "topLeft", ref: this.topLeftConector},
@@ -32,6 +33,10 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
+                start: event => {
+                    this.cursorOffset.x = event.client.x - event.currentTarget.closest(".part").getBoundingClientRect().x; 
+                    this.cursorOffset.y = event.client.y - event.currentTarget.closest(".part").getBoundingClientRect().top; 
+                },
 				move: event => {
                     if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
@@ -139,8 +144,15 @@ export default class Button extends React.Component {
 		if (translate) {
 			let svg = document.getElementById("AppSVG");
 			let pt = svg.createSVGPoint();
-			pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;
-			pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;
+            
+            if (this.cursorOffset.x === undefined || this.cursorOffset.y === undefined) {
+                pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;
+                pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;
+            } else {
+                pt.x = clientX - this.cursorOffset.x;
+                pt.y = clientY - this.cursorOffset.y;
+            }
+            
 		
 			let cursorpt = pt.matrixTransform(svg.getScreenCTM().inverse());
             element.closest(".part").setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
