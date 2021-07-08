@@ -96,11 +96,13 @@ class Drawer extends Component {
     }
 
     onDoubleTap = (childData) => {
-        if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
+        //if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
+        if (this.selectedPart && this.selectedPart.ref === childData.ref) {
             this.setState({
                 hideProperties: true,
                 partData: {},
             });
+            this.selectedPart.callback("selectPart", false)
             this.previousPartState = undefined;
             this.selectedPart = undefined;
         } else {
@@ -110,7 +112,9 @@ class Drawer extends Component {
             });
             this.previousPartState = childData.ref.state;
             this.selectedPart = childData;
+            this.selectedPart.callback("selectPart", true)
         }
+        // TODO set all other parts in list to not selected.
     }
 
     handleCategorySelect = event => {

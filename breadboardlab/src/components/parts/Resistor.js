@@ -10,7 +10,6 @@ export default class Resistor extends React.Component {
             type: "Resistor",
             name: "Resistor",
             resistance: "220",
-            resistanceEnabled: true,
             band1Colour: "#ff0000",
             band2Colour: "#ff0000",
             band3Colour: "#964b00",
@@ -33,7 +32,6 @@ export default class Resistor extends React.Component {
     }
 
     onDoubleClick() {
-        this.setState({isSelected: !this.state.isSelected})
         this.props.onDoubleTap(this.getProps());
     }
 
@@ -133,6 +131,8 @@ export default class Resistor extends React.Component {
                 this.setState({band3Colour: '#A08968'})
                 this.setState({band4Colour: '#A08968'})
             }
+        } else if (propName === "selectPart") {
+            this.setState({isSelected: value})
         }
     }
 
