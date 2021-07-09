@@ -13,6 +13,7 @@ export default class Button extends React.Component {
         this.state = {
             type: "Momentary Button",
             name: "Momentary Button",
+            isSelected: false,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -193,6 +194,8 @@ export default class Button extends React.Component {
                 <circle cx="0.18" cy="-0.18" r="0.03" fill="#202020" />
                 <circle cx="-0.18" cy="0.18" r="0.03" fill="#202020" />
                 <circle cx="0.18" cy="0.18" r="0.03" fill="#202020" />
+                <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1"
+                      fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.025" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
             </g>
         )
     }

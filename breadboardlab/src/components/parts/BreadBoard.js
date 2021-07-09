@@ -11,6 +11,7 @@ export default class BreadBoard extends React.Component {
 		this.state = {
 			type: "Breadboard",
 			name: "Breadboard",
+			isSelected: false,
 		}
 		this.onDoubleClick = this.onDoubleClick.bind(this);
         this.connectPart = this.connectPart.bind(this);
@@ -7330,6 +7331,12 @@ export default class BreadBoard extends React.Component {
 						y="44.0"
 						id="Col-Label-64">64</text>
 				</g>
+				<rect
+					width="178.2547"
+					height="55.881859"
+					x="-0.45604399"
+					y="9.6281099e-08"
+					fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.25" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
 			</g>
 		)
     }

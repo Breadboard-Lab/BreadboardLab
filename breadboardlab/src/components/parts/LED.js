@@ -12,7 +12,8 @@ export default class LED extends React.Component {
             name: "LED",
             colour: "Red",
             visualColourOuter: "hsl(0, 100%, 31%)",
-            visualColourInner: "hsl(0, 100%, 75%)"
+            visualColourInner: "hsl(0, 100%, 75%)",
+            isSelected: false,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -116,6 +117,8 @@ export default class LED extends React.Component {
                         onMouseLeave={this.onMouseLeave}
                         strokeOpacity="0" fillOpacity="0" cx="0.4" cy="0.5" rx="0.08" ry="0.08"/>
                 </Interactable>
+                <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
+                      fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.075" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
             </g>
         )
     }

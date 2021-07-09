@@ -9,6 +9,7 @@ export default class Transistor extends React.Component {
         this.state = {
             type: "Transistor",
             name: "Transistor",
+            isSelected: false,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -61,6 +62,8 @@ export default class Transistor extends React.Component {
                 <circle cx="-0.3" cy="0" r="0.032" fill="#707070" />
                 <circle cx="0" cy="0" r="0.032" fill="#707070" />
                 <circle cx="0.3" cy="0" r="0.032" fill="#707070" />
+                <path d="M -0.50 0.22 A 0.525 0.525 90 1 1 0.50 0.22 ZZ"
+                      fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.025" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
             </g>
         )
     }
