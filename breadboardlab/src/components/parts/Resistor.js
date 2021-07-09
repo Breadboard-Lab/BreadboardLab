@@ -131,8 +131,6 @@ export default class Resistor extends React.Component {
                 this.setState({band3Colour: '#A08968'})
                 this.setState({band4Colour: '#A08968'})
             }
-        } else if (propName === "selectPart") {
-            this.setState({isSelected: value})
         }
     }
 
