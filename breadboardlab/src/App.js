@@ -69,6 +69,8 @@ class App extends Component {
             themeState: true,
             selectedTool: 'select_tool',
             theme: {...themeDark},
+            hideProperties: true,
+            partData: {},
         }
     }
 
@@ -122,6 +124,34 @@ class App extends Component {
         // TODO handle Share
         console.log('Share clicked')
     };
+
+    onDoubleTap = (childData) => {
+        if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
+            //if (this.selectedPart && this.selectedPart.ref === childData.ref) {
+            this.setState({
+                hideProperties: true,
+                partData: {},
+            });
+            this.selectedPart.ref.setState({isSelected: false});
+            this.previousPartState = undefined;
+            this.selectedPart = undefined;
+        } else {
+            this.setState({
+                hideProperties: false,
+                partData: childData
+            });
+
+            if (this.selectedPart) {
+                this.selectedPart.ref.setState({isSelected: false});
+                this.previousPartState = childData.ref.state;
+                this.selectedPart = childData;
+            }
+            childData.ref.setState({isSelected: true}, () => {
+                this.previousPartState = childData.ref.state;
+                this.selectedPart = childData;
+            });
+        }
+    }
 
     render() {
         const {classes} = this.props;
@@ -205,6 +235,9 @@ class App extends Component {
                         open={this.state.open}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
+                        onDoubleTap={this.onDoubleTap}
+                        hideProperties={this.state.hideProperties}
+                        partData={this.state.partData}
                     />
 
                     { /* Canvas */}

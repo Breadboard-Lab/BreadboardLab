@@ -66,16 +66,13 @@ class Drawer extends Component {
         this.selectedPart = undefined;
 
         this.state = {
-            hideProperties: true,
-            partData: {},
             selectedCategory: "basics",
             searchFilter: "",
         }
     }
 
-    onDoubleTap = (childData) => {
+    /*onDoubleTap = (childData) => {
         if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
-        //if (this.selectedPart && this.selectedPart.ref === childData.ref) {
             this.setState({
                 hideProperties: true,
                 partData: {},
@@ -99,8 +96,7 @@ class Drawer extends Component {
                 this.selectedPart = childData;
             });
         }
-        // TODO set all other parts in list to not selected.
-    }
+    }*/
 
     handleCategorySelect = event => {
         this.setState({selectedCategory: event.target.value})
@@ -179,23 +175,23 @@ class Drawer extends Component {
                             this.state.searchFilter !== "" ? (
                                 listOfParts.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component}
-                                                 name={filteredPart.name} description={filteredPart.description} onDoubleTap={this.onDoubleTap}/>
+                                                 name={filteredPart.name} description={filteredPart.description} onDoubleTap={this.props.onDoubleTap}/>
                                 ))
                             ) : ({
                                 'all':
                                     listOfParts.all.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.props.onDoubleTap}/>
                                     )),
                                 'basics':
                                     listOfParts.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.props.onDoubleTap}/>
                                     )),
                                 'gates':
                                     listOfParts.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.props.onDoubleTap}/>
                                     )),
                             }[this.state.selectedCategory])
                         }
@@ -209,11 +205,11 @@ class Drawer extends Component {
                     <Grid
                         item
                         className={clsx(classes.propertiesPanel, {
-                            [classes.propertiesPanelHide]: this.state.hideProperties,
+                            [classes.propertiesPanelHide]: this.props.hideProperties,
                         })}
                     >
                         <PropertiesPanel
-                            partData={this.state.partData}
+                            partData={this.props.partData}
                         />
                     </Grid>
 
