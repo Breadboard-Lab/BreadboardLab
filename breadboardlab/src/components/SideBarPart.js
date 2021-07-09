@@ -3,15 +3,42 @@ import InfoIcon from "@material-ui/icons/Info";
 import {
     SvgIcon,
     ListItem,
-    ListItemAvatar, ListItemText, ListItemSecondaryAction, withWidth,
+    ListItemAvatar,
+    ListItemText,
+    ListItemSecondaryAction,
+    withWidth,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    Typography,
+    withStyles,
 } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import Interactable from "./Interactable";
+import CloseIcon from '@material-ui/icons/Close';
+import themeDark from "../themes/themeDark";
 //import interact from "interactjs";
+
+
+const styles = theme => ({
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: theme.palette.grey[500],
+    },
+});
 
 let svg;
 
 class SideBarPart extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            open: false,
+        }
+    }
+
     added = false;
     listening = false;
     static listOfRefs = []
@@ -67,7 +94,7 @@ class SideBarPart extends React.Component {
             move: (event) => {
                 let part = this.node.node.current.closest(".part");
                 let findConnector = part.querySelector(".connector");
-                
+
                 if (findConnector && !event.currentTarget.classList.contains("connector")) {
                     event.interaction.stop();
                     event.interaction.start({name: "drag"}, event.interactable, findConnector);
@@ -76,7 +103,7 @@ class SideBarPart extends React.Component {
                     pos.x = event.client.x - part.getBoundingClientRect().width / 2;
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
                     var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
-    
+
                     if (cursorpt.x && cursorpt.y) {
                         part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
                     }
@@ -135,7 +162,13 @@ class SideBarPart extends React.Component {
         });
     }
 
+    handleDialog = () => {
+        this.setState({open: !this.state.open})
+    }
+
     render() {
+        const {classes} = this.props;
+
         return (
             <Interactable draggable={true} draggableOptions={this.draggingOptions} onMove={this.onMove}
                           onDown={this.onDown}>
@@ -153,12 +186,25 @@ class SideBarPart extends React.Component {
                                     primaryTypographyProps={{variant: "body2"}}
                                 />
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="delete">
+                                    <IconButton edge="end" aria-label="delete" onClick={this.handleDialog}>
                                         <InfoIcon/>
                                     </IconButton>
                                 </ListItemSecondaryAction>
                             </> : null}
                     </ListItem>
+                    <Dialog aria-labelledby="simple-dialog-title" open={this.state.open} onClose={this.handleDialog}>
+                        <DialogTitle id="dialog-title" onClose={this.handleDialog}>
+                            <Typography>{this.props.name}</Typography>
+                            <IconButton aria-label="close" className={classes.closeButton} onClick={this.handleDialog}>
+                                <CloseIcon/>
+                            </IconButton>
+                        </DialogTitle>
+                        <DialogContent>
+                            <Typography gutterBottom>
+                                {this.props.description}
+                            </Typography>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </Interactable>
         );
@@ -184,4 +230,4 @@ function movePart(event) {
     }
 }
 
-export default withWidth()(SideBarPart);
+export default withWidth()(withStyles(styles)(SideBarPart));

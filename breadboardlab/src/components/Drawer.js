@@ -6,12 +6,8 @@ import clsx from "clsx";
 import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import PropertiesPanel from "./PropertiesPanel";
-import BreadBoard from "./parts/BreadBoard";
-import Resistor from "./parts/Resistor";
-import LED from "./parts/LED";
-import MomentaryButton from "./parts/Button";
-import Transistor from "./parts/Transistor";
 import SideBarPart from "./SideBarPart";
+import listOfParts from "../utils/listOfParts";
 
 const drawerWidth = 240;
 
@@ -62,24 +58,6 @@ const styles = theme => ({
         flexGrow: 1,
     },
 });
-
-const listParts = {
-    all: [
-        {name: 'Breadboard', component: <BreadBoard/>},
-        {name: 'MomentaryButton', component: <MomentaryButton/>},
-        {name: 'LED', component: <LED/>},
-        {name: 'Resistor', component: <Resistor/>},
-        {name: 'Transistor', component: <Transistor/>},
-    ],
-    basics: [
-        {name: 'Breadboard', component: <BreadBoard/>},
-        {name: 'MomentaryButton', component: <MomentaryButton/>},
-        {name: 'LED', component: <LED/>},
-        {name: 'Resistor', component: <Resistor/>},
-        {name: 'Transistor', component: <Transistor/>},
-    ],
-    gates: []
-}
 
 class Drawer extends Component {
     constructor(props) {
@@ -199,25 +177,25 @@ class Drawer extends Component {
                                 if searchFilter is not empty, check through All category for matching parts
                              */
                             this.state.searchFilter !== "" ? (
-                                listParts.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
+                                listOfParts.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component}
-                                                 name={filteredPart.name} onDoubleTap={this.onDoubleTap}/>
+                                                 name={filteredPart.name} description={filteredPart.description} onDoubleTap={this.onDoubleTap}/>
                                 ))
                             ) : ({
                                 'all':
-                                    listParts.all.map((part, index) => (
+                                    listOfParts.all.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
                                     )),
                                 'basics':
-                                    listParts.basics.map((part, index) => (
+                                    listOfParts.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
                                     )),
                                 'gates':
-                                    listParts.gates.map((part, index) => (
+                                    listOfParts.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
-                                                     name={part.name} onDoubleTap={this.onDoubleTap}/>
+                                                     name={part.name} description={part.description} onDoubleTap={this.onDoubleTap}/>
                                     )),
                             }[this.state.selectedCategory])
                         }
