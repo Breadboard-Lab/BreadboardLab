@@ -102,12 +102,15 @@ export default class Button extends React.Component {
                         {x: connectorRect.right, y: connectorRect.bottom}
                     ]
 
-                    for (let coord of checkCoord) {
-                        if (connectors.includes(document.elementsFromPoint(coord.x, coord.y)[1])) {
-                            element = document.elementsFromPoint(coord.x, coord.y)[1];
-                            break;
+                    loopCoord:
+                        for (let coord of checkCoord) {
+                            for (let e of document.elementsFromPoint(coord.x, coord.y)) {
+                                if (connectors.includes(e)) {
+                                    element = e;
+                                    break loopCoord;
+                                }
+                            }
                         }
-                    }
                     
                     if (element) {
                         let rect1 = refData.ref.current.getBoundingClientRect();
