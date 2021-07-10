@@ -20,7 +20,6 @@ export default class Button extends React.Component {
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
-        this.snapOffset = {top: 5, bottom: 5, left: 5, right: 5};
         this.cursorOffset = {x: undefined, y: undefined};
         this.attachTo = new Map();
         this.refArray = [
@@ -85,40 +84,46 @@ export default class Button extends React.Component {
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
 
         if (breadboardTranslate && relatedTargetTranslate) {
-            let svg = document.getElementById("AppSVG");
-            let pt = svg.createSVGPoint();
 			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
 
-            pt.x = Number(relatedTargetTranslate[1]);
-            pt.y = Number(relatedTargetTranslate[5]);
-            const relatedPosition = pt.matrixTransform(svg.getScreenCTM().inverse());
-
-            pt.x = xPos;
-            pt.y = yPos;
-            const breadboardHolePosition = pt.matrixTransform(svg.getScreenCTM().inverse());
-
-            let allConnected = true;
+            let allConnected = false;
             let elementID = [];
-            let connectors  = Array.prototype.slice.call(attachRef.connectors);
+            let connectors = Array.prototype.slice.call(attachRef.connectors);
 
             if (connectors) {
                 for (let refData of this.refArray) {
-                    const refPos = {
-                        x: refData.ref.current.getBoundingClientRect().x + relatedPosition.x - breadboardHolePosition.x + refData.ref.current.getBoundingClientRect().width / 2,
-                        y: refData.ref.current.getBoundingClientRect().y + relatedPosition.y - breadboardHolePosition.y + refData.ref.current.getBoundingClientRect().height / 2,
-                    };
-                    const element = document.elementsFromPoint(refPos.x, refPos.y)[1];
-                    if (!connectors.includes(element)) {
-                        allConnected = false;
-                        break;
-                    } else {
-                        if (attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                    let element = undefined;
+                    let connectorRect = refData.ref.current.getBoundingClientRect();
+                    let checkCoord = [
+                        {x: connectorRect.left, y: connectorRect.top},
+                        {x: connectorRect.right, y: connectorRect.top},
+                        {x: connectorRect.left, y: connectorRect.bottom},
+                        {x: connectorRect.right, y: connectorRect.bottom}
+                    ]
+
+                    for (let coord of checkCoord) {
+                        if (connectors.includes(document.elementsFromPoint(coord.x, coord.y)[1])) {
+                            element = document.elementsFromPoint(coord.x, coord.y)[1];
+                            break;
+                        }
+                    }
+                    
+                    if (element) {
+                        let rect1 = refData.ref.current.getBoundingClientRect();
+                        let rect2 = element.getBoundingClientRect();
+                        let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+    
+                        if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                            allConnected = true;
                             elementID.push(element.id);
                         } else {
                             allConnected = false;
                             break;
                         }
+                    } else {
+                        allConnected = false;
+                        break;
                     }
                 }
             }

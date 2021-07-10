@@ -19,6 +19,7 @@ export default class BreadBoard extends React.Component {
 		this.updateProp = this.updateProp.bind(this);
 
 		this.scale = {x: 6, y: 6};
+		this.snapped = false;
 		this.offSet = {x: 0.45604399, y: 0};
 		this.mousedown = false;
 		this.connectedParts = new Map();
@@ -96,10 +97,10 @@ export default class BreadBoard extends React.Component {
 					move: event => {
 						let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.currentTarget.closest(".part"));
 
-						if (typeof ref.moveConnectortoCursor === "function")
+						if (typeof ref.moveConnectortoCursor === "function" && !ref.snapped)
 							ref.moveConnectortoCursor(event.currentTarget, event.client.x, event.client.y);
 					},
-					end: event => {
+					end: () => {
 						this.mousedown = false;
 					}
 				}
@@ -134,27 +135,18 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.5,
-				ondropmove: event => {			
+				overlap: 0.05,
+				ondropmove: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-					let scale = document.getElementById("AppSVG").getAttribute("scale");
 					let rect1 = event.relatedTarget.getBoundingClientRect();
 					let rect2 = event.currentTarget.getBoundingClientRect();
-					let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-					let connectedPart = this.connectedParts.get(event.currentTarget.id);
 					
-					if (overlap && typeof ref.snapConnector === "function" && (connectedPart === undefined || connectedPart.ref === ref)) {
-						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
-						
-					}	
-					delta.x += event.dragEvent.delta.x;
-					delta.y += event.dragEvent.delta.y;
-					let snapOffset = ref.snapOffset || {top: 0, bottom: 0, left: 0, right: 0};
-					overlap = !(rect1.right + delta.x < rect2.left - snapOffset.left / scale ||
-							    rect1.left + delta.x > rect2.right + snapOffset.right / scale ||
-								rect1.bottom + delta.y < rect2.top - snapOffset.top / scale ||
-								rect1.top + delta.y > rect2.bottom + snapOffset.bottom / scale);
-
+					let connectedPart = this.connectedParts.get(event.currentTarget.id);
+					let overlap = !(rect1.right + delta.x < rect2.left ||
+							    rect1.left + delta.x > rect2.right ||
+								rect1.bottom + delta.y < rect2.top ||
+								rect1.top + delta.y > rect2.bottom);
+					
 					if (!overlap && connectedPart && connectedPart.ref === ref) {
 						if (typeof ref.disconnect === "function")
 							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
@@ -162,7 +154,19 @@ export default class BreadBoard extends React.Component {
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
 						delta.x = 0;
 						delta.y = 0;
+						return;
 					}
+					overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+					if (overlap && typeof ref.snapConnector === "function" && (connectedPart === undefined || connectedPart.ref === ref)) {
+						if (!ref.snapped) {
+							delta.x = rect1.left - rect2.left;
+							delta.y = rect1.top - rect2.top;
+						}
+						ref.snapConnector(event, event.currentTarget.id, this, this.connectPart);
+					}
+					delta.x += event.dragEvent.delta.x;
+					delta.y += event.dragEvent.delta.y;
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
@@ -173,6 +177,8 @@ export default class BreadBoard extends React.Component {
 							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 						if (typeof ref.moveConnectortoCursor === "function") 
 							ref.moveConnectortoCursor(event.relatedTarget, event.dragEvent.client.x, event.dragEvent.client.y);
+						delta.x = 0;
+						delta.y = 0;
 					}
 				}
 			});
@@ -181,13 +187,17 @@ export default class BreadBoard extends React.Component {
 
 	connectPart(id, partID, ref) {
 		this.connectedParts.set(id, {id: partID, ref: ref});
-		this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
+		ref.snapped = true;
+
+		if (this.node.current.querySelector("#" + id))
+			this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 	}
 
 	disconnectPart(id, ref) {
-		if (this.connectedParts.get(id).ref === ref) {
+		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref) {
 			this.connectedParts.set(id, undefined);
 			this.node.current.querySelector("#" + id).setAttribute("filter", "");
+			ref.snapped = false;
 		}
 	}
 

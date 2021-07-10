@@ -98,7 +98,7 @@ class SideBarPart extends React.Component {
                 if (findConnector && !event.currentTarget.classList.contains("connector")) {
                     event.interaction.stop();
                     event.interaction.start({name: "drag"}, event.interactable, findConnector);
-                } else {
+                } else if (!this.node.snapped) {
                     let pos = svg.createSVGPoint();
                     pos.x = event.client.x - part.getBoundingClientRect().width / 2;
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;

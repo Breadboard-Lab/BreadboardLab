@@ -96,21 +96,18 @@ export default class Wire extends React.Component {
 	}
 
     disconnect(event, id, callback) {
-        let item = this.attachTo.get("start");
+        if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
+            this.attachTo.set("start", undefined);
 
-        if (item) {
-            if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
-                this.attachTo.set("start", undefined);
-    
-                if (typeof callback === "function")
-                    callback(id, this);
-            } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
-                this.attachTo.set("end", undefined);
-    
-                if (typeof callback === "function")
-                    callback(id, this);
-            }
+            if (typeof callback === "function")
+                callback(id, this);
+        } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
+            this.attachTo.set("end", undefined);
+            
+            if (typeof callback === "function")
+                callback(id, this);
         }
+        this.snapped = false;
     }
 
     movePart(id, dx, dy) {
