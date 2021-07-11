@@ -40,7 +40,6 @@ export default class Button extends React.Component {
 				move: event => {
                     if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
-                        this.disconnect()
                     } else {
                         const {interaction} = event;
                         interaction.stop();
@@ -123,7 +122,8 @@ export default class Button extends React.Component {
                 callback(this.attachTo.get(refData.id).id, this);
             }
             this.attachTo.set(refData.id, undefined);
-        }        
+        }
+        this.highlightID = undefined;
     }
 
     movePart(id, dx, dy) {

@@ -134,10 +134,18 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.1,
+				overlap: 0.01,
+				ondragenter: event => {
+					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
+
+					if (ref && typeof ref.highlight === "function")
+						ref.highlight(event, this);
+				},
 				ondropmove: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
+					if (ref && typeof ref.disconnect === "function") 
+						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 					if (ref && typeof ref.highlight === "function")
 						ref.highlight(event, this);
 				},
@@ -150,7 +158,7 @@ export default class BreadBoard extends React.Component {
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
-					if (typeof ref.disconnect === "function") 
+					if (ref && typeof ref.disconnect === "function") 
 						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 
 				}
