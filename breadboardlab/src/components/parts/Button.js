@@ -77,7 +77,18 @@ export default class Button extends React.Component {
         )
     }
 
-    snapConnector(event, id, attachRef, callback) {
+    highlight(event, attachRef) {
+        let elementID = this.checkConnected(attachRef);
+
+        if (elementID.length === 4) {
+            this.highlightID = {ids: elementID, ref: attachRef};
+
+            for (let connectorID of this.highlightID.ids)
+                attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
+        }
+    }
+
+    connect(event, id, attachRef, callback) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
         const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
 		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
@@ -86,73 +97,32 @@ export default class Button extends React.Component {
         if (breadboardTranslate && relatedTargetTranslate) {
 			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
-
-            let allConnected = false;
-            let elementID = [];
-            let connectors = Array.prototype.slice.call(attachRef.connectors);
-
-            if (connectors) {
-                for (let refData of this.refArray) {
-                    let element = undefined;
-                    let connectorRect = refData.ref.current.getBoundingClientRect();
-                    let checkCoord = [
-                        {x: connectorRect.left, y: connectorRect.top},
-                        {x: connectorRect.right, y: connectorRect.top},
-                        {x: connectorRect.left, y: connectorRect.bottom},
-                        {x: connectorRect.right, y: connectorRect.bottom}
-                    ]
-
-                    loopCoord:
-                        for (let coord of checkCoord) {
-                            for (let e of document.elementsFromPoint(coord.x, coord.y)) {
-                                if (connectors.includes(e)) {
-                                    element = e;
-                                    break loopCoord;
-                                }
-                            }
-                        }
-                    
-                    if (element) {
-                        let rect1 = refData.ref.current.getBoundingClientRect();
-                        let rect2 = element.getBoundingClientRect();
-                        let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-    
-                        if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
-                            allConnected = true;
-                            elementID.push(element.id);
-                        } else {
-                            allConnected = false;
-                            break;
-                        }
-                    } else {
-                        allConnected = false;
-                        break;
-                    }
-                }
-            }
             
-            if (allConnected) {
+            if (this.highlightID.ids.length === 4) {
                 for (let i = 0; i < this.refArray.length; i++) {
-                    this.attachTo.set(this.refArray[i].id, {id: elementID[i], attachRef});
+                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], attachRef});
                     
                     if (typeof callback === "function") {
-                        callback(elementID[i], this.refArray[i].id, this);
+                        callback(this.highlightID.ids[i], this.refArray[i].id, this);
                     }
                 }
                 this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
-            } else {
-                this.moveConnectortoCursor(this.node.current, event.dragEvent.client.x, event.dragEvent.client.y);
             }
 		}
     }
 
     disconnect(event, id, callback) {
-        for (let refData of this.refArray) {
-            if (typeof callback === "function" && this.attachTo.get(refData.id)) {
-                callback(this.attachTo.get(refData.id).id, this);
+        if (this.attachTo.get("topRight") !== undefined) {
+            for (let refData of this.refArray) {
+                if (typeof callback === "function" && this.attachTo.get(refData.id)) {
+                    callback(this.attachTo.get(refData.id).id, this);
+                }
+                this.attachTo.set(refData.id, undefined);
             }
-            
-            this.attachTo.set(refData.id, undefined);
+        } else {
+            if (this.highlightID) 
+                for (let id of this.highlightID.ids)
+                    this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
         }
     }
 
@@ -163,6 +133,49 @@ export default class Button extends React.Component {
         if (translate) {
             this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 4} ${Number(translate[5]) + dy / 4})`);
         }
+    }
+
+    checkConnected(attachRef) {
+        let elementID = [];
+        let connectors = Array.prototype.slice.call(attachRef.connectors);
+
+        if (connectors) {
+            for (let refData of this.refArray) {
+                let element = undefined;
+                let connectorRect = refData.ref.current.getBoundingClientRect();
+                let checkCoord = [
+                    {x: connectorRect.left, y: connectorRect.top},
+                    {x: connectorRect.right, y: connectorRect.top},
+                    {x: connectorRect.left, y: connectorRect.bottom},
+                    {x: connectorRect.right, y: connectorRect.bottom}
+                ]
+
+                loopCoord:
+                    for (let coord of checkCoord) {
+                        for (let e of document.elementsFromPoint(coord.x, coord.y)) {
+                            if (connectors.includes(e)) {
+                                element = e;
+                                break loopCoord;
+                            }
+                        }
+                    }
+                
+                if (element) {
+                    let rect1 = refData.ref.current.getBoundingClientRect();
+                    let rect2 = element.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                        elementID.push(element.id);
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return elementID
     }
     
     render() {

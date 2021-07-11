@@ -41,10 +41,12 @@ export default class Wire extends React.Component {
             }
         }
     }
+    
+    highlight(event) {
+        event.currentTarget.setAttribute("filter", "url(#f3)");
+    }
 
-    snapConnector(event, id, attachRef, callback) {
-		event.currentTarget.setAttribute("filter", "url(#f3)");
-
+    connect(event, id, attachRef, callback) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
@@ -88,6 +90,9 @@ export default class Wire extends React.Component {
 
             if (typeof callback === "function")
                 callback(id, this);
+        } else if ((this.endPoint.current.node === event.relatedTarget && this.attachTo.get("start") && this.attachTo.get("start").id !== event.currentTarget.id) ||
+                   (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("end") && this.attachTo.get("end").id !== event.currentTarget.id)) {
+            event.currentTarget.setAttribute("filter", "");
         }
     }
 
