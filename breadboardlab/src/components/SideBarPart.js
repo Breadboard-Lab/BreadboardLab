@@ -102,11 +102,13 @@ class SideBarPart extends React.Component {
                     let pos = svg.createSVGPoint();
                     pos.x = event.client.x - part.getBoundingClientRect().width / 2;
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
-                    var cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
+                    let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    if (cursorpt.x && cursorpt.y) {
+                    if (cursorpt)
                         part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
-                    }
+                                            
+                    if (typeof this.node.disconnect === "function")
+                        this.node.disconnect()
                 }
             },
             end: () => {

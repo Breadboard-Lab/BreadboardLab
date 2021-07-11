@@ -40,6 +40,7 @@ export default class Button extends React.Component {
 				move: event => {
                     if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
+                        this.disconnect()
                     } else {
                         const {interaction} = event;
                         interaction.stop();
@@ -98,7 +99,7 @@ export default class Button extends React.Component {
 			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
 			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
             
-            if (this.highlightID.ids.length === 4) {
+            if (this.highlightID && this.highlightID.ids.length === 4) {
                 for (let i = 0; i < this.refArray.length; i++) {
                     this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], attachRef});
                     
@@ -112,18 +113,17 @@ export default class Button extends React.Component {
     }
 
     disconnect(event, id, callback) {
-        if (this.attachTo.get("topRight") !== undefined) {
-            for (let refData of this.refArray) {
-                if (typeof callback === "function" && this.attachTo.get(refData.id)) {
-                    callback(this.attachTo.get(refData.id).id, this);
-                }
-                this.attachTo.set(refData.id, undefined);
-            }
-        } else {
-            if (this.highlightID) 
-                for (let id of this.highlightID.ids)
-                    this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
+        if (this.highlightID) {
+            for (let id of this.highlightID.ids)
+                this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
         }
+
+        for (let refData of this.refArray) {
+            if (typeof callback === "function" && this.attachTo.get(refData.id)) {
+                callback(this.attachTo.get(refData.id).id, this);
+            }
+            this.attachTo.set(refData.id, undefined);
+        }        
     }
 
     movePart(id, dx, dy) {
@@ -167,11 +167,7 @@ export default class Button extends React.Component {
 
                     if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
                         elementID.push(element.id);
-                    } else {
-                        break;
                     }
-                } else {
-                    break;
                 }
             }
         }

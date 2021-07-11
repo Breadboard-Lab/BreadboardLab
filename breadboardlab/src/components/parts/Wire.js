@@ -82,11 +82,13 @@ export default class Wire extends React.Component {
     disconnect(event, id, callback) {
         if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
             this.attachTo.set("start", undefined);
+            event.currentTarget.setAttribute("filter", "");
 
             if (typeof callback === "function")
                 callback(id, this);
         } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
             this.attachTo.set("end", undefined);
+            event.currentTarget.setAttribute("filter", "");
 
             if (typeof callback === "function")
                 callback(id, this);

@@ -134,7 +134,7 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.01,
+				overlap: 0.1,
 				ondropmove: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
@@ -152,7 +152,7 @@ export default class BreadBoard extends React.Component {
 
 					if (typeof ref.disconnect === "function") 
 						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
-					
+
 				}
 			});
 		} 
@@ -160,15 +160,11 @@ export default class BreadBoard extends React.Component {
 
 	connectPart(id, partID, ref) {
 		this.connectedParts.set(id, {id: partID, ref: ref});
-
-		if (this.node.current.querySelector("#" + id))
-			this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 	}
 
 	disconnectPart(id, ref) {
 		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref) {
 			this.connectedParts.set(id, undefined);
-			this.node.current.querySelector("#" + id).setAttribute("filter", "");
 		}
 	}
 
