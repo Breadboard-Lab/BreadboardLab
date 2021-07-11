@@ -146,28 +146,6 @@ export default class Button extends React.Component {
 		}
     }
 
-    moveConnectortoCursor(element, clientX, clientY) {
-        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const translate = regexTranslate.exec(element.closest(".part").getAttribute("transform"));
-
-		if (translate) {
-			let svg = document.getElementById("AppSVG");
-			let pt = svg.createSVGPoint();
-            
-            if (this.cursorOffset.x === undefined || this.cursorOffset.y === undefined) {
-                pt.x = clientX - element.closest(".part").getBoundingClientRect().width / 2;
-                pt.y = clientY - element.closest(".part").getBoundingClientRect().height / 2;
-            } else {
-                pt.x = clientX - this.cursorOffset.x;
-                pt.y = clientY - this.cursorOffset.y;
-            }
-            
-		
-			let cursorpt = pt.matrixTransform(svg.getScreenCTM().inverse());
-            element.closest(".part").setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
-		}
-    }
-
     disconnect(event, id, callback) {
         for (let refData of this.refArray) {
             if (typeof callback === "function" && this.attachTo.get(refData.id)) {

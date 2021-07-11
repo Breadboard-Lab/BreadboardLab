@@ -69,24 +69,6 @@ export default class Wire extends React.Component {
 		}
 	}
 
-    moveConnectortoCursor(element, clientX, clientY) {
-		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const translate = regexTranslate.exec(element.parentNode.getAttribute("transform"));
-        
-		if (translate) {
-			let svg = document.getElementById("AppSVG");
-			let pt = svg.createSVGPoint();
-			pt.x = clientX;
-			pt.y = clientY;
-
-			let cursorpt =  pt.matrixTransform(svg.getScreenCTM().inverse());
-			const xPos = cursorpt.x - Number(translate[1]);
-			const yPos = cursorpt.y - Number(translate[5]);
-	
-			this.moveConnector(element, xPos, yPos);
-		}
-	}
-
 	moveConnector(connector, xPos, yPos) {
 		if (connector === this.startPoint.current.node) {
             this.setState({startPoint: {x: xPos, y: yPos}});
@@ -103,11 +85,10 @@ export default class Wire extends React.Component {
                 callback(id, this);
         } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
             this.attachTo.set("end", undefined);
-            
+
             if (typeof callback === "function")
                 callback(id, this);
         }
-        this.snapped = false;
     }
 
     movePart(id, dx, dy) {
