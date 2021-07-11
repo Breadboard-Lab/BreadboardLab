@@ -138,27 +138,29 @@ export default class BreadBoard extends React.Component {
 				ondragenter: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
-					if (ref && typeof ref.highlight === "function")
+					if (ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.highlight(event, this);
 				},
 				ondropmove: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
-					if (ref && typeof ref.disconnect === "function") 
-						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
-					if (ref && typeof ref.highlight === "function")
-						ref.highlight(event, this);
+					if (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) {
+						if (ref && typeof ref.disconnect === "function") 
+							ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
+						if (ref && typeof ref.highlight === "function")
+							ref.highlight(event, this);
+					}
 				},
 				ondrop: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
-					if (ref && typeof ref.connect === "function")
+					if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.connect(event, event.currentTarget.id, this, this.connectPart);
 				},
 				ondragleave: event => {
 					let ref = SideBarPart.listOfRefs.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 
-					if (ref && typeof ref.disconnect === "function") 
+					if (ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref)) 
 						ref.disconnect(event, event.currentTarget.id, this.disconnectPart);
 
 				}
@@ -167,10 +169,13 @@ export default class BreadBoard extends React.Component {
     }
 
 	connectPart(id, partID, ref) {
+		this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 		this.connectedParts.set(id, {id: partID, ref: ref});
 	}
 
 	disconnectPart(id, ref) {
+		this.node.current.querySelector("#" + id).setAttribute("filter", "");
+
 		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref) {
 			this.connectedParts.set(id, undefined);
 		}

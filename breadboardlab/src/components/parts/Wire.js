@@ -42,7 +42,7 @@ export default class Wire extends React.Component {
         }
     }
     
-    highlight(event) {
+    highlight(event, attachRef) {
         event.currentTarget.setAttribute("filter", "url(#f3)");
     }
 
@@ -82,13 +82,11 @@ export default class Wire extends React.Component {
     disconnect(event, id, callback) {
         if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
             this.attachTo.set("start", undefined);
-            event.currentTarget.setAttribute("filter", "");
 
             if (typeof callback === "function")
                 callback(id, this);
         } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
             this.attachTo.set("end", undefined);
-            event.currentTarget.setAttribute("filter", "");
 
             if (typeof callback === "function")
                 callback(id, this);
@@ -131,14 +129,14 @@ export default class Wire extends React.Component {
                     <ellipse 
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
-                        className="wire start connector" strokeWidth="1.5" strokeOpacity="0" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
+                        className="wire start connector" strokeOpacity="0" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
                 </Interactable>
                 
                 <Interactable ref={this.endPoint} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
                     <ellipse
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
-                        className="wire end connector" strokeWidth="1.5" strokeOpacity="0" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
+                        className="wire end connector" strokeOpacity="0" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
                 </Interactable>
             </g>
         );
