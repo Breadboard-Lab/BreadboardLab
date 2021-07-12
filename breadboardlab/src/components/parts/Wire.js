@@ -10,10 +10,18 @@ export default class Wire extends React.Component {
 
         this.state = {
             startPoint: this.props.startPoint,
-            endPoint: this.props.endPoint
+            endPoint: this.props.endPoint,
+            type: "Wire",
+            name: "Wire",
+            colour: "Red",
+            visualColourOuter: "hsl(0, 100%, 31%)",
+            visualColourInner: "hsl(0, 100%, 75%)",
+            isSelected: false,
         }
         this.setPoints = this.setPoints.bind(this);
         this.movePart = this.movePart.bind(this);
+        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.updateProp = this.updateProp.bind(this);
 
         this.attachTo = new Map();
     }
@@ -41,7 +49,64 @@ export default class Wire extends React.Component {
             }
         }
     }
-    
+
+    onDoubleClick() {
+        this.props.onDoubleTap(this.getProps());
+    }
+
+    updateProp(propName, value) {
+        if (propName.toLowerCase() === "type") {
+            this.setState({type: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "name") {
+            this.setState({name: value}, this.onDoubleClick);
+        } else if (propName.toLowerCase() === "colour") {
+            this.setState({colour: value}, this.onDoubleClick);
+
+            // Changes LED colour based on Properties Panel Colour Selection
+            switch (value) {
+                case "Red":
+                    this.setState({visualColourOuter: "hsl(0, 100%, 31%)"})
+                    this.setState({visualColourInner: "hsl(0, 100%, 75%)"})
+                    break
+                case "Blue":
+                    this.setState({visualColourOuter: "hsl(210,100%,31%)"})
+                    this.setState({visualColourInner: "hsl(210,100%,75%)"})
+                    break
+                case "Green":
+                    this.setState({visualColourOuter: "hsl(100, 100%, 31%)"})
+                    this.setState({visualColourInner: "hsl(125,100%,75%)"})
+                    break
+                case "Yellow":
+                    this.setState({visualColourOuter: "hsl(55,100%,31%)"})
+                    this.setState({visualColourInner: "hsl(55, 100%, 75%)"})
+                    break
+                default:
+                    this.setState({visualColourOuter: "hsl(0, 100%, 31%)"})
+                    this.setState({visualColourInner: "hsl(0, 100%, 75%)"})
+            }
+        }
+    }
+
+    getProps() {
+        return (
+            {
+                ref: this,
+                callback: this.updateProp,
+                props: [
+                    {propName: "Type", propType: "string", value: this.state.type},
+                    {propName: "Name", propType: "textfield", value: this.state.name},
+                    {
+                        propName: "Colour",
+                        propType: "select",
+                        value: this.state.colour,
+                        options: ["Red", "Blue", "Green", "Yellow"]
+                    }
+                ]
+            }
+
+        )
+    }
+
     highlight(event, attachRef) {
         event.currentTarget.setAttribute("filter", "url(#f3)");
     }
@@ -121,9 +186,10 @@ export default class Wire extends React.Component {
 
     render() {                        
         return(
-            <g ref={this.node} className="part" transform={this.props.transform}>
-                <path stroke="darkred" strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
-                <path stroke="red" strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} className="part" transform={this.props.transform}>
+                <path stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="9" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+                <path stroke={this.state.visualColourOuter} strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
+                <path stroke={this.state.visualColourInner} strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 
                 <Interactable ref={this.startPoint} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsStartPoint}>
                     <ellipse 

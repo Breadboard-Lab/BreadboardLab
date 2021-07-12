@@ -119,7 +119,8 @@ export default class BreadBoard extends React.Component {
 								ref: node => this.wire = node,
 								startPoint: startPoint,
 								endPoint: startPoint,
-								transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`
+								transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`,
+								onDoubleTap: this.props.onDoubleTap
 							}
 						);							  
 						this.props.addPart(wire);
