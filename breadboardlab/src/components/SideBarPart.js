@@ -106,7 +106,7 @@ class SideBarPart extends React.Component {
 
                     if (cursorpt)
                         part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
-                                            
+
                     if (typeof this.node.disconnect === "function")
                         this.node.disconnect()
                 }
@@ -194,7 +194,7 @@ class SideBarPart extends React.Component {
                                 </ListItemSecondaryAction>
                             </> : null}
                     </ListItem>
-                    <Dialog aria-labelledby="simple-dialog-title" open={this.state.open} onClose={this.handleDialog}>
+                    <Dialog aria-labelledby="dialog" open={this.state.open} onClose={this.handleDialog}>
                         <DialogTitle id="dialog-title" onClose={this.handleDialog}>
                             <Typography>{this.props.name}</Typography>
                             <IconButton aria-label="close" className={classes.closeButton} onClick={this.handleDialog}>

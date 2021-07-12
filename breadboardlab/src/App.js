@@ -7,7 +7,7 @@ import {
     Toolbar,
     Tooltip,
     Typography,
-    withStyles,withWidth,
+    withStyles, withWidth,
 } from "@material-ui/core";
 import {ThemeProvider} from '@material-ui/core/styles'
 import clsx from "clsx";
@@ -125,9 +125,8 @@ class App extends Component {
         console.log('Share clicked')
     };
 
-    onDoubleTap = (childData) => {
+    handlePartSelect = (childData) => {
         if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
-            //if (this.selectedPart && this.selectedPart.ref === childData.ref) {
             this.setState({
                 hideProperties: true,
                 partData: {},
@@ -202,7 +201,7 @@ class App extends Component {
 
                             { /* Drawer Controller Button
                                     Hides on Drawer opened
-                            */ }
+                            */}
                             <Tooltip title="Open Drawer">
                                 <IconButton
                                     color="inherit"
@@ -215,7 +214,7 @@ class App extends Component {
                                 </IconButton>
                             </Tooltip>
 
-                            { /* Tools */ }
+                            { /* Tools */}
                             {this.props.width < 'xs' ?
                                 <AppbarToolsMenu
                                     selectedTool={this.state.selectedTool}
@@ -235,7 +234,7 @@ class App extends Component {
                         open={this.state.open}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
-                        onDoubleTap={this.onDoubleTap}
+                        handlePartSelect={this.handlePartSelect}
                         hideProperties={this.state.hideProperties}
                         partData={this.state.partData}
                     />
