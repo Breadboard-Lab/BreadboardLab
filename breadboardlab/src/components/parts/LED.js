@@ -24,6 +24,7 @@ export default class LED extends React.Component {
 
         this.scale = {x: 20, y: 20};
         this.offSet = {x: 0.3, y: 0.5};
+        this.attachTo = new Map();
     }
 
     draggableOptionsCathode = {
@@ -108,6 +109,51 @@ export default class LED extends React.Component {
             }
 
         )
+    }
+
+    connect(event, id, attachRef, callback) {
+		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
+		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
+
+		if (breadboardTranslate && relatedTargetTranslate) {
+			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x / this.scale.x - this.offSet.x + (Number(breadboardTranslate[1]) - Number(relatedTargetTranslate[1])) / this.scale.x;
+			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y / this.scale.x - this.offSet.y + (Number(breadboardTranslate[5]) - Number(relatedTargetTranslate[5])) / this.scale.y;
+            
+            if (this.cathode.current.node === event.relatedTarget && (!this.attachTo.get("anode") || this.attachTo.get("anode").id !== id)) {
+                this.attachTo.set("cathode", {id: id, ref: attachRef});
+                this.moveConnector(event.relatedTarget, xPos, yPos);
+
+                if (typeof callback === "function")
+                    callback(id, "cathode", this);
+            } else if (this.anode.current.node === event.relatedTarget && (!this.attachTo.get("cathode") || this.attachTo.get("anode").id !== id)) {
+                this.attachTo.set("anode", {id: id, ref: attachRef});
+                this.moveConnector(event.relatedTarget, xPos, yPos);
+
+                if (typeof callback === "function")
+                    callback(id, "anode", this);
+            }
+		}
+	}
+
+    moveConnector(connector, xPos, yPos) {
+		if (connector === this.cathode.current.node) {
+            this.setState({cathodePoint: {x: xPos, y: yPos}});
+        } else {
+            this.setState({anodePoint: {x: xPos, y: yPos}});
+        }
+	}
+
+    movePart(id, dx, dy) {
+        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+		const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
+        
+        if (translate) {
+            if (this.attachTo.get("cathode") && this.attachTo.get("anode"))
+                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 2} ${Number(translate[5]) + dy / 2})`);
+            else 
+                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
+        }
     }
 
     onMouseEnter(event) {

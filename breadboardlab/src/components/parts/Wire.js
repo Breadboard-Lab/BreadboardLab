@@ -71,14 +71,6 @@ export default class Wire extends React.Component {
 		}
 	}
 
-	moveConnector(connector, xPos, yPos) {
-		if (connector === this.startPoint.current.node) {
-            this.setState({startPoint: {x: xPos, y: yPos}});
-        } else {
-            this.setState({endPoint: {x: xPos, y: yPos}});
-        }
-	}
-
     disconnect(event, id, callback) {
         if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
             this.attachTo.set("start", undefined);
@@ -103,6 +95,14 @@ export default class Wire extends React.Component {
             this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
         }
     }
+    
+	moveConnector(connector, xPos, yPos) {
+		if (connector === this.startPoint.current.node) {
+            this.setState({startPoint: {x: xPos, y: yPos}});
+        } else {
+            this.setState({endPoint: {x: xPos, y: yPos}});
+        }
+	}
     
     setPoints(startPoint, endPoint) {
         this.setState({
