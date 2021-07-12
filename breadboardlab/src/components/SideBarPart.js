@@ -16,7 +16,6 @@ import {
 import IconButton from "@material-ui/core/IconButton";
 import Interactable from "./Interactable";
 import CloseIcon from '@material-ui/icons/Close';
-import themeDark from "../themes/themeDark";
 //import interact from "interactjs";
 
 
@@ -56,8 +55,7 @@ class SideBarPart extends React.Component {
 
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
-        let hoverElement = document.elementFromPoint(xPos, yPos);
-        let element = hoverElement;
+        let element = document.elementFromPoint(xPos, yPos);
 
         while (element) {
             if (element === svg) {
