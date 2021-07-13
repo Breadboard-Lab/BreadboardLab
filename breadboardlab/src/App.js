@@ -101,21 +101,32 @@ class App extends Component {
     };
 
     handleDelete = () => {
-        /*
-            filters for if selectedPart key is equal to a key in listOfParts array
-                returns new array with results of any part not equal to selectedPart key
-         */
-
         // console.log("selectedPart", this.selectedPart.ref._reactInternals.key)
         // console.log(this.state.listOfParts.filter(part => {
         //     console.log(part.props.children.key)
         //     return part.props.children.key !== this.selectedPart.ref._reactInternals.key
         // }))
-        this.setState(state => ({
-            listOfParts: state.listOfParts.filter(part => {
+        try {
+            /*
+                filters for if selectedPart key is equal to a key in listOfParts array
+                    returns new array with results of any part not equal to selectedPart key
+             */
+            let newListOfParts = this.state.listOfParts.filter(part => {
                 return part.props.children.key !== this.selectedPart.ref._reactInternals.key
             })
-        }));
+            this.setState({listOfParts: newListOfParts});
+        } catch (error) {
+            console.log(error)
+        } finally {
+            // Unselects deleted part
+            this.setState({
+                hideProperties: true,
+                partData: {},
+            });
+            this.selectedPart.ref.setState({isSelected: false});
+            this.previousPartState = undefined;
+            this.selectedPart = undefined;
+        }
     };
 
     handleUndo = () => {
