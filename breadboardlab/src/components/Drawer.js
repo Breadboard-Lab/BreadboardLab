@@ -7,7 +7,7 @@ import CategorySelect from "./CategorySelect";
 import SearchIcon from "@material-ui/icons/Search";
 import PropertiesPanel from "./PropertiesPanel";
 import SideBarPart from "./SideBarPart";
-import listOfParts from "../utils/listOfParts";
+import partsList from "../utils/partsList";
 
 const drawerWidth = 240;
 
@@ -173,26 +173,26 @@ class Drawer extends Component {
                                 if searchFilter is not empty, check through All category for matching parts
                              */
                             this.state.searchFilter !== "" ? (
-                                listOfParts.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
+                                partsList.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component}
                                                  name={filteredPart.name} description={filteredPart.description}
                                                  onDoubleTap={this.props.handlePartSelect}/>
                                 ))
                             ) : ({
                                 'all':
-                                    listOfParts.all.map((part, index) => (
+                                    partsList.all.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>
                                     )),
                                 'basics':
-                                    listOfParts.basics.map((part, index) => (
+                                    partsList.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>
                                     )),
                                 'gates':
-                                    listOfParts.gates.map((part, index) => (
+                                    partsList.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>

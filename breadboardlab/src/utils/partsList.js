@@ -5,7 +5,7 @@ import Resistor from "../components/parts/Resistor";
 import Transistor from "../components/parts/Transistor";
 import React from "react";
 
-const listOfParts = {
+const partsList = {
     all: [
         {name: 'Breadboard', component: <BreadBoard/>, description: ''},
         {name: 'MomentaryButton', component: <MomentaryButton/>, description: 'A switch that closes or opens a circuit.'},
@@ -24,4 +24,4 @@ const listOfParts = {
 }
 
 
-export default listOfParts;
+export default partsList;

@@ -51,7 +51,6 @@ export default class Button extends React.Component {
     }
 
     onDoubleClick() {
-        console.log("test")
         this.props.onDoubleTap(this.getProps());
     }
 

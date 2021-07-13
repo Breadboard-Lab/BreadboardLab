@@ -101,7 +101,7 @@ class App extends Component {
     };
 
     handleDelete = () => {
-        // console.log("handleDelete pressed", this.state.listOfParts.filter(function(part){
+        // console.log("handleDelete pressed", this.state.partsList.filter(function(part){
         //     return part.ref !== this.selectedPart.ref
         // }))
         console.log("selectedPart", this.selectedPart.ref)
