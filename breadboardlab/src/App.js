@@ -101,13 +101,21 @@ class App extends Component {
     };
 
     handleDelete = () => {
-        // console.log("handleDelete pressed", this.state.partsList.filter(function(part){
-        //     return part.ref !== this.selectedPart.ref
+        /*
+            filters for if selectedPart key is equal to a key in listOfParts array
+                returns new array with results of any part not equal to selectedPart key
+         */
+
+        // console.log("selectedPart", this.selectedPart.ref._reactInternals.key)
+        // console.log(this.state.listOfParts.filter(part => {
+        //     console.log(part.props.children.key)
+        //     return part.props.children.key !== this.selectedPart.ref._reactInternals.key
         // }))
-        console.log("selectedPart", this.selectedPart.ref)
-        this.state.listOfParts.forEach((part, index) => {
-            console.log("partInList", index, part)
-        })
+        this.setState(state => ({
+            listOfParts: state.listOfParts.filter(part => {
+                return part.props.children.key !== this.selectedPart.ref._reactInternals.key
+            })
+        }));
     };
 
     handleUndo = () => {

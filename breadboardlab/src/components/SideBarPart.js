@@ -40,7 +40,8 @@ class SideBarPart extends React.Component {
 
     added = false;
     listening = false;
-    static listOfRefs = []
+    static listOfRefs = [];
+    partKey = 0;
 
     addPart = (e, event, interaction) => {
         let part = React.cloneElement(
@@ -49,9 +50,11 @@ class SideBarPart extends React.Component {
                 ref: (node) => this.node = node,
                 addPart: this.props.ondrag,
                 movePart: movePart,
-                onDoubleTap: this.props.onDoubleTap
-            },
+                onDoubleTap: this.props.onDoubleTap,
+                key: this.partKey
+            }
         );
+        this.partKey++;
 
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
