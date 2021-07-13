@@ -74,6 +74,10 @@ class App extends Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", this.deleteKeyPressed, false);
+    }
+
     handleThemeChange = () => {
         // Switches between dark theme and light theme.
         this.setState(state => ({themeState: !state.themeState}));
@@ -106,7 +110,7 @@ class App extends Component {
         //     console.log(part.props.children.key)
         //     return part.props.children.key !== this.selectedPart.ref._reactInternals.key
         // }))
-        try {
+        if (this.selectedPart) {
             /*
                 filters for if selectedPart key is equal to a key in listOfParts array
                     returns new array with results of any part not equal to selectedPart key
@@ -115,19 +119,21 @@ class App extends Component {
                 return part.props.children.key !== this.selectedPart.ref._reactInternals.key
             })
             this.setState({listOfParts: newListOfParts});
-        } catch (error) {
-            console.log(error)
-        } finally {
             // Unselects deleted part
             this.setState({
                 hideProperties: true,
                 partData: {},
             });
-            this.selectedPart.ref.setState({isSelected: false});
             this.previousPartState = undefined;
             this.selectedPart = undefined;
         }
     };
+
+    deleteKeyPressed = (event) => {
+        if (event.key === 'Delete'){
+            this.handleDelete()
+        }
+    }
 
     handleUndo = () => {
         // TODO handle undo
