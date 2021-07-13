@@ -104,8 +104,10 @@ class App extends Component {
         // console.log("handleDelete pressed", this.state.listOfParts.filter(function(part){
         //     return part.ref !== this.selectedPart.ref
         // }))
-        // console.log(this.selectedPart.ref)
-        // console.log(this.state.listOfParts)
+        console.log("selectedPart", this.selectedPart.ref)
+        this.state.listOfParts.forEach((part, index) => {
+            console.log("partInList", index, part)
+        })
     };
 
     handleUndo = () => {
