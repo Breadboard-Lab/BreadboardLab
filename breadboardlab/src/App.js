@@ -65,7 +65,7 @@ const styles = theme => ({
 class App extends Component {
     static listOfRefs = listOfRefs;
     static partKey = partKey;
-    
+
     constructor(props) {
         super(props)
         this.state = {
@@ -80,7 +80,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.deleteKeyPressed, false);
+        document.addEventListener("keydown", this.handleKeyPress, false);
     }
 
     handleThemeChange = () => {
@@ -142,7 +142,7 @@ class App extends Component {
         }
     };
 
-    deleteKeyPressed = (event) => {
+    handleKeyPress = (event) => {
         if (event.key === 'Delete'){
             this.handleDelete()
         }

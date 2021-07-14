@@ -79,6 +79,7 @@ const AppbarToolsMenu = (props) => {
                 <IconButton
                     aria-label="undo"
                     onClick={props.handleUndo}
+                    disabled
                 >
                     <UndoIcon/>
                 </IconButton>
@@ -87,6 +88,7 @@ const AppbarToolsMenu = (props) => {
                 <IconButton
                     aria-label="redo"
                     onClick={props.handleRedo}
+                    disabled
                 >
                     <RedoIcon/>
                 </IconButton>
