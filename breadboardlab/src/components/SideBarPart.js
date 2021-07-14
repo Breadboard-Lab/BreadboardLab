@@ -16,6 +16,7 @@ import {
 import IconButton from "@material-ui/core/IconButton";
 import Interactable from "./Interactable";
 import CloseIcon from '@material-ui/icons/Close';
+import App from "../App";
 //import interact from "interactjs";
 
 
@@ -40,35 +41,32 @@ class SideBarPart extends React.Component {
 
     added = false;
     listening = false;
-    static listOfRefs = [];
-    partKey = 0;
 
     addPart = (e, event, interaction) => {
-        let part = React.cloneElement(
-            this.props.part,
-            {
-                ref: (node) => this.node = node,
-                addPart: this.props.ondrag,
-                movePart: movePart,
-                onDoubleTap: this.props.onDoubleTap,
-                key: this.partKey
-            }
-        );
-        this.partKey++;
-
         let xPos = (e.touches !== undefined) ? e.touches[0].clientX : e.clientX;
         let yPos = (e.touches !== undefined) ? e.touches[0].clientY : e.clientY;
         let element = document.elementFromPoint(xPos, yPos);
 
         while (element) {
             if (element === svg) {
+                let part = React.cloneElement(
+                    this.props.part,
+                    {
+                        ref: (node) => this.node = node,
+                        addPart: this.props.ondrag,
+                        movePart: movePart,
+                        onDoubleTap: this.props.onDoubleTap,
+                        key: App.partKey._currentValue,
+                    }
+                );
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
 
-                this.props.ondrag(<g className="part">{part}</g>);
+                this.props.ondrag(<g key={App.partKey._currentValue} className="part">{part}</g>);
                 this.listening = false;
                 this.added = true;
                 let element = this.node.node.current;
+                App.partKey._currentValue++;
 
                 if (element) {
                     if (this.node.scale && this.node.offSet) {
@@ -80,8 +78,8 @@ class SideBarPart extends React.Component {
                         element.setAttribute("transform", `translate(0 0) scale(1 1)`);
                     }
                     interaction.stop();
-                    interaction.start({name: "drag"}, event.interactable, element);
-                    SideBarPart.listOfRefs.push(this.node);
+                    interaction.start({name: "drag"}, event.interactable, element)
+                    App.listOfRefs._currentValue.push(this.node);
                 }
                 break;
             }

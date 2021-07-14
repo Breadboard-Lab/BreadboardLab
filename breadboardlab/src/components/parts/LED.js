@@ -111,7 +111,7 @@ export default class LED extends React.Component {
         )
     }
 
-    connect(event, id, attachRef, callback) {
+    connect(event, id, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
@@ -124,14 +124,14 @@ export default class LED extends React.Component {
                 this.attachTo.set("cathode", {id: id, ref: attachRef});
                 this.moveConnector(event.relatedTarget, xPos, yPos);
 
-                if (typeof callback === "function")
-                    callback(id, "cathode", this);
-            } else if (this.anode.current.node === event.relatedTarget && (!this.attachTo.get("cathode") || this.attachTo.get("anode").id !== id)) {
+                if (typeof attachRef.connectPart === "function")
+                    attachRef.connectPart(id, "cathode", this);
+            } else if (this.anode.current.node === event.relatedTarget && (!this.attachTo.get("cathode") || this.attachTo.get("cathode").id !== id)) {
                 this.attachTo.set("anode", {id: id, ref: attachRef});
                 this.moveConnector(event.relatedTarget, xPos, yPos);
 
-                if (typeof callback === "function")
-                    callback(id, "anode", this);
+                if (typeof attachRef.connectPart === "function")
+                    attachRef.connectPart(id, "anode", this);
             }
 		}
 	}

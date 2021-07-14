@@ -107,11 +107,11 @@ export default class Wire extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(event) {
         event.currentTarget.setAttribute("filter", "url(#f3)");
     }
 
-    connect(event, id, attachRef, callback) {
+    connect(event, id, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
@@ -124,33 +124,54 @@ export default class Wire extends React.Component {
                 this.attachTo.set("start", {id: id, ref: attachRef});
                 this.moveConnector(event.relatedTarget, xPos, yPos);
 
-                if (typeof callback === "function")
-                    callback(id, "start", this);
+                if (typeof attachRef.connectPart === "function")
+                    attachRef.connectPart(id, "start", this);
             } else if (this.endPoint.current.node === event.relatedTarget && (!this.attachTo.get("start") || this.attachTo.get("start").id !== id)) {
                 this.attachTo.set("end", {id: id, ref: attachRef});
                 this.moveConnector(event.relatedTarget, xPos, yPos);
 
-                if (typeof callback === "function")
-                    callback(id, "end", this);
+                if (typeof attachRef.connectPart === "function")
+                    attachRef.connectPart(id, "end", this);
             }
 		}
 	}
 
-    disconnect(event, id, callback) {
-        if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
+    disconnect(event) {
+        if (event) {
+            if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
+                if (typeof this.attachTo.get("start").ref.disconnectPart === "function")
+                    this.attachTo.get("start").ref.disconnectPart(this.attachTo.get("start").id, this);
+                
+                this.attachTo.set("start", undefined);
+            } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
+                if (typeof this.attachTo.get("end").ref.disconnectPart === "function")
+                    this.attachTo.get("end").ref.disconnectPart(this.attachTo.get("end").id, this);
+                
+                this.attachTo.set("end", undefined);
+            } else if ((this.endPoint.current.node === event.relatedTarget && this.attachTo.get("start") && this.attachTo.get("start").id !== event.currentTarget.id) ||
+                       (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("end") && this.attachTo.get("end").id !== event.currentTarget.id)) {
+                event.currentTarget.setAttribute("filter", "");
+            }
+        } else {
+            if (this.attachTo.get("start")) {
+                this.attachTo.get("start").ref.node.current.querySelector("#" + this.attachTo.get("start").id).setAttribute("filter", "");
+
+                if (typeof this.attachTo.get("start").ref.disconnectPart === "function") {
+                    this.attachTo.get("start").ref.disconnectPart(this.attachTo.get("start").id, this);
+                }
+            }
+             
+            if (this.attachTo.get("end")) {
+                this.attachTo.get("end").ref.node.current.querySelector("#" + this.attachTo.get("end").id).setAttribute("filter", "");
+
+                if (typeof this.attachTo.get("end").ref.disconnectPart === "function") {
+                    this.attachTo.get("end").ref.disconnectPart(this.attachTo.get("end").id, this);
+                }
+            }
             this.attachTo.set("start", undefined);
-
-            if (typeof callback === "function")
-                callback(id, this);
-        } else if (this.endPoint.current.node === event.relatedTarget && this.attachTo.get("end") !== undefined) {
             this.attachTo.set("end", undefined);
-
-            if (typeof callback === "function")
-                callback(id, this);
-        } else if ((this.endPoint.current.node === event.relatedTarget && this.attachTo.get("start") && this.attachTo.get("start").id !== event.currentTarget.id) ||
-                   (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("end") && this.attachTo.get("end").id !== event.currentTarget.id)) {
-            event.currentTarget.setAttribute("filter", "");
         }
+        
     }
 
     movePart(id, dx, dy) {

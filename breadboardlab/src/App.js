@@ -22,6 +22,8 @@ import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
 
 const drawerWidth = 240;
+const listOfRefs = React.createContext([]);
+const partKey = React.createContext(0);
 
 const styles = theme => ({
     root: {
@@ -61,6 +63,9 @@ const styles = theme => ({
 });
 
 class App extends Component {
+    static listOfRefs = listOfRefs;
+    static partKey = partKey;
+    
     constructor(props) {
         super(props)
         this.state = {
@@ -115,9 +120,17 @@ class App extends Component {
                 filters for if selectedPart key is equal to a key in listOfParts array
                     returns new array with results of any part not equal to selectedPart key
              */
+            
+            if (typeof this.selectedPart.ref.disconnect === "function")
+                this.selectedPart.ref.disconnect();
+            
             let newListOfParts = this.state.listOfParts.filter(part => {
-                return part.props.children.key !== this.selectedPart.ref._reactInternals.key
-            })
+                return part.key !== this.selectedPart.ref._reactInternals.key
+            });
+            App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => {
+                return ref !== this.selectedPart.ref
+            });
+            
             this.setState({listOfParts: newListOfParts});
             // Unselects deleted part
             this.setState({

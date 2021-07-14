@@ -87,7 +87,7 @@ export default class Button extends React.Component {
         }
     }
 
-    connect(event, id, attachRef, callback) {
+    connect(event, id, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
         const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
 		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
@@ -101,8 +101,8 @@ export default class Button extends React.Component {
                 for (let i = 0; i < this.refArray.length; i++) {
                     this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], attachRef});
                     
-                    if (typeof callback === "function") {
-                        callback(this.highlightID.ids[i], this.refArray[i].id, this);
+                    if (typeof attachRef.connectPart === "function") {
+                        attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
                     }
                 }
                 this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
@@ -110,15 +110,15 @@ export default class Button extends React.Component {
 		}
     }
 
-    disconnect(event, id, callback) {
+    disconnect() {
         if (this.highlightID) {
             for (let id of this.highlightID.ids)
                 this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
         }
 
         for (let refData of this.refArray) {
-            if (typeof callback === "function" && this.attachTo.get(refData.id)) {
-                callback(this.attachTo.get(refData.id).id, this);
+            if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).attachRef.disconnectPart === "function") {
+                this.attachTo.get(refData.id).attachRef.disconnectPart(this.attachTo.get(refData.id).id, this);
             }
             this.attachTo.set(refData.id, undefined);
         }
