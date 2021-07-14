@@ -227,6 +227,9 @@ function movePart(event) {
     if (transform) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
+
+        // TODO change rotation value based off object's rotation state
+        //      e.g. (Resistor.js).state.resistance
         let rotation = 0;
 
         // Centers rotation on part's center

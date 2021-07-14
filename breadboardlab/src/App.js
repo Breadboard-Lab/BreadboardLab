@@ -105,8 +105,12 @@ class App extends Component {
     };
 
     handleRotate = () => {
-        // TODO handle svg rotation
-        console.log('Rotate clicked')
+        // Increments selectPart's rotate state by 15 degrees.
+        //      Only Resistor.js has a rotation state right now.
+        // TODO actually update the rotate transformation in SideBarPart.js movePart function.
+        if (this.selectedPart) {
+            this.selectedPart.ref.setState({rotation: this.selectedPart.ref.state.rotation+=15});
+        }
     };
 
     handleDelete = () => {

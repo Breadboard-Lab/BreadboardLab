@@ -15,6 +15,7 @@ export default class Resistor extends React.Component {
             band3Colour: "#964b00",
             band4Colour: "#cfb53b",
             isSelected: false,
+            rotation: 0
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
