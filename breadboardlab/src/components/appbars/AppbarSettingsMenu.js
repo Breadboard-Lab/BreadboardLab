@@ -13,6 +13,7 @@ const AppbarSettingsMenu = (props) => {
         <Grid>
             <Tooltip title="Share">
                 <Button
+                    disabled
                     aria-label='Share'
                     onClick={props.handleShare}
                 >

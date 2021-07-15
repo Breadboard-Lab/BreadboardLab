@@ -5,9 +5,10 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import ShareIcon from '@material-ui/icons/Share';
 import InvertColorsIcon from "@material-ui/icons/InvertColors";
+import {saveSvgAsPng, saveSvg} from '../../utils/saveSvg';
 
 
-const AppbarSettingsCollapseMenu = () => {
+const AppbarSettingsCollapseMenu = (props) => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -18,6 +19,15 @@ const AppbarSettingsCollapseMenu = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleExport = (exportFormat) => {
+        console.log(`exportToFile(${exportFormat})`);
+        if (exportFormat === 'Export as SVG') {
+            saveSvg(document.getElementById('AppSVG'), 'breadboard_lab_export.svg');
+        } else {
+            saveSvgAsPng(document.getElementById('AppSVG'), 'breadboard_lab_export.png');
+        }
+    }
 
     return (
         <div>
@@ -38,19 +48,26 @@ const AppbarSettingsCollapseMenu = () => {
                 getContentAnchorEl={null}
                 onClose={handleClose}
             >
-                <MenuItem>
+                <MenuItem disabled>
                     <ListItemIcon>
                         <ShareIcon/>
                     </ListItemIcon>
                     <ListItemText primary="Share"/>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleExport("Export as SVG")}>
                     <ListItemIcon>
                         <SaveAltIcon/>
                     </ListItemIcon>
-                    <ListItemText primary="Export"/>
+                    <ListItemText primary="Export as SVG"/>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => handleExport("Export as PNG")}>
+                    <ListItemIcon>
+                        <SaveAltIcon/>
+                    </ListItemIcon>
+                    <ListItemText primary="Export as PNG"/>
+                </MenuItem>
+                <MenuItem
+                    onClick={props.handleThemeChange}>
                     <ListItemIcon>
                         <InvertColorsIcon/>
                     </ListItemIcon>

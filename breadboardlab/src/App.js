@@ -114,17 +114,11 @@ class App extends Component {
     };
 
     handleDelete = () => {
-        // console.log("selectedPart", this.selectedPart.ref._reactInternals.key)
-        // console.log(this.state.listOfParts.filter(part => {
-        //     console.log(part.props.children.key)
-        //     return part.props.children.key !== this.selectedPart.ref._reactInternals.key
-        // }))
+        /*
+            If a part is selected, disconnect & unmount anything important from
+            the part then filter remove part from listOfParts and listOfRefs.
+         */
         if (this.selectedPart) {
-            /*
-                filters for if selectedPart key is equal to a key in listOfParts array
-                    returns new array with results of any part not equal to selectedPart key
-             */
-            
             if (typeof this.selectedPart.ref.disconnect === "function")
                 this.selectedPart.ref.disconnect();
             
@@ -136,6 +130,7 @@ class App extends Component {
             });
             
             this.setState({listOfParts: newListOfParts});
+
             // Unselects deleted part
             this.setState({
                 hideProperties: true,
@@ -224,7 +219,10 @@ class App extends Component {
                                     handleShare={this.handleShare}
                                     handleThemeChange={this.handleThemeChange}
                                 />
-                                : <AppbarSettingsCollapseMenu/>
+                                : <AppbarSettingsCollapseMenu
+                                    handleShare={this.handleShare}
+                                    handleThemeChange={this.handleThemeChange}
+                                />
                             }
 
                         </Toolbar>
