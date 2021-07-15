@@ -10,7 +10,7 @@ import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 
-const AppbarToolsCollapseMenu = () => {
+const AppbarToolsCollapseMenu = (props) => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -41,7 +41,7 @@ const AppbarToolsCollapseMenu = () => {
                     getContentAnchorEl={null}
                     onClose={handleClose}
                 >
-                    <MenuItem>
+                    <MenuItem onClick={(event) => props.handleTool(event, "select_tool")}>
                         <ListItemIcon>
                             <SvgIcon>
                                 <SelectIcon/>
@@ -50,42 +50,42 @@ const AppbarToolsCollapseMenu = () => {
                         <ListItemText primary="Select" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={(event) => props.handleTool(event, "wire_tool")}>
                         <ListItemIcon>
                             <LinearScaleIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Draw Wire" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={props.handleRotate}>
                         <ListItemIcon>
                             <RotateRightIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Rotate" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={props.handleDelete}>
                         <ListItemIcon>
                             <DeleteForeverIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Delete" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={props.handleUndo}>
                         <ListItemIcon>
                             <UndoIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Undo" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={props.handleRedo}>
                         <ListItemIcon>
                             <RedoIcon/>
                         </ListItemIcon>
                         <ListItemText primary="Redo" />
                     </MenuItem>
 
-                    <MenuItem>
+                    <MenuItem onClick={props.handleStart}>
                         <ListItemIcon>
                             <PlayArrowIcon/>
                         </ListItemIcon>

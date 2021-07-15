@@ -270,7 +270,14 @@ class App extends Component {
                                     handleRedo={this.handleRedo}
                                     handleStart={this.handleStart}
                                 />
-                                : <AppbarToolsCollapseMenu/>}
+                                : <AppbarToolsCollapseMenu
+                                    handleTool={this.handleTool}
+                                    handleRotate={this.handleRotate}
+                                    handleDelete={this.handleDelete}
+                                    handleUndo={this.handleUndo}
+                                    handleRedo={this.handleRedo}
+                                    handleStart={this.handleStart}
+                                />}
                         </Toolbar>
                     </AppBar>
 
