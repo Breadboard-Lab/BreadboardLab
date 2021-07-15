@@ -223,7 +223,7 @@ function movePart(event) {
     const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
     const currentTransform = part.getAttribute("transform");
     const transform = regex.exec(currentTransform);
-
+    
     if (transform) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;

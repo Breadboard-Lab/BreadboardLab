@@ -99,7 +99,7 @@ export default class Button extends React.Component {
             
             if (this.highlightID && this.highlightID.ids.length === 4) {
                 for (let i = 0; i < this.refArray.length; i++) {
-                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], attachRef});
+                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
                     
                     if (typeof attachRef.connectPart === "function") {
                         attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
@@ -117,8 +117,8 @@ export default class Button extends React.Component {
         }
 
         for (let refData of this.refArray) {
-            if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).attachRef.disconnectPart === "function") {
-                this.attachTo.get(refData.id).attachRef.disconnectPart(this.attachTo.get(refData.id).id, this);
+            if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
+                this.attachTo.get(refData.id).ref.disconnectPart(this.attachTo.get(refData.id).id, this);
             }
             this.attachTo.set(refData.id, undefined);
         }
