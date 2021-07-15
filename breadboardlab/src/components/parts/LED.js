@@ -297,6 +297,7 @@ export default class LED extends React.Component {
                 </Interactable>
 
                 <path d="M -0.06 0.85 A 0.77 0.77 90 1 1 0.85 0.85 Z"
+                      transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
                       fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.075" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
             </g>
         )
