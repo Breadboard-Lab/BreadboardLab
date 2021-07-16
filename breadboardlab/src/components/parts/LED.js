@@ -36,11 +36,9 @@ export default class LED extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
-                this.connectorMove = true;
                 
                 this.setState({cathodePoint: {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale / this.scale.x, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale / this.scale.y}});
-            },
-            end: () => this.connectorMove = false
+            }
         }
     }
 
@@ -48,11 +46,9 @@ export default class LED extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
-                this.connectorMove = true;
 
                 this.setState({anodePoint: {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale / this.scale.x, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale / this.scale.y}});
-            },
-            end: () => this.connectorMove = false
+            }
         }
     }
 
@@ -165,24 +161,23 @@ export default class LED extends React.Component {
     disconnect(event) {
         if (event && (event.relatedTarget === this.anode.current.node || event.relatedTarget === this.cathode.current.node)) {
             if (event.relatedTarget === this.anode.current.node) {
-                if (this.attachTo.get("anode") && typeof this.attachTo.get("anode").ref.disconnectPart === "function")
+                if (this.attachTo.get("anode") && typeof this.attachTo.get("anode").ref.disconnectPart === "function") {
                     this.attachTo.get("anode").ref.disconnectPart(this.attachTo.get("anode").id, this);
-                
+                }
                 this.attachTo.set("anode", undefined);
                 event.currentTarget.setAttribute("filter", "");
             } else if (event.relatedTarget === this.cathode.current.node) {
-                if (this.attachTo.get("cathode") && typeof this.attachTo.get("cathode").ref.disconnectPart === "function")
+                if (this.attachTo.get("cathode") && typeof this.attachTo.get("cathode").ref.disconnectPart === "function") {
                     this.attachTo.get("cathode").ref.disconnectPart(this.attachTo.get("cathode").id, this);
-
+                }
                 this.attachTo.set("cathode", undefined);
                 event.currentTarget.setAttribute("filter", "");
             }
         } else {
-            if (this.highlightID) {
+            if (this.highlightID)
                 for (let id of this.highlightID.ids)
                     if (id)
                         this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
-            }
     
             for (let refData of this.refArray) {
                 if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
@@ -220,40 +215,33 @@ export default class LED extends React.Component {
         if (connectors) {
             for (let refData of this.refArray) {
                 let element = undefined;
-                let connectorRect = refData.ref.current.node.getBoundingClientRect();
-                let checkCoord = [
-                    {x: connectorRect.left, y: connectorRect.top},
-                    {x: connectorRect.right, y: connectorRect.top},
-                    {x: connectorRect.left, y: connectorRect.bottom},
-                    {x: connectorRect.right, y: connectorRect.bottom}
-                ]
 
-                loopCoord:
-                    for (let coord of checkCoord) {
-                        for (let e of document.elementsFromPoint(coord.x, coord.y)) {
-                            if (connectors.includes(e)) {
-                                element = e;
-                                break loopCoord;
-                            }
-                        }
+                for (let connector of connectors) {
+                    let rect1 = refData.ref.current.node.getBoundingClientRect();
+                    let rect2 = connector.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap) {
+                        element = connector;
+                        break;
                     }
+                }
                 
                 if (element) {
                     let rect1 = refData.ref.current.node.getBoundingClientRect();
                     let rect2 = element.getBoundingClientRect();
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
                         elementID.push(element.id);
-                    } else {
+                    else
                         elementID.push(undefined);
-                    }
                 } else {
                     elementID.push(undefined);
                 }
             }
         }
-        return elementID
+        return elementID;
     }
 
     onMouseEnter(event) {

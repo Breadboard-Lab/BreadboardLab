@@ -29,11 +29,10 @@ export default class BreadBoard extends React.Component {
     }
 
 	updateProp(propName, value) {
-		if (propName.toLowerCase() === "type") {
+		if (propName.toLowerCase() === "type")
 			this.setState({type: value}, this.onDoubleClick);
-		} else if (propName.toLowerCase() === "name") {
+		else if (propName.toLowerCase() === "name")
 			this.setState({name: value}, this.onDoubleClick);
-		}
 	}
 
 	getProps() {
@@ -60,9 +59,8 @@ export default class BreadBoard extends React.Component {
 						let {dx, dy} = this.props.movePart(event);
 	
 						this.connectedParts.forEach((item, key) => {
-							if (item && typeof item.ref.movePart === "function") {
+							if (item && typeof item.ref.movePart === "function") 
 								item.ref.movePart(item.id, dx, dy);
-							}
 						});
 					}
 				}
@@ -82,9 +80,9 @@ export default class BreadBoard extends React.Component {
 			});
 
 			this.connectors[i].addEventListener("mouseleave", (e) => {
-				if (e.srcElement.getAttribute("filter") !== "url(#f3)")
+				if (e.srcElement.getAttribute("filter") !== "url(#f3)") {
 					e.srcElement.setAttribute("filter", "");
-
+				}
 				e.srcElement.setAttribute("style", "");
 				this.mousedown = false;
 			});
@@ -163,7 +161,6 @@ export default class BreadBoard extends React.Component {
 
 					if (ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref)) 
 						ref.disconnect(event, event.currentTarget.id);
-
 				}
 			});
 		} 
@@ -177,9 +174,8 @@ export default class BreadBoard extends React.Component {
 	disconnectPart(id, ref) {
 		this.node.current.querySelector("#" + id).setAttribute("filter", "");
 
-		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref) {
+		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref)
 			this.connectedParts.set(id, undefined);
-		}
 	}
 
     render() {

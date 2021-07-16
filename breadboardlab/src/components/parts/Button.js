@@ -55,11 +55,10 @@ export default class Button extends React.Component {
     }
 
     updateProp(propName, value) {
-        if (propName.toLowerCase() === "type") {
+        if (propName.toLowerCase() === "type")
             this.setState({type: value}, this.onDoubleClick);
-        } else if (propName.toLowerCase() === "name") {
+        else if (propName.toLowerCase() === "name")
             this.setState({name: value}, this.onDoubleClick);
-        }
     }
 
     getProps() {
@@ -72,7 +71,6 @@ export default class Button extends React.Component {
                     {propName: "Name", propType: "textfield", value: this.state.name},
                 ]
             }
-
         )
     }
 
@@ -101,9 +99,8 @@ export default class Button extends React.Component {
                 for (let i = 0; i < this.refArray.length; i++) {
                     this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
                     
-                    if (typeof attachRef.connectPart === "function") {
+                    if (typeof attachRef.connectPart === "function") 
                         attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
-                    }
                 }
                 this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
             }
@@ -111,10 +108,9 @@ export default class Button extends React.Component {
     }
 
     disconnect() {
-        if (this.highlightID) {
+        if (this.highlightID)
             for (let id of this.highlightID.ids)
                 this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
-        }
 
         for (let refData of this.refArray) {
             if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
@@ -129,9 +125,8 @@ export default class Button extends React.Component {
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
         
-        if (translate) {
+        if (translate)
             this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 4} ${Number(translate[5]) + dy / 4})`);
-        }
     }
 
     checkConnected(attachRef) {
@@ -141,36 +136,29 @@ export default class Button extends React.Component {
         if (connectors) {
             for (let refData of this.refArray) {
                 let element = undefined;
-                let connectorRect = refData.ref.current.getBoundingClientRect();
-                let checkCoord = [
-                    {x: connectorRect.left, y: connectorRect.top},
-                    {x: connectorRect.right, y: connectorRect.top},
-                    {x: connectorRect.left, y: connectorRect.bottom},
-                    {x: connectorRect.right, y: connectorRect.bottom}
-                ]
 
-                loopCoord:
-                    for (let coord of checkCoord) {
-                        for (let e of document.elementsFromPoint(coord.x, coord.y)) {
-                            if (connectors.includes(e)) {
-                                element = e;
-                                break loopCoord;
-                            }
-                        }
+                for (let connector of connectors) {
+                    let rect1 = refData.ref.current.getBoundingClientRect();
+                    let rect2 = connector.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap) {
+                        element = connector;
+                        break;
                     }
+                }
                 
                 if (element) {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = element.getBoundingClientRect();
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
+                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
                         elementID.push(element.id);
-                    }
                 }
             }
         }
-        return elementID
+        return elementID;
     }
     
     render() {
