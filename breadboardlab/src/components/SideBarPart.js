@@ -103,8 +103,15 @@ class SideBarPart extends React.Component {
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
                     let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
+                    // Centers rotation on part's center
+                    let partBBox = part.getBBox()
+                    let rotatePointX = partBBox.x + (partBBox.width/2)
+                    let rotatePointY = partBBox.y + (partBBox.height/2)
+
+
                     if (cursorpt)
-                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
+                        // part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
+                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y}) rotate(0 ${rotatePointX} ${rotatePointY})`);
 
                     if (typeof this.node.disconnect === "function")
                         this.node.disconnect()
@@ -223,6 +230,15 @@ function movePart(event) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
 
+        // Centers rotation on part's center
+        // let partBBox = part.getBBox()
+        // let rotatePointX = partBBox.x + (partBBox.width/2)
+        // let rotatePointY = partBBox.y + (partBBox.height/2)
+        //
+        // let rotation = 0;   // TODO adjust rotation on App.js handleRotate
+
+
+        // part.setAttribute("transform", `translate(${xPos} ${yPos}) rotate(${rotation} ${rotatePointX} ${rotatePointY})`);
         part.setAttribute("transform", `translate(${xPos} ${yPos})`);
         return {dx: event.dx * scale, dy: event.dy * scale}
     } else {
