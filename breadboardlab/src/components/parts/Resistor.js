@@ -25,6 +25,11 @@ export default class Resistor extends React.Component {
     }
 
     componentDidMount() {
+        // Finds the (x, y) center of the component by halving width & height.
+        const SCALE = 2;
+        this.centerPointX = (this.node.current.getBoundingClientRect().width/(2*SCALE))
+        this.centerPointY = (this.node.current.getBoundingClientRect().height/(2*SCALE))
+
         interact(this.node.current.parentNode).styleCursor(false).draggable({
             listeners: {
                 move: this.props.movePart
@@ -158,19 +163,22 @@ export default class Resistor extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(100,105), scale(200,150)">
-                <path fill="#A08968" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043 
+            <g transform={`rotate(${this.state.rotation} ${this.centerPointX ? this.centerPointX : 0} ${this.centerPointY ? this.centerPointY : 0})`}>
+                <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(100,105), scale(200,150)">
+                    <path fill="#A08968" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
                     c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                     c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
-                <path fill={this.state.band1Colour}
-                      d="M-0.447-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
-                <path fill={this.state.band2Colour} d="M-0.378-0.389h0.025v-0.129h-0.025"/>
-                <path fill={this.state.band3Colour} d="M-0.325-0.389H-0.3v-0.129h-0.025"/>
-                <path fill={this.state.band4Colour}
-                      d="M-0.261-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
-                <path fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.015" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
+                    <path fill={this.state.band1Colour}
+                          d="M-0.447-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
+                    <path fill={this.state.band2Colour} d="M-0.378-0.389h0.025v-0.129h-0.025"/>
+                    <path fill={this.state.band3Colour} d="M-0.325-0.389H-0.3v-0.129h-0.025"/>
+                    <path fill={this.state.band4Colour}
+                          d="M-0.261-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
+                    <path fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.015"
+                          strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
                     c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                     c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
+                </g>
             </g>
         )
     }
