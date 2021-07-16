@@ -135,16 +135,15 @@ export default class BreadBoard extends React.Component {
 			})
 			.dropzone({
 				accept: ".connector",
-				overlap: 0.01,
+				overlap: 0.0001,
 				ondragenter: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-
+					
 					if (ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.highlight(event, this);
 				},
 				ondropmove: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-
 
 					if (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) {
 						if (ref && typeof ref.disconnect === "function") 
@@ -155,13 +154,12 @@ export default class BreadBoard extends React.Component {
 				},
 				ondrop: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-
+					
 					if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.connect(event, event.currentTarget.id, this);
 				},
 				ondragleave: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
-
 
 					if (ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref)) 
 						ref.disconnect(event, event.currentTarget.id);

@@ -6,6 +6,7 @@ export default class LED extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.connectorContainer = React.createRef();
         this.cathode = React.createRef();
         this.anode = React.createRef();
 
@@ -59,12 +60,12 @@ export default class LED extends React.Component {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
             listeners: {
                 move: event => {
-                    if (event.currentTarget === this.cathode.current.node && typeof this.props.movePart === "function") {
+                    if (event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event);
                     } else {
                         const {interaction} = event;
-                        interaction.stop();
-                        interaction.start({name: "drag"}, event.interactable, this.cathode.current.node);
+                        interaction.stop()
+                        interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
                     }
                 }
             },
@@ -130,7 +131,6 @@ export default class LED extends React.Component {
 
     highlight(event, attachRef) {
         let elementID = this.checkConnected(attachRef);
-
         this.highlightID = {ids: elementID, ref: attachRef};
 
         for (let connectorID of this.highlightID.ids)
@@ -144,7 +144,6 @@ export default class LED extends React.Component {
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
 
 		if (breadboardTranslate && relatedTargetTranslate) {
-			            
             if (this.highlightID) {
                 for (let i = 0; i < this.refArray.length; i++) {
                     if (this.highlightID.ids[i]) {
@@ -164,20 +163,18 @@ export default class LED extends React.Component {
 	}
 
     disconnect(event) {
-        if (event && this.connectorMove) {
-            if (this.cathode.current.node === event.relatedTarget && this.attachTo.get("cathode") !== undefined) {
-                console.log(this.attachTo.get("cathode"))
-                if (typeof this.attachTo.get("cathode").ref.disconnectPart === "function")
-                    this.attachTo.get("cathode").ref.disconnectPart(this.attachTo.get("cathode").id, this);
-                
-                this.attachTo.set("cathode", undefined);
-            } else if (this.anode.current.node === event.relatedTarget && this.attachTo.get("anode") !== undefined) {
-                if (typeof this.attachTo.get("anode").ref.disconnectPart === "function")
+        if (event && (event.relatedTarget === this.anode.current.node || event.relatedTarget === this.cathode.current.node)) {
+            if (event.relatedTarget === this.anode.current.node) {
+                if (this.attachTo.get("anode") && typeof this.attachTo.get("anode").ref.disconnectPart === "function")
                     this.attachTo.get("anode").ref.disconnectPart(this.attachTo.get("anode").id, this);
                 
                 this.attachTo.set("anode", undefined);
-            } else if ((this.anode.current.node === event.relatedTarget && this.attachTo.get("cathode") && this.attachTo.get("cathode").id !== event.currentTarget.id) ||
-                       (this.cathode.current.node === event.relatedTarget && this.attachTo.get("anode") && this.attachTo.get("anode").id !== event.currentTarget.id)) {
+                event.currentTarget.setAttribute("filter", "");
+            } else if (event.relatedTarget === this.cathode.current.node) {
+                if (this.attachTo.get("cathode") && typeof this.attachTo.get("cathode").ref.disconnectPart === "function")
+                    this.attachTo.get("cathode").ref.disconnectPart(this.attachTo.get("cathode").id, this);
+
+                this.attachTo.set("cathode", undefined);
                 event.currentTarget.setAttribute("filter", "");
             }
         } else {
@@ -193,7 +190,6 @@ export default class LED extends React.Component {
                 }
                 this.attachTo.set(refData.id, undefined);
             }
-            this.highlightID = undefined;
         }
     }
 
@@ -250,8 +246,10 @@ export default class LED extends React.Component {
                     if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this)) {
                         elementID.push(element.id);
                     } else {
-                        elementID.push(undefined)
+                        elementID.push(undefined);
                     }
+                } else {
+                    elementID.push(undefined);
                 }
             }
         }
@@ -282,19 +280,23 @@ export default class LED extends React.Component {
 
                 <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1} cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08" fill="#707070"/>
                 <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7} cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08" fill="#707070"/>
-                <Interactable ref={this.cathode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsCathode}>
-                    <ellipse 
-                        onMouseEnter={this.onMouseEnter}
-                        onMouseLeave={this.onMouseLeave}
-                        className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.cathodePoint.x} cy={this.state.cathodePoint.y} rx="0.08" ry="0.08"/>
-                </Interactable>
+                
+                <g ref={this.connectorContainer} className="connector">
+                    <Interactable ref={this.cathode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsCathode}>
+                        <ellipse 
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.cathodePoint.x} cy={this.state.cathodePoint.y} rx="0.08" ry="0.08"/>
+                    </Interactable>
 
-                <Interactable ref={this.anode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsAnode}>
-                    <ellipse 
-                        onMouseEnter={this.onMouseEnter}
-                        onMouseLeave={this.onMouseLeave}
-                        className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.anodePoint.x} cy={this.state.anodePoint.y} rx="0.08" ry="0.08"/>
-                </Interactable>
+                    <Interactable ref={this.anode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsAnode}>
+                        <ellipse 
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.anodePoint.x} cy={this.state.anodePoint.y} rx="0.08" ry="0.08"/>
+                    </Interactable>
+                </g>
+                
 
                 <path d="M -0.06 0.85 A 0.77 0.77 90 1 1 0.85 0.85 Z"
                       transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
