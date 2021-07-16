@@ -20,16 +20,14 @@ export default class Resistor extends React.Component {
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
+
+        this.centerPointX = 15.90000057220459;
+        this.centerPointY = 5.737496495246887;
         this.scale = {x: 100, y: 75};
         this.offSet = {x: 0.5, y: 0.53};
     }
 
     componentDidMount() {
-        // Finds the (x, y) center of the component by halving width & height.
-        const SCALE = 2;
-        this.centerPointX = (this.node.current.getBoundingClientRect().width/(2*SCALE))
-        this.centerPointY = (this.node.current.getBoundingClientRect().height/(2*SCALE))
-
         interact(this.node.current.parentNode).styleCursor(false).draggable({
             listeners: {
                 move: this.props.movePart
