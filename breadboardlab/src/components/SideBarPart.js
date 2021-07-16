@@ -103,13 +103,8 @@ class SideBarPart extends React.Component {
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
                     let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    // Centers rotation on part's center
-                    let partBBox = part.getBBox()
-                    let rotatePointX = partBBox.x + (partBBox.width/2)
-                    let rotatePointY = partBBox.y + (partBBox.height/2)
-
                     if (cursorpt)
-                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y}) rotate(0 ${rotatePointX} ${rotatePointY})`);
+                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
 
                     if (typeof this.node.disconnect === "function")
                         this.node.disconnect()
@@ -228,16 +223,7 @@ function movePart(event) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
 
-        // TODO change rotation value based off object's rotation state
-        //      e.g. (Resistor.js).state.resistance
-        let rotation = 0;
-
-        // Centers rotation on part's center
-        let partBBox = part.getBBox()
-        let rotatePointX = partBBox.x + (partBBox.width/2)
-        let rotatePointY = partBBox.y + (partBBox.height/2)
-
-        part.setAttribute("transform", `translate(${xPos} ${yPos}) rotate(${rotation} ${rotatePointX} ${rotatePointY})`);
+        part.setAttribute("transform", `translate(${xPos} ${yPos})`);
         return {dx: event.dx * scale, dy: event.dy * scale}
     } else {
         part.setAttribute("transform", `translate(0 0)`);
