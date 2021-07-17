@@ -73,9 +73,9 @@ class SideBarPart extends React.Component {
                         let scale = this.node.scale;
                         let offSet = this.node.offSet;
 
-                        element.setAttribute("transform", `translate(${offSet.x * scale.x} ${offSet.y * scale.y}) scale(${scale.x} ${scale.y})`);
+                        element.setAttribute("transform", `rotate(0 0 0) translate(${offSet.x * scale.x} ${offSet.y * scale.y}) scale(${scale.x} ${scale.y})`);
                     } else {
-                        element.setAttribute("transform", `translate(0 0) scale(1 1)`);
+                        element.setAttribute("transform", `rotate(0 0 0) translate(0 0) scale(1 1)`);
                     }
                     interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element)
@@ -103,15 +103,8 @@ class SideBarPart extends React.Component {
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
                     let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    // Centers rotation on part's center
-                    let partBBox = part.getBBox()
-                    let rotatePointX = partBBox.x + (partBBox.width/2)
-                    let rotatePointY = partBBox.y + (partBBox.height/2)
-
-
                     if (cursorpt)
-                        // part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
-                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y}) rotate(0 ${rotatePointX} ${rotatePointY})`);
+                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
 
                     if (typeof this.node.disconnect === "function")
                         this.node.disconnect()

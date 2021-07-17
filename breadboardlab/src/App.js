@@ -107,7 +107,23 @@ class App extends Component {
     handleRotate = () => {
         // Increments selectedPart's rotate state by 15 degrees.
         if (this.selectedPart) {
-            this.selectedPart.ref.setState({rotation: this.selectedPart.ref.state.rotation+=15});
+            console.log(this.selectedPart.ref)
+            const regexRotate = /rotate\((([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?)\)/i;
+            const rotate = regexRotate.exec(this.selectedPart.ref.node.current.getAttribute("transform"));
+
+            let partBBox = this.selectedPart.ref.node.current.getBBox();
+            let rotatePointX = partBBox.x + (partBBox.width / 2) * this.selectedPart.ref.scale.x;
+            let rotatePointY = partBBox.y + (partBBox.height / 2) * this.selectedPart.ref.scale.y;
+            
+            if (this.selectedPart.ref.rotation)
+                this.selectedPart.ref.rotation += 15;
+            else 
+                this.selectedPart.ref.rotation = 15;
+                
+            if (rotate)
+                this.selectedPart.ref.node.current.setAttribute("transform", this.selectedPart.ref.node.current.getAttribute("transform").replace(regexRotate, `rotate(${this.selectedPart.ref.rotation}, ${rotatePointX}, ${rotatePointY})`));
+            else
+                this.selectedPart.ref.node.current.setAttribute("transform", `rotate(${this.selectedPart.ref.rotation}, ${rotatePointX}, ${rotatePointY})` + this.selectedPart.ref.node.current.getAttribute("transform"));
         }
     };
 
