@@ -109,21 +109,24 @@ class App extends Component {
         if (this.selectedPart) {
             console.log(this.selectedPart.ref)
             const regexRotate = /rotate\((([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?)\)/i;
+            const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+            const translate = regexTranslate.exec(this.selectedPart.ref.node.current.getAttribute("transform"));
             const rotate = regexRotate.exec(this.selectedPart.ref.node.current.getAttribute("transform"));
 
             let partBBox = this.selectedPart.ref.node.current.getBBox();
-            let rotatePointX = partBBox.x + (partBBox.width / 2) * this.selectedPart.ref.scale.x;
-            let rotatePointY = partBBox.y + (partBBox.height / 2) * this.selectedPart.ref.scale.y;
+            let scale = (this.selectedPart.ref.scale ? {x: this.selectedPart.ref.scale.x, y: this.selectedPart.ref.scale.x} : {x: 1, y: 1})
+            let rotatePointX = (partBBox.x + Number(translate[1]) / scale.x) + (partBBox.width / 2) * scale.x;
+            let rotatePointY = (partBBox.y + Number(translate[5]) / scale.y) + (partBBox.height / 2) * scale.y;
             
             if (this.selectedPart.ref.rotation)
                 this.selectedPart.ref.rotation += 15;
             else 
                 this.selectedPart.ref.rotation = 15;
-                
+
             if (rotate)
                 this.selectedPart.ref.node.current.setAttribute("transform", this.selectedPart.ref.node.current.getAttribute("transform").replace(regexRotate, `rotate(${this.selectedPart.ref.rotation}, ${rotatePointX}, ${rotatePointY})`));
             else
-                this.selectedPart.ref.node.current.setAttribute("transform", `rotate(${this.selectedPart.ref.rotation}, ${rotatePointX}, ${rotatePointY})` + this.selectedPart.ref.node.current.getAttribute("transform"));
+                this.selectedPart.ref.node.current.setAttribute("transform", `rotate(${this.selectedPart.ref.rotation}, ${rotatePointX}, ${rotatePointY}) ` + this.selectedPart.ref.node.current.getAttribute("transform"));
         }
     };
 
