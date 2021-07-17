@@ -166,6 +166,13 @@ export default class BreadBoard extends React.Component {
 		} 
     }
 
+	disconnect() {
+		this.connectedParts.forEach((item, key) => {
+			if (item && typeof item.ref.disconnect === "function") 
+				item.ref.disconnect();
+		});
+	}
+
 	connectPart(id, partID, ref) {
 		this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 		this.connectedParts.set(id, {id: partID, ref: ref});
