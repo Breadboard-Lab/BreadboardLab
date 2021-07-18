@@ -55,6 +55,7 @@ class SideBarPart extends React.Component {
                         ref: (node) => this.node = node,
                         addPart: this.props.ondrag,
                         movePart: movePart,
+                        rotatePart: rotatePart,
                         onDoubleTap: this.props.onDoubleTap,
                         key: App.partKey._currentValue,
                     }
@@ -223,21 +224,37 @@ function movePart(event) {
         let xPos = Number(transform[1]) + event.dx * scale;
         let yPos = Number(transform[5]) + event.dy * scale;
 
-        // Centers rotation on part's center
-        // let partBBox = part.getBBox()
-        // let rotatePointX = partBBox.x + (partBBox.width/2)
-        // let rotatePointY = partBBox.y + (partBBox.height/2)
-        //
-        // let rotation = 0;   // TODO adjust rotation on App.js handleRotate
-
-
-        // part.setAttribute("transform", `translate(${xPos} ${yPos}) rotate(${rotation} ${rotatePointX} ${rotatePointY})`);
         part.setAttribute("transform", `translate(${xPos} ${yPos})`);
         return {dx: event.dx * scale, dy: event.dy * scale}
     } else {
         part.setAttribute("transform", `translate(0 0)`);
         return {dx: 0, dy: 0}
     }
+}
+
+function rotatePart(ref) {
+    if (ref && ref.node.current) {
+        const regexRotate = /rotate\((([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?)\)/i;
+        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
+        const translate = regexTranslate.exec(ref.node.current.getAttribute("transform"));
+        const rotate = regexRotate.exec(ref.node.current.getAttribute("transform"));
+    
+        let partBBox = ref.node.current.getBBox();
+        let scale = (ref.scale ? {x: ref.scale.x, y: ref.scale.x} : {x: 1, y: 1})
+        let rotatePointX = (partBBox.x + Number(translate[1]) / scale.x) + (partBBox.width / 2) * scale.x;
+        let rotatePointY = (partBBox.y + Number(translate[5]) / scale.y) + (partBBox.height / 2) * scale.y;
+        
+        if (ref.rotation)
+            ref.rotation += 15;
+        else 
+            ref.rotation = 15;
+    
+        if (rotate)
+            ref.node.current.setAttribute("transform", ref.node.current.getAttribute("transform").replace(regexRotate, `rotate(${ref.rotation}, ${rotatePointX}, ${rotatePointY})`));
+        else
+            ref.node.current.setAttribute("transform", `rotate(${ref.rotation}, ${rotatePointX}, ${rotatePointY}) ` + ref.node.current.getAttribute("transform"));
+    }
+    
 }
 
 export default withWidth()(withStyles(styles)(SideBarPart));

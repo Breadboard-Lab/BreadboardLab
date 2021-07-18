@@ -173,6 +173,16 @@ export default class BreadBoard extends React.Component {
 		});
 	}
 
+	rotate() {
+		if (typeof this.props.rotatePart === "function")
+			this.props.rotatePart(this);
+
+		this.connectedParts.forEach((item, key) => {
+			if (item && typeof item.ref.rotate === "function") 
+				item.ref.rotate();
+		});
+	}
+
 	connectPart(id, partID, ref) {
 		this.node.current.querySelector("#" + id).setAttribute("filter", "url(#f3)");
 		this.connectedParts.set(id, {id: partID, ref: ref});

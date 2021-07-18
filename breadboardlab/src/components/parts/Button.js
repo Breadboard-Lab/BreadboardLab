@@ -94,13 +94,15 @@ export default class Button extends React.Component {
         if (breadboardTranslate && relatedTargetTranslate) {
             let angle = this.rotation || 0;
             
-			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]);
-			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]);
+			let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
+            pointBreadboard.x = event.currentTarget.getBoundingClientRect().x + event.currentTarget.getBoundingClientRect().width / 2;
+            pointBreadboard.y = event.currentTarget.getBoundingClientRect().y + event.currentTarget.getBoundingClientRect().height / 2;
+            const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
-            let point = document.getElementById("AppSVG").createSVGPoint();
-            point.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
-            point.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
-            const svgP = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+            let pointConnector = document.getElementById("AppSVG").createSVGPoint();
+            pointConnector.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
+            pointConnector.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
+            const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
 
             if (this.highlightID && this.highlightID.ids.length === 4) {
@@ -110,7 +112,7 @@ export default class Button extends React.Component {
                     if (typeof attachRef.connectPart === "function") 
                         attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
                 }
-                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(relatedTargetTranslate[1]) + xPos - svgP.x - 0.7 * Math.cos(angle * Math.PI / 180)} ${Number(relatedTargetTranslate[5]) + yPos - svgP.y - 0.7 * Math.cos(angle * Math.PI / 180)})`);
+                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(relatedTargetTranslate[1]) + svgBreadboard.x - svgConnector.x + 0.8 * Math.cos((angle - 135) * Math.PI / 180)} ${Number(relatedTargetTranslate[5]) + svgBreadboard.y - svgConnector.y + 0.8 * Math.sin((angle - 135) * Math.PI / 180)})`);
             }
 		}
     }
@@ -135,6 +137,11 @@ export default class Button extends React.Component {
         
         if (translate)
             this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 4} ${Number(translate[5]) + dy / 4})`);
+    }
+
+    rotate() {
+        if (typeof this.props.rotatePart === "function")
+			this.props.rotatePart(this);
     }
 
     checkConnected(attachRef) {
