@@ -267,54 +267,52 @@ export default class LED extends React.Component {
 
     render() {
         return (
-            <g transform={`rotate(${this.state.rotation} ${this.centerPointX ? this.centerPointX : 0} ${this.centerPointY ? this.centerPointY : 0})`}>
-                <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(17,28) scale(40,40)">
-                    <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
-                          d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
-                    <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
-                          d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(17,28) scale(40,40)">
+                <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
+                        d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
+                <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
+                        d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
 
-                    <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
-                          transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                          fill={this.state.visualColourInner} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0.8"/>
-                    <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
-                          transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                          stroke={this.state.visualColourOuter} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0"/>
-
-
-                    <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1}
-                            cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
-                            fill="#707070"/>
-                    <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7}
-                            cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
-                            fill="#707070"/>
-
-                    <g ref={this.connectorContainer} className="connector">
-                        <Interactable ref={this.cathode} styleCursor={false} draggable={true}
-                                      draggableOptions={this.draggableOptionsCathode}>
-                            <ellipse
-                                onMouseEnter={this.onMouseEnter}
-                                onMouseLeave={this.onMouseLeave}
-                                className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.cathodePoint.x}
-                                cy={this.state.cathodePoint.y} rx="0.08" ry="0.08"/>
-                        </Interactable>
-
-                        <Interactable ref={this.anode} styleCursor={false} draggable={true}
-                                      draggableOptions={this.draggableOptionsAnode}>
-                            <ellipse
-                                onMouseEnter={this.onMouseEnter}
-                                onMouseLeave={this.onMouseLeave}
-                                className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.anodePoint.x}
-                                cy={this.state.anodePoint.y} rx="0.08" ry="0.08"/>
-                        </Interactable>
-                    </g>
+                <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
+                        transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
+                        fill={this.state.visualColourInner} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0.8"/>
+                <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
+                        transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
+                        stroke={this.state.visualColourOuter} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0"/>
 
 
-                    <path d="M -0.06 0.85 A 0.77 0.77 90 1 1 0.85 0.85 Z"
-                          transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                          fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.075"
-                          strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1}
+                        cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
+                        fill="#707070"/>
+                <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7}
+                        cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
+                        fill="#707070"/>
+
+                <g ref={this.connectorContainer} className="connector">
+                    <Interactable ref={this.cathode} styleCursor={false} draggable={true}
+                                    draggableOptions={this.draggableOptionsCathode}>
+                        <ellipse
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.cathodePoint.x}
+                            cy={this.state.cathodePoint.y} rx="0.08" ry="0.08"/>
+                    </Interactable>
+
+                    <Interactable ref={this.anode} styleCursor={false} draggable={true}
+                                    draggableOptions={this.draggableOptionsAnode}>
+                        <ellipse
+                            onMouseEnter={this.onMouseEnter}
+                            onMouseLeave={this.onMouseLeave}
+                            className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.anodePoint.x}
+                            cy={this.state.anodePoint.y} rx="0.08" ry="0.08"/>
+                    </Interactable>
                 </g>
+
+
+                <path d="M -0.06 0.85 A 0.77 0.77 90 1 1 0.85 0.85 Z"
+                        transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
+                        fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.075"
+                        strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round"/>
             </g>
         )
     }

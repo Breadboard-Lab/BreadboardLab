@@ -107,7 +107,6 @@ class App extends Component {
     handleRotate = () => {
         // Increments selectedPart's rotate state by 15 degrees.
         if (this.selectedPart) {
-            console.log(this.selectedPart.ref)
             const regexRotate = /rotate\((([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?)\)/i;
             const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
             const translate = regexTranslate.exec(this.selectedPart.ref.node.current.getAttribute("transform"));

@@ -3528,21 +3528,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H1"
 						cx="7.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I1"
 						cx="7.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J1"
 						cx="7.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3565,21 +3565,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H2"
 						cx="9.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I2"
 						cx="9.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J2"
 						cx="9.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3602,21 +3602,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H3"
 						cx="12.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I3"
 						cx="12.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J3"
 						cx="12.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3639,21 +3639,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H4"
 						cx="14.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I4"
 						cx="14.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J4"
 						cx="14.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3676,21 +3676,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H5"
 						cx="17.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I5"
 						cx="17.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J5"
 						cx="17.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3713,21 +3713,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H6"
 						cx="20.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I6"
 						cx="20.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J6"
 						cx="20.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3750,21 +3750,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H7"
 						cx="22.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I7"
 						cx="22.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J7"
 						cx="22.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3787,21 +3787,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H8"
 						cx="25.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I8"
 						cx="25.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J8"
 						cx="25.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3824,21 +3824,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H9"
 						cx="27.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I9"
 						cx="27.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J9"
 						cx="27.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3861,21 +3861,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H10"
 						cx="30.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I10"
 						cx="30.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J10"
 						cx="30.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3898,21 +3898,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H11"
 						cx="33.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I11"
 						cx="33.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J11"
 						cx="33.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3935,21 +3935,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H12"
 						cx="35.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I12"
 						cx="35.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J12"
 						cx="35.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -3972,21 +3972,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H13"
 						cx="38.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I13"
 						cx="38.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J13"
 						cx="38.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4009,21 +4009,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H14"
 						cx="40.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I14"
 						cx="40.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J14"
 						cx="40.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4046,21 +4046,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H15"
 						cx="43.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I15"
 						cx="43.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J15"
 						cx="43.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4083,21 +4083,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H16"
 						cx="46.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I16"
 						cx="46.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J16"
 						cx="46.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4120,21 +4120,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H17"
 						cx="48.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I17"
 						cx="48.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J17"
 						cx="48.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4157,21 +4157,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H18"
 						cx="51.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I18"
 						cx="51.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J18"
 						cx="51.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4194,21 +4194,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H19"
 						cx="53.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I19"
 						cx="53.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J19"
 						cx="53.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4231,21 +4231,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H20"
 						cx="56.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I20"
 						cx="56.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J20"
 						cx="56.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4268,21 +4268,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H21"
 						cx="59.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I21"
 						cx="59.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J21"
 						cx="59.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4305,21 +4305,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H22"
 						cx="61.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I22"
 						cx="61.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J22"
 						cx="61.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4342,21 +4342,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H23"
 						cx="64.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I23"
 						cx="64.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J23"
 						cx="64.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4379,21 +4379,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H24"
 						cx="66.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I24"
 						cx="66.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J24"
 						cx="66.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4416,21 +4416,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H25"
 						cx="69.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I25"
 						cx="69.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J25"
 						cx="69.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4453,21 +4453,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H26"
 						cx="72.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I26"
 						cx="72.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J26"
 						cx="72.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4490,21 +4490,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H27"
 						cx="74.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I27"
 						cx="74.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J27"
 						cx="74.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4527,21 +4527,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H28"
 						cx="77.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I28"
 						cx="77.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J28"
 						cx="77.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4564,21 +4564,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H29"
 						cx="79.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I29"
 						cx="79.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J29"
 						cx="79.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4601,21 +4601,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H30"
 						cx="82.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I30"
 						cx="82.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J30"
 						cx="82.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4638,21 +4638,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H31"
 						cx="85.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I31"
 						cx="85.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J31"
 						cx="85.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4675,21 +4675,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H32"
 						cx="87.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I32"
 						cx="87.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J32"
 						cx="87.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4712,21 +4712,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H33"
 						cx="90.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I33"
 						cx="90.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J33"
 						cx="90.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4749,21 +4749,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H34"
 						cx="92.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I34"
 						cx="92.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J34"
 						cx="92.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4786,21 +4786,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H35"
 						cx="95.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I35"
 						cx="95.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J35"
 						cx="95.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4823,21 +4823,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H36"
 						cx="98.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I36"
 						cx="98.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J36"
 						cx="98.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4860,21 +4860,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H37"
 						cx="100.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I37"
 						cx="100.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J37"
 						cx="100.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4897,21 +4897,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H38"
 						cx="103.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I38"
 						cx="103.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J38"
 						cx="103.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4934,21 +4934,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H39"
 						cx="105.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I39"
 						cx="105.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J39"
 						cx="105.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -4971,21 +4971,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H40"
 						cx="108.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I40"
 						cx="108.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J40"
 						cx="108.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5008,21 +5008,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H41"
 						cx="111.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I41"
 						cx="111.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J41"
 						cx="111.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5045,21 +5045,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H42"
 						cx="113.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I42"
 						cx="113.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J42"
 						cx="113.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5082,21 +5082,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H43"
 						cx="116.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I43"
 						cx="116.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J43"
 						cx="116.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5119,21 +5119,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H44"
 						cx="118.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I44"
 						cx="118.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J44"
 						cx="118.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5156,21 +5156,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H45"
 						cx="121.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I45"
 						cx="121.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J45"
 						cx="121.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5193,21 +5193,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H46"
 						cx="124.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I46"
 						cx="124.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J46"
 						cx="124.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5230,21 +5230,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H47"
 						cx="126.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I47"
 						cx="126.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J47"
 						cx="126.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5267,21 +5267,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H48"
 						cx="129.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I48"
 						cx="129.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J48"
 						cx="129.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5304,21 +5304,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H49"
 						cx="131.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I49"
 						cx="131.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J49"
 						cx="131.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5341,21 +5341,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H50"
 						cx="134.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I50"
 						cx="134.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J50"
 						cx="134.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5378,21 +5378,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H51"
 						cx="137.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I51"
 						cx="137.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J51"
 						cx="137.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5415,21 +5415,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H52"
 						cx="139.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I52"
 						cx="139.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J52"
 						cx="139.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5452,21 +5452,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H53"
 						cx="142.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I53"
 						cx="142.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J53"
 						cx="142.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5489,21 +5489,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H54"
 						cx="144.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I54"
 						cx="144.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J54"
 						cx="144.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5526,21 +5526,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H55"
 						cx="147.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I55"
 						cx="147.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J55"
 						cx="147.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5563,21 +5563,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H56"
 						cx="150.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I56"
 						cx="150.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J56"
 						cx="150.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5600,21 +5600,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H57"
 						cx="152.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I57"
 						cx="152.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J57"
 						cx="152.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5637,21 +5637,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H58"
 						cx="155.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I58"
 						cx="155.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J58"
 						cx="155.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5674,21 +5674,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H59"
 						cx="157.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I59"
 						cx="157.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J59"
 						cx="157.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5711,21 +5711,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H60"
 						cx="160.5"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I60"
 						cx="160.5"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J60"
 						cx="160.5"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5748,21 +5748,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H61"
 						cx="163.1"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I61"
 						cx="163.1"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J61"
 						cx="163.1"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5785,21 +5785,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H62"
 						cx="165.7"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I62"
 						cx="165.7"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J62"
 						cx="165.7"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5822,21 +5822,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H63"
 						cx="168.3"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I63"
 						cx="168.3"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J63"
 						cx="168.3"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>
@@ -5859,21 +5859,21 @@ export default class BreadBoard extends React.Component {
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="H64"
 						cx="170.9"
-						cy="35.4"
+						cy="35.6"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="I64"
 						cx="170.9"
-						cy="38.0"
+						cy="38.2"
 						rx="0.625"
 						ry="0.625" />
 					<ellipse
 						fill="#000000" stroke="#000000" strokeWidth="0.25" strokeOpacity="1"
 						id="J64"
 						cx="170.9"
-						cy="40.4"
+						cy="40.8"
 						rx="0.625"
 						ry="0.625" />
 				</g>

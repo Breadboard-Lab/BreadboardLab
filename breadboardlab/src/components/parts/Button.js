@@ -92,9 +92,17 @@ export default class Button extends React.Component {
 		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
 
         if (breadboardTranslate && relatedTargetTranslate) {
-			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]) - 7.3;
-			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]) - 2.2;
+            let angle = this.rotation || 0;
             
+			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + Number(breadboardTranslate[1]);
+			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + Number(breadboardTranslate[5]);
+
+            let point = document.getElementById("AppSVG").createSVGPoint();
+            point.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
+            point.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
+            const svgP = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+
+
             if (this.highlightID && this.highlightID.ids.length === 4) {
                 for (let i = 0; i < this.refArray.length; i++) {
                     this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
@@ -102,7 +110,7 @@ export default class Button extends React.Component {
                     if (typeof attachRef.connectPart === "function") 
                         attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
                 }
-                this.node.current.closest(".part").setAttribute("transform", `translate(${xPos} ${yPos})`);
+                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(relatedTargetTranslate[1]) + xPos - svgP.x - 0.7 * Math.cos(angle * Math.PI / 180)} ${Number(relatedTargetTranslate[5]) + yPos - svgP.y - 0.7 * Math.cos(angle * Math.PI / 180)})`);
             }
 		}
     }
@@ -140,7 +148,7 @@ export default class Button extends React.Component {
                 for (let connector of connectors) {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
-                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+                    let overlap = !(rect1.right - rect1.width / 2 < rect2.left || rect1.left + rect1.width / 2 > rect2.right || rect1.bottom - rect1.height / 2 < rect2.top || rect1.top + rect1.height / 2 > rect2.bottom);
 
                     if (overlap) {
                         element = connector;
