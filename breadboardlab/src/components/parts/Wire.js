@@ -111,27 +111,27 @@ export default class Wire extends React.Component {
         event.currentTarget.setAttribute("filter", "url(#f3)");
     }
 
-    connect(event, id, attachRef) {
+    connect(relatedTarget, currentTarget, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
-		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
+		const relatedTargetTranslate = regexTranslate.exec(relatedTarget.closest(".part").getAttribute("transform"));
+		const breadboardTranslate = regexTranslate.exec(currentTarget.closest(".part").getAttribute("transform"));
 
 		if (breadboardTranslate && relatedTargetTranslate) {
-			const xPos = (Number(event.currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]);
-			const yPos = (Number(event.currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]);
+			const xPos = (Number(currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]);
+			const yPos = (Number(currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]);
             
-            if (this.startPoint.current.node === event.relatedTarget && (!this.attachTo.get("end") || this.attachTo.get("end").id !== id)) {
-                this.attachTo.set("start", {id: id, ref: attachRef});
-                this.moveConnector(event.relatedTarget, xPos, yPos);
+            if (this.startPoint.current.node === relatedTarget && (!this.attachTo.get("end") || this.attachTo.get("end").id !== currentTarget.id)) {
+                this.attachTo.set("start", {id: currentTarget.id, ref: attachRef});
+                this.moveConnector(relatedTarget, xPos, yPos);
 
                 if (typeof attachRef.connectPart === "function")
-                    attachRef.connectPart(id, "start", this);
-            } else if (this.endPoint.current.node === event.relatedTarget && (!this.attachTo.get("start") || this.attachTo.get("start").id !== id)) {
-                this.attachTo.set("end", {id: id, ref: attachRef});
-                this.moveConnector(event.relatedTarget, xPos, yPos);
+                    attachRef.connectPart(currentTarget.id, "start", this);
+            } else if (this.endPoint.current.node === relatedTarget && (!this.attachTo.get("start") || this.attachTo.get("start").id !== currentTarget.id)) {
+                this.attachTo.set("end", {id: currentTarget.id, ref: attachRef});
+                this.moveConnector(relatedTarget, xPos, yPos);
 
                 if (typeof attachRef.connectPart === "function")
-                    attachRef.connectPart(id, "end", this);
+                    attachRef.connectPart(currentTarget.id, "end", this);
             }
 		}
 	}
@@ -174,12 +174,9 @@ export default class Wire extends React.Component {
         
     }
 
-    movePart(id, dx, dy) {
-        if (id === "start") {
-            this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, this.state.endPoint);
-        } else if (id === "end") {
-            this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
-        }
+    movePart(dx, dy) {
+        this.setPoints({x: this.state.startPoint.x + dx, y: this.state.startPoint.y + dy}, this.state.endPoint);
+        this.setPoints(this.state.startPoint, {x: this.state.endPoint.x + dx, y: this.state.endPoint.y + dy});
     }
     
 	moveConnector(connector, xPos, yPos) {
@@ -216,14 +213,14 @@ export default class Wire extends React.Component {
                     <ellipse 
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
-                        className="wire start connector" strokeOpacity="0" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="3.5" ry="3.5"/>
+                        className="wire start connector" strokeOpacity="0" fillOpacity="0" cx={this.state.startPoint.x} cy={this.state.startPoint.y} rx="2" ry="2"/>
                 </Interactable>
                 
                 <Interactable ref={this.endPoint} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsEndPoint}>
                     <ellipse
                         onMouseEnter={this.onMouseEnter}
                         onMouseLeave={this.onMouseLeave}
-                        className="wire end connector" strokeOpacity="0" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="3.5" ry="3.5"/>
+                        className="wire end connector" strokeOpacity="0" fillOpacity="0" cx={this.state.endPoint.x} cy={this.state.endPoint.y} rx="2" ry="2"/>
                 </Interactable>
             </g>
         );

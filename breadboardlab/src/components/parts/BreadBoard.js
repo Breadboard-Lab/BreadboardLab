@@ -55,12 +55,16 @@ export default class BreadBoard extends React.Component {
 		interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
+					let visited = {};
+
 					if (typeof this.props.movePart === "function") {
 						let {dx, dy} = this.props.movePart(event);
 	
 						this.connectedParts.forEach((item, key) => {
-							if (item && typeof item.ref.movePart === "function") 
-								item.ref.movePart(item.id, dx, dy);
+							if (item && typeof item.ref.movePart === "function" && !visited[item.ref._reactInternals.key]) {
+								visited[item.ref._reactInternals.key] = item;
+								item.ref.movePart(dx, dy);
+							}
 						});
 					}
 				}
@@ -107,7 +111,10 @@ export default class BreadBoard extends React.Component {
        			if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown) {
 					const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 					const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
-					let startPoint = {x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x, y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y};
+					let startPoint = {
+						x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x,
+						y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y
+					};
 					
 					if (translate && this.connectedParts.get(event.currentTarget.id) === undefined) {
 						let wire = React.cloneElement(
@@ -154,7 +161,7 @@ export default class BreadBoard extends React.Component {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
 					
 					if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
-						ref.connect(event, event.currentTarget.id, this);
+						ref.connect(event.relatedTarget, event.currentTarget, this);
 				},
 				ondragleave: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.closest(".part") === event.relatedTarget.closest(".part"));
@@ -174,12 +181,16 @@ export default class BreadBoard extends React.Component {
 	}
 
 	rotate() {
+		let visited = {};
+
 		if (typeof this.props.rotatePart === "function")
 			this.props.rotatePart(this);
 
 		this.connectedParts.forEach((item, key) => {
-			if (item && typeof item.ref.rotate === "function") 
-				item.ref.rotate();
+			if (item && typeof item.ref.rotate === "function" && !visited[item.ref._reactInternals.key]) {
+				visited[item.ref._reactInternals.key] = item;
+				item.ref.rotate(this);
+			}
 		});
 	}
 

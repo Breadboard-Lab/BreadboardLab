@@ -147,10 +147,10 @@ export default class LED extends React.Component {
                 attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
     }
 
-    connect(event, id, attachRef) {
+    connect(relatedTarget, currentTarget, attachRef) {
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-        const relatedTargetTranslate = regexTranslate.exec(event.relatedTarget.closest(".part").getAttribute("transform"));
-        const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
+        const relatedTargetTranslate = regexTranslate.exec(relatedTarget.closest(".part").getAttribute("transform"));
+        const breadboardTranslate = regexTranslate.exec(currentTarget.closest(".part").getAttribute("transform"));
 
         if (breadboardTranslate && relatedTargetTranslate) {
             if (this.highlightID) {
@@ -209,16 +209,12 @@ export default class LED extends React.Component {
         }
     }
 
-    movePart(id, dx, dy) {
+    movePart(dx, dy) {
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
         const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
 
-        if (translate) {
-            if (this.attachTo.get("cathode") && this.attachTo.get("anode"))
-                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 2} ${Number(translate[5]) + dy / 2})`);
-            else
-                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
-        }
+        if (translate)
+            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
     }
 
     checkConnected(attachRef) {

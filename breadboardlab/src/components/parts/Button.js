@@ -85,18 +85,18 @@ export default class Button extends React.Component {
         }
     }
 
-    connect(event, id, attachRef) {
+    connect(relatedTarget, currentTarget, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-        const currentTranslate = event.relatedTarget.closest(".part").getAttribute("transform");
+        const currentTranslate = relatedTarget.closest(".part").getAttribute("transform");
 		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
-		const breadboardTranslate = regexTranslate.exec(event.currentTarget.closest(".part").getAttribute("transform"));
+		const breadboardTranslate = regexTranslate.exec(currentTarget.closest(".part").getAttribute("transform"));
 
         if (breadboardTranslate && relatedTargetTranslate) {
             let angle = this.rotation || 0;
             
 			let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
-            pointBreadboard.x = event.currentTarget.getBoundingClientRect().x + event.currentTarget.getBoundingClientRect().width / 2;
-            pointBreadboard.y = event.currentTarget.getBoundingClientRect().y + event.currentTarget.getBoundingClientRect().height / 2;
+            pointBreadboard.x = currentTarget.getBoundingClientRect().x + currentTarget.getBoundingClientRect().width / 2;
+            pointBreadboard.y = currentTarget.getBoundingClientRect().y + currentTarget.getBoundingClientRect().height / 2;
             const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
             let pointConnector = document.getElementById("AppSVG").createSVGPoint();
@@ -131,17 +131,23 @@ export default class Button extends React.Component {
         this.highlightID = undefined;
     }
 
-    movePart(id, dx, dy) {
+    movePart(dx, dy) {
         const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
 		const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
         
         if (translate)
-            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx / 4} ${Number(translate[5]) + dy / 4})`);
+            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
     }
 
-    rotate() {
+    rotate(attahRef) {
         if (typeof this.props.rotatePart === "function")
 			this.props.rotatePart(this);
+        
+        if (attahRef) {
+            this.connect(this.topLeftConector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
+        } else {
+            this.disconnect();
+        }
     }
 
     checkConnected(attachRef) {
@@ -155,7 +161,7 @@ export default class Button extends React.Component {
                 for (let connector of connectors) {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
-                    let overlap = !(rect1.right - rect1.width / 2 < rect2.left || rect1.left + rect1.width / 2 > rect2.right || rect1.bottom - rect1.height / 2 < rect2.top || rect1.top + rect1.height / 2 > rect2.bottom);
+                    let overlap = !(rect1.right - rect1.width / 2 < rect2.left + 5 || rect1.left + rect1.width / 2 > rect2.right - 5 || rect1.bottom - rect1.height / 2 < rect2.top + 5 || rect1.top + rect1.height / 2 > rect2.bottom - 5);
 
                     if (overlap) {
                         element = connector;
