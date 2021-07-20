@@ -10,21 +10,21 @@ import Switch from "../components/parts/Switch";
 const partsList = {
     all: [
         {name: 'Breadboard', component: <BreadBoard/>, description: ''},
-        {name: 'Momentary Button', component: <MomentaryButton/>, description: 'A switch that closes or opens a circuit.'},
         {name: 'LED', component: <LED/>, description: 'A light-emitting diode that emits light when current flows through it.'},
         {name: 'Resistor', component: <Resistor/>, description: 'Limits and regulates the flow of electrical current.'},
-        {name: 'Transistor', component: <Transistor/>, description: ''},
-        {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Momentary Button', component: <MomentaryButton/>, description: 'A switch that closes or opens a circuit.'},
         {name: 'Switch', component: <Switch/>, description: ''},
+        {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Transistor', component: <Transistor/>, description: ''},
     ],
     basics: [
         {name: 'Breadboard', component: <BreadBoard/>, description: ''},
-        {name: 'Momentary Button', component: <MomentaryButton/>, description: 'A switch that closes or opens a circuit.'},
         {name: 'LED', component: <LED/>, description: 'A light-emitting diode that emits light when current flows through it.'},
         {name: 'Resistor', component: <Resistor/>, description: 'Limits and regulates the flow of electrical current.'},
-        {name: 'Transistor', component: <Transistor/>, description: ''},
-        {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Momentary Button', component: <MomentaryButton/>, description: 'A switch that closes or opens a circuit.'},
         {name: 'Switch', component: <Switch/>, description: ''},
+        {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Transistor', component: <Transistor/>, description: ''},
     ],
     gates: []
 }
