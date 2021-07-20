@@ -47,8 +47,8 @@ class PropertiesPanel extends React.Component {
                     properties.push(
                         <Grid key={key} item>
                             <TextField
-                                id="part-name"
-                                label="Part Name"
+                                id="part-textfield"
+                                label={prop.propName}
                                 value={prop.value}
                                 onChange={event => this.handleChanges(event, prop.propName)}
                                 InputProps={{
