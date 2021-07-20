@@ -1,7 +1,7 @@
 import React from "react";
 import interact from "interactjs";
 
-export default class CeramicCapacitor extends React.Component {
+export default class Switch extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
