@@ -5,6 +5,7 @@ import Resistor from "../components/parts/Resistor";
 import Transistor from "../components/parts/Transistor";
 import React from "react";
 import CeramicCapacitor from "../components/parts/CeramicCapacitor";
+import Switch from "../components/parts/Switch";
 
 const partsList = {
     all: [
@@ -14,6 +15,7 @@ const partsList = {
         {name: 'Resistor', component: <Resistor/>, description: 'Limits and regulates the flow of electrical current.'},
         {name: 'Transistor', component: <Transistor/>, description: ''},
         {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Switch', component: <Switch/>, description: ''},
     ],
     basics: [
         {name: 'Breadboard', component: <BreadBoard/>, description: ''},
@@ -22,6 +24,7 @@ const partsList = {
         {name: 'Resistor', component: <Resistor/>, description: 'Limits and regulates the flow of electrical current.'},
         {name: 'Transistor', component: <Transistor/>, description: ''},
         {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
+        {name: 'Switch', component: <Switch/>, description: ''},
     ],
     gates: []
 }
