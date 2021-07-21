@@ -61,6 +61,7 @@ class PropertiesPanel extends React.Component {
                                 label={prop.propName}
                                 value={prop.value}
                                 onChange={event => this.handleChanges(event, prop.propName)}
+                                fullWidth
                                 InputProps={{
                                     endAdornment: <InputAdornment
                                         position="end">{prop.adornment ? prop.adornment : ""}
