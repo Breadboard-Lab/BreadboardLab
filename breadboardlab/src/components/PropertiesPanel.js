@@ -10,6 +10,7 @@ import {
     Typography,
     withStyles
 } from "@material-ui/core";
+import {Autocomplete} from "@material-ui/lab";
 
 const styles = theme => ({
     grid: {
@@ -33,6 +34,15 @@ class PropertiesPanel extends React.Component {
         }
     }
 
+    handleAutocomplete = (event, value, propName) => {
+        this.setState({selectedValue: value});
+
+        if (typeof this.props.partData.callback === "function") {
+            this.props.partData.callback(propName, value);
+        }
+
+    }
+
     render() {
         const {classes} = this.props;
         let properties = [];
@@ -52,7 +62,9 @@ class PropertiesPanel extends React.Component {
                                 value={prop.value}
                                 onChange={event => this.handleChanges(event, prop.propName)}
                                 InputProps={{
-                                    endAdornment: <InputAdornment position="end">{prop.adornment ? prop.adornment : ""}</InputAdornment>,
+                                    endAdornment: <InputAdornment
+                                        position="end">{prop.adornment ? prop.adornment : ""}
+                                    </InputAdornment>,
                                     inputProps: {
                                         min: 0
                                     }
@@ -86,6 +98,32 @@ class PropertiesPanel extends React.Component {
                         </Grid>
                     )
                     key += 3;
+                } else if (prop.propType === "autocomplete") {
+                    properties.push(
+                        <Grid key={key} item>
+                            <Autocomplete
+                                id="part-autocomplete"
+                                key={key + 1}
+                                disableClearable
+                                freeSolo
+                                renderInput={(params) => <TextField
+                                    {...params}
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        endAdornment: <InputAdornment
+                                            position="end">{prop.adornment}</InputAdornment>,
+                                    }}
+                                    label={prop.propName}
+                                    type={prop.type}
+                                />}
+                                options={prop.defaultOptions}
+                                value={prop.value}
+                                getOptionLabel={(option) => option}
+                                onInputChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
+                            />
+                        </Grid>
+                    )
+                    key += 4;
                 }
             }
         }

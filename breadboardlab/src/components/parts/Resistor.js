@@ -145,10 +145,11 @@ export default class Resistor extends React.Component {
                     {propName: "Name", propType: "textfield", value: this.state.name},
                     {
                         propName: "Resistance",
-                        propType: "textfield",
+                        propType: "autocomplete",
                         value: this.state.resistance,
                         adornment: 'Ω',
-                        type: 'number'
+                        type: 'number',
+                        defaultOptions: ["220", "470", "1000", "10000"]
                     },
                 ]
             }
