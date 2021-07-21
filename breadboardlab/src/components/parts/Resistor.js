@@ -149,7 +149,12 @@ export default class Resistor extends React.Component {
                         value: this.state.resistance,
                         adornment: 'Ω',
                         type: 'number',
-                        defaultOptions: ["220", "470", "1000", "10000"]
+                        defaultOptions: [
+                            {label: "220 Ohms", value: "220"},
+                            {label: "470 Ohms", value: "470"},
+                            {label: "1k Ohms", value: "1000"},
+                            {label: "10k Ohms", value: "10000"},
+                        ]
                     },
                 ]
             }

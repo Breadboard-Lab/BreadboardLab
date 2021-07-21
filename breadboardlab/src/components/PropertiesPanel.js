@@ -116,9 +116,10 @@ class PropertiesPanel extends React.Component {
                                     label={prop.propName}
                                     type={prop.type}
                                 />}
+                                renderOption={(option) => <Typography noWrap>{option.label}</Typography>}
                                 options={prop.defaultOptions}
                                 value={prop.value}
-                                getOptionLabel={(option) => option}
+                                getOptionLabel={option => typeof option === 'string' ? option : option.value}
                                 onInputChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
                             />
                         </Grid>
