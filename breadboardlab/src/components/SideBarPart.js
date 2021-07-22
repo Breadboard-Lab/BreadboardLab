@@ -240,7 +240,7 @@ function rotatePart(ref) {
         const rotate = regexRotate.exec(ref.node.current.getAttribute("transform"));
     
         let partBBox = ref.node.current.getBBox();
-        let scale = (ref.scale ? {x: ref.scale.x, y: ref.scale.x} : {x: 1, y: 1})
+        let scale = (ref.scale ? {x: ref.scale.x, y: ref.scale.y} : {x: 1, y: 1})
         let rotatePointX = (partBBox.x + Number(translate[1]) / scale.x) + (partBBox.width / 2) * scale.x;
         let rotatePointY = (partBBox.y + Number(translate[5]) / scale.y) + (partBBox.height / 2) * scale.y;
         
