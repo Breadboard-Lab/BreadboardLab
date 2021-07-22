@@ -1,5 +1,5 @@
 import BreadBoard from "../components/parts/BreadBoard";
-import MomentaryButton from "../components/parts/Button";
+import MomentaryButton from "../components/parts/MomentaryButton";
 import LED from "../components/parts/LED";
 import Resistor from "../components/parts/Resistor";
 import Transistor from "../components/parts/Transistor";

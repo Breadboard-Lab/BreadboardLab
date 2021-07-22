@@ -1,7 +1,7 @@
 import React from "react";
 import interact from "interactjs";
 
-export default class Button extends React.Component {
+export default class MomentaryButton extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
@@ -139,12 +139,12 @@ export default class Button extends React.Component {
             this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
     }
 
-    rotate(attahRef) {
+    rotate(attachRef) {
         if (typeof this.props.rotatePart === "function")
 			this.props.rotatePart(this);
         
-        if (attahRef) {
-            this.connect(this.topLeftConector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
+        if (attachRef) {
+            this.connect(this.topLeftConector.current, attachRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attachRef);
         } else {
             this.disconnect();
         }
