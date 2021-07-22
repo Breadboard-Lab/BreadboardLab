@@ -10,6 +10,7 @@ export default class CeramicCapacitor extends React.Component {
             type: "Ceramic Capacitor",
             name: "Ceramic Capacitor",
             capacitance: "1000",
+            unit: "F",
             isSelected: false,
         }
         this.scale = {x: 0.65, y: 0.65};
@@ -36,7 +37,12 @@ export default class CeramicCapacitor extends React.Component {
         } else if (propName.toLowerCase() === "name") {
             this.setState({name: value}, this.onDoubleClick);
         } else if (propName.toLowerCase() === "capacitance") {
-            this.setState({capacitance: value}, this.onDoubleClick);
+            if (isNaN(value)) {
+                this.setState({unit: value}, this.onDoubleClick)
+            } else {
+                this.setState({capacitance: value}, this.onDoubleClick);
+            }
+
         }
     }
 
@@ -50,10 +56,16 @@ export default class CeramicCapacitor extends React.Component {
                     {propName: "Name", propType: "textfield", value: this.state.name},
                     {
                         propName: "Capacitance",
-                        propType: "textfield",
+                        propType: "autocomplete",
                         value: this.state.capacitance,
-                        adornment: 'F',
-                        type: 'number'
+                        defaultOptions: [
+                            {label: "100 farads", value: "100", unit: "F"},
+                            {label: "1000 millifarads", value: "1000", unit: "mF"},
+                            {label: "10000 microfarads", value: "10000", unit: "μF"},
+                        ],
+                        units: ["F", "mF", "μF"],
+                        selectedUnit: this.state.unit,
+                        type: 'number',
                     },
                 ]
             }
@@ -77,7 +89,8 @@ export default class CeramicCapacitor extends React.Component {
                 <path id="lights" fill="#35ADCA" d="M13.52,12.909c-0.128,0-0.259-0.025-0.385-0.078c-0.508-0.213-0.749-0.795-0.538-1.304
 			c0.083-0.2,2.097-4.917,7.324-5.456c0.539-0.061,1.041,0.342,1.097,0.892c0.057,0.549-0.343,1.041-0.892,1.097
 			c-4.021,0.414-5.617,4.08-5.683,4.236C14.281,12.678,13.91,12.909,13.52,12.909z"/>
-                <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeMiterlimit="10" d="M60.563,29.063
+                <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeMiterlimit="10"
+                      d="M60.563,29.063
 			C60.563,13.288,47.773,0.5,32,0.5C16.226,0.5,3.438,13.288,3.438,29.063c0,8.527,3.743,16.178,9.669,21.414l4.099,12.112
 			c0,0.5,0.8,0.911,1.787,0.911c0.983,0,1.783-0.413,1.783-0.911l2.177-6.437c2.845,0.951,5.884,1.474,9.047,1.474
 			c3.164,0,6.203-0.521,9.046-1.474l2.179,6.437c0,0.5,0.805,0.911,1.787,0.911s1.787-0.413,1.787-0.911L50.9,50.471
