@@ -19,28 +19,30 @@ const styles = theme => ({
 });
 
 class PropertiesPanel extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            selectedValue: "",
-        }
-    }
-
     handleChanges = (event, propName) => {
-        this.setState({selectedValue: event.target.value});
-
         if (typeof this.props.partData.callback === "function") {
             this.props.partData.callback(propName, event.target.value);
         }
     }
 
     handleAutocomplete = (event, value, propName) => {
-        this.setState({selectedValue: value});
-
-        if (typeof this.props.partData.callback === "function") {
-            this.props.partData.callback(propName, value);
+        /*
+            Checks if theres an event and whether its a dropdown select event or if its a user typing.
+         */
+        if (event) {
+            if (event.type === "click") {
+                console.log("click")
+                if (typeof this.props.partData.callback === "function") {
+                    this.props.partData.callback(propName, value.unit);
+                    this.props.partData.callback(propName, value.value);
+                }
+            } else {
+                console.log("change")
+                if (typeof this.props.partData.callback === "function") {
+                    this.props.partData.callback(propName, value);
+                }
+            }
         }
-
     }
 
     render() {
@@ -111,8 +113,20 @@ class PropertiesPanel extends React.Component {
                                     {...params}
                                     InputProps={{
                                         ...params.InputProps,
-                                        endAdornment: <InputAdornment
-                                            position="end">{prop.adornment}</InputAdornment>,
+                                        endAdornment:
+                                            <InputAdornment
+                                                position="end">
+                                                <Select
+                                                    disableUnderline
+                                                    value={prop.selectedUnit}
+                                                    onChange={event => this.handleChanges(event, prop.propName)}
+                                                >
+                                                    {prop.units.map((object, index) =>
+                                                        <MenuItem key={index} value={object}>
+                                                            {object}
+                                                        </MenuItem>)}
+                                                </Select>
+                                            </InputAdornment>,
                                     }}
                                     label={prop.propName}
                                     type={prop.type}
@@ -121,6 +135,7 @@ class PropertiesPanel extends React.Component {
                                 options={prop.defaultOptions}
                                 value={prop.value}
                                 getOptionLabel={option => typeof option === 'string' ? option : option.value}
+                                onChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
                                 onInputChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
                             />
                         </Grid>
