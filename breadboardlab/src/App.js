@@ -166,6 +166,8 @@ class App extends Component {
 
     handlePartSelect = (childData) => {
         if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
+            // TODO catch case for when property panel form event is called but no changes are made
+            //  (thus unselecting the part as previous state and current state are same)
             this.setState({
                 hideProperties: true,
                 partData: {},
