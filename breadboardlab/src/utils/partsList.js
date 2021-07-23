@@ -8,6 +8,8 @@ import CeramicCapacitor from "../components/parts/CeramicCapacitor";
 import Switch from "../components/parts/Switch";
 import Battery from "../components/parts/Battery";
 import LEDv2 from "../components/parts/LEDv2";
+import NPNTransistor from "../components/parts/NPNTransistor";
+import PNPTransistor from "../components/parts/PNPTransistor";
 
 const partsList = {
     all: [
@@ -20,6 +22,8 @@ const partsList = {
         {name: 'Switch', component: <Switch/>, description: ''},
         {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
         {name: 'Transistor', component: <Transistor/>, description: ''},
+        {name: 'NPN Transistor', component: <NPNTransistor/>, description: ''},
+        {name: 'PNP Transistor', component: <PNPTransistor/>, description: ''},
     ],
     basics: [
         {name: 'Breadboard', component: <BreadBoard/>, description: ''},
@@ -31,6 +35,8 @@ const partsList = {
         {name: 'Switch', component: <Switch/>, description: ''},
         {name: 'Ceramic Capacitor', component: <CeramicCapacitor/>, description: ''},
         {name: 'Transistor', component: <Transistor/>, description: ''},
+        {name: 'NPN Transistor', component: <NPNTransistor/>, description: ''},
+        {name: 'PNP Transistor', component: <PNPTransistor/>, description: ''},
     ],
     gates: []
 }
