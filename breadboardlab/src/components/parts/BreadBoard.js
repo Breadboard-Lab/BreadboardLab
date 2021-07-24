@@ -164,6 +164,8 @@ export default class BreadBoard extends React.Component {
 					
 					if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.connect(event.relatedTarget, event.currentTarget, this);
+					console.log(this.connectedParts);
+					console.log(ref.attachTo);
 				},
 				ondragleave: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
@@ -203,7 +205,7 @@ export default class BreadBoard extends React.Component {
 		this.node.current.querySelector("#" + id).setAttribute("filter", "");
 
 		if (this.connectedParts.get(id) && this.connectedParts.get(id).ref === ref)
-			this.connectedParts.set(id, undefined);
+			this.connectedParts.delete(id);
 	}
 
     render() {

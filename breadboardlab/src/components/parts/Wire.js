@@ -139,6 +139,7 @@ export default class Wire extends React.Component {
 
     disconnect(event) {
         if (event) {
+            
             if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
                 if (typeof this.attachTo.get("start").ref.disconnectPart === "function")
                     this.attachTo.get("start").ref.disconnectPart(this.attachTo.get("start").id, this);
@@ -149,8 +150,9 @@ export default class Wire extends React.Component {
                     this.attachTo.get("end").ref.disconnectPart(this.attachTo.get("end").id, this);
                 
                 this.attachTo.set("end", undefined);
-            } else if ((this.endPoint.current.node === event.relatedTarget && this.attachTo.get("start") && this.attachTo.get("start").id !== event.currentTarget.id) ||
-                       (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("end") && this.attachTo.get("end").id !== event.currentTarget.id)) {
+            } else if ((this.endPoint.current.node === event.relatedTarget && ((this.attachTo.get("start") && this.attachTo.get("start").id !== event.currentTarget.id) || !this.attachTo.get("start")))  ||
+                       (this.startPoint.current.node === event.relatedTarget && ((this.attachTo.get("end") && this.attachTo.get("end").id !== event.currentTarget.id) || !this.attachTo.get("start")))) {
+                
                 event.currentTarget.setAttribute("filter", "");
             }
         } else {
