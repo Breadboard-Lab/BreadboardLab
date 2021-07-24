@@ -57,7 +57,7 @@ export default class QuadXORChip extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick}  transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${0} ${0} ${0}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <g id="pins">
                         <path id="pin_x5F_14" fill="#606262" d="M3,23l1-4.582c0-0.552,0.448-1,1-1s1,0.448,1,1L7,23H3z"/>

@@ -111,21 +111,20 @@ export default class BreadBoard extends React.Component {
 				const {interaction} = event;
         
        			if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown) {
-					const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-					const translate = regexTranslate.exec(this.node.current.parentNode.getAttribute("transform"));
 					let startPoint = {
 						x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x,
 						y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y
 					};
 					
-					if (translate && this.connectedParts.get(event.currentTarget.id) === undefined) {
+					if (this.connectedParts.get(event.currentTarget.id) === undefined) {
 						let wire = React.cloneElement(
 							<Wire></Wire>,
 							{
 								ref: node => this.wire = node,
 								startPoint: startPoint,
 								endPoint: startPoint,
-								transform: `translate(${Number(translate[1])}, ${Number(translate[5])})`,
+								translation: {x: this.state.translation.x, y: this.state.translation.y},
+								rotation: this.state.rotation,
 								onDoubleTap: this.props.onDoubleTap,
 								key: App.partKey._currentValue
 							}

@@ -17,6 +17,8 @@ export default class Wire extends React.Component {
             visualColourOuter: "hsl(0, 100%, 31%)",
             visualColourInner: "hsl(0, 100%, 75%)",
             isSelected: false,
+            translation: {x: this.props.translation.x, y: this.props.translation.y},
+            rotation: this.props.rotation
         }
         this.setPoints = this.setPoints.bind(this);
         this.movePart = this.movePart.bind(this);
@@ -113,12 +115,11 @@ export default class Wire extends React.Component {
 
     connect(relatedTarget, currentTarget, attachRef) {
 		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const relatedTargetTranslate = regexTranslate.exec(relatedTarget.closest(".part").getAttribute("transform"));
-		const breadboardTranslate = regexTranslate.exec(currentTarget.closest(".part").getAttribute("transform"));
+		const relatedTargetTranslate = regexTranslate.exec(this.node.current.getAttribute("transform"));
 
-		if (breadboardTranslate && relatedTargetTranslate) {
-			const xPos = (Number(currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + Number(breadboardTranslate[1]);
-			const yPos = (Number(currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + Number(breadboardTranslate[5]);
+		if (relatedTargetTranslate) {
+			const xPos = (Number(currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + attachRef.state.translation.x;
+			const yPos = (Number(currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + attachRef.state.translation.y;
             
             if (this.startPoint.current.node === relatedTarget && (!this.attachTo.get("end") || this.attachTo.get("end").id !== currentTarget.id)) {
                 this.attachTo.set("start", {id: currentTarget.id, ref: attachRef});
@@ -204,7 +205,7 @@ export default class Wire extends React.Component {
 
     render() {                        
         return(
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} className="part" transform={this.props.transform}>
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <path stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="9" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke={this.state.visualColourOuter} strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke={this.state.visualColourInner} strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
