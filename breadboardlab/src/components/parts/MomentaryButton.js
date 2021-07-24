@@ -1,7 +1,7 @@
 import React from "react";
 import interact from "interactjs";
 
-export default class MomentaryButton extends React.Component {
+export default class Button extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
@@ -14,13 +14,14 @@ export default class MomentaryButton extends React.Component {
             type: "Momentary Button",
             name: "Momentary Button",
             isSelected: false,
+            translation: {x: 0, y: 0},
+            rotation: 0
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 50, y: 50};
         this.offSet = {x: 0.3, y: 0.35};
-        this.cursorOffset = {x: undefined, y: undefined};
         this.attachTo = new Map();
         this.refArray = [
             {id: "topLeft", ref: this.topLeftConector},
@@ -33,13 +34,9 @@ export default class MomentaryButton extends React.Component {
     componentDidMount() {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
-                start: event => {
-                    this.cursorOffset.x = event.client.x - event.currentTarget.closest(".part").getBoundingClientRect().x; 
-                    this.cursorOffset.y = event.client.y - event.currentTarget.closest(".part").getBoundingClientRect().top; 
-                },
 				move: event => {
                     if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
-                        this.props.movePart(event);
+                        this.props.movePart(event, this);
                     } else {
                         const {interaction} = event;
                         interaction.stop();
@@ -85,36 +82,30 @@ export default class MomentaryButton extends React.Component {
         }
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
-		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-        const currentTranslate = relatedTarget.closest(".part").getAttribute("transform");
-		const relatedTargetTranslate = regexTranslate.exec(currentTranslate);
-		const breadboardTranslate = regexTranslate.exec(currentTarget.closest(".part").getAttribute("transform"));
+    connect(relatedTarget, currentTarget, attachRef) {        
+        let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
+        pointBreadboard.x = currentTarget.getBoundingClientRect().x + currentTarget.getBoundingClientRect().width / 2;
+        pointBreadboard.y = currentTarget.getBoundingClientRect().y + currentTarget.getBoundingClientRect().height / 2;
+        const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
-        if (breadboardTranslate && relatedTargetTranslate) {
-            let angle = this.rotation || 0;
-            
-			let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
-            pointBreadboard.x = currentTarget.getBoundingClientRect().x + currentTarget.getBoundingClientRect().width / 2;
-            pointBreadboard.y = currentTarget.getBoundingClientRect().y + currentTarget.getBoundingClientRect().height / 2;
-            const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
-
-            let pointConnector = document.getElementById("AppSVG").createSVGPoint();
-            pointConnector.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
-            pointConnector.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
-            const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+        let pointConnector = document.getElementById("AppSVG").createSVGPoint();
+        pointConnector.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
+        pointConnector.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
+        const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
 
-            if (this.highlightID && this.highlightID.ids.length === 4) {
-                for (let i = 0; i < this.refArray.length; i++) {
-                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
-                    
-                    if (typeof attachRef.connectPart === "function") 
-                        attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
-                }
-                this.node.current.closest(".part").setAttribute("transform", `translate(${Number(relatedTargetTranslate[1]) + svgBreadboard.x - svgConnector.x + 0.8 * Math.cos((angle - 135) * Math.PI / 180)} ${Number(relatedTargetTranslate[5]) + svgBreadboard.y - svgConnector.y + 0.8 * Math.sin((angle - 135) * Math.PI / 180)})`);
+        if (this.highlightID && this.highlightID.ids.length === 4) {
+            for (let i = 0; i < this.refArray.length; i++) {
+                this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
+                
+                if (typeof attachRef.connectPart === "function") 
+                    attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
             }
-		}
+            this.setState({translation: {
+                x: this.state.translation.x + svgBreadboard.x - svgConnector.x + 0.8 * Math.cos((this.state.rotation - 135) * Math.PI / 180),
+                y: this.state.translation.y + svgBreadboard.y - svgConnector.y + 0.8 * Math.sin((this.state.rotation - 135) * Math.PI / 180)}
+            });
+        }
     }
 
     disconnect() {
@@ -131,23 +122,14 @@ export default class MomentaryButton extends React.Component {
         this.highlightID = undefined;
     }
 
-    movePart(dx, dy) {
-        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
-        
-        if (translate)
-            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
-    }
-
-    rotate(attachRef) {
-        if (typeof this.props.rotatePart === "function")
-			this.props.rotatePart(this);
-        
-        if (attachRef) {
-            this.connect(this.topLeftConector.current, attachRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attachRef);
-        } else {
-            this.disconnect();
-        }
+    rotate(attahRef) {
+        this.setState({rotation: this.state.rotation + 15}, () => {
+            if (attahRef) {
+                this.connect(this.topLeftConector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
+            } else {
+                this.disconnect();
+            }
+        })
     }
 
     checkConnected(attachRef) {
@@ -161,10 +143,31 @@ export default class MomentaryButton extends React.Component {
                 for (let connector of connectors) {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
-                    let overlap = !(rect1.right - rect1.width / 2 < rect2.left + 5 || rect1.left + rect1.width / 2 > rect2.right - 5 || rect1.bottom - rect1.height / 2 < rect2.top + 5 || rect1.top + rect1.height / 2 > rect2.bottom - 5);
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
                     if (overlap) {
-                        element = connector;
+                        let xConnection = refData.ref.current.getBoundingClientRect().x + refData.ref.current.getBoundingClientRect().width / 2;
+                        let yConnection = refData.ref.current.getBoundingClientRect().y + refData.ref.current.getBoundingClientRect().height / 2;
+    
+                        let xConnector = connector.getBoundingClientRect().x + connector.getBoundingClientRect().width / 2;
+                        let yConnector = connector.getBoundingClientRect().y + connector.getBoundingClientRect().height / 2;
+
+                        let t = attachRef.state.rotation * (Math.PI / 180);
+                        let w, h;
+
+                        if (attachRef.state.rotation % 360 !== 45) {
+                            w = (1 / (Math.cos(t) * Math.cos(t) - Math.sin(t) * Math.sin(t))) * ( connector.getBoundingClientRect().width * Math.cos(t) - connector.getBoundingClientRect().height * Math.sin(t))
+                            h = (1 / (Math.cos(t) * Math.cos(t) - Math.sin(t) * Math.sin(t))) * (-connector.getBoundingClientRect().width * Math.sin(t) + connector.getBoundingClientRect().height * Math.cos(t))
+                        } else {
+                            w = (connector.getBoundingClientRect().width * Math.cos(t) + connector.getBoundingClientRect().height * Math.sin(t)) / 2;
+                            h = (connector.getBoundingClientRect().width * Math.sin(t) + connector.getBoundingClientRect().height * Math.cos(t)) / 2;
+                        }            
+                        let radiusX = Math.abs(w) / 2;
+                        let radiusY = Math.abs(h) / 2;
+                        let ellispeArea = (xConnection - xConnector) * (xConnection - xConnector) / (radiusX * radiusX) + (yConnection - yConnector) * (yConnection - yConnector) / (radiusY * radiusY);
+    
+                        if (ellispeArea <= 1) 
+                            element = connector;
                         break;
                     }
                 }
@@ -183,22 +186,37 @@ export default class MomentaryButton extends React.Component {
     }
     
     render() {
+        let rotatePointX;
+        let rotatePointY;
+
+        if (this.node.current) {
+            let partBBox = this.node.current.firstChild.getBBox();
+            rotatePointX = partBBox.width / 2;
+            rotatePointY = partBBox.height / 2;
+            
+        } else {
+            rotatePointX = 0;
+            rotatePointY = 0;
+        }
+
         return(
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform="translate(30, 33) scale(90,90)">
-                <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
-                <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />
-                <rect ref={this.topLeftConector} className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                <rect ref={this.topRightConector} x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                <rect ref={this.bottomLeftConector} x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
-                <rect ref={this.bottomRightConector} x="0.14" y="0.3" width="0.06" height="0.05" fill="#707070" />
-                <circle cx="0" cy="0" r="0.15" fill="#000000" />
-                <circle cx="0" cy="0" r="0.1" fill="#202020" />
-                <circle cx="-0.18" cy="-0.18" r="0.03" fill="#202020" />
-                <circle cx="0.18" cy="-0.18" r="0.03" fill="#202020" />
-                <circle cx="-0.18" cy="0.18" r="0.03" fill="#202020" />
-                <circle cx="0.18" cy="0.18" r="0.03" fill="#202020" />
-                <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1"
-                      fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.025" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
+            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+                <g transform={this.props.icon ? `translate(30,33),scale(90,90)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
+                    <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
+                    <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />
+                    <rect ref={this.topLeftConector} className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.topRightConector} x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.bottomLeftConector} x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.bottomRightConector} x="0.14" y="0.3" width="0.06" height="0.05" fill="#707070" />
+                    <circle cx="0" cy="0" r="0.15" fill="#000000" />
+                    <circle cx="0" cy="0" r="0.1" fill="#202020" />
+                    <circle cx="-0.18" cy="-0.18" r="0.03" fill="#202020" />
+                    <circle cx="0.18" cy="-0.18" r="0.03" fill="#202020" />
+                    <circle cx="-0.18" cy="0.18" r="0.03" fill="#202020" />
+                    <circle cx="0.18" cy="0.18" r="0.03" fill="#202020" />
+                    <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1"
+                        fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.025" strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" />
+                </g>
             </g>
         )
     }

@@ -55,7 +55,6 @@ class SideBarPart extends React.Component {
                         ref: (node) => this.node = node,
                         addPart: this.props.ondrag,
                         movePart: movePart,
-                        rotatePart: rotatePart,
                         onDoubleTap: this.props.onDoubleTap,
                         key: App.partKey._currentValue,
                     }
@@ -63,21 +62,13 @@ class SideBarPart extends React.Component {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
 
-                this.props.ondrag(<g key={App.partKey._currentValue} className="part">{part}</g>);
+                this.props.ondrag(part);
                 this.listening = false;
                 this.added = true;
                 let element = this.node.node.current;
                 App.partKey._currentValue++;
 
                 if (element) {
-                    if (this.node.scale && this.node.offSet) {
-                        let scale = this.node.scale;
-                        let offSet = this.node.offSet;
-
-                        element.setAttribute("transform", `rotate(0 0 0) translate(${offSet.x * scale.x} ${offSet.y * scale.y}) scale(${scale.x} ${scale.y})`);
-                    } else {
-                        element.setAttribute("transform", `rotate(0 0 0) translate(0 0) scale(1 1)`);
-                    }
                     interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element)
                     App.listOfRefs._currentValue.push(this.node);
@@ -92,7 +83,7 @@ class SideBarPart extends React.Component {
         manualStart: true,
         listeners: {
             move: (event) => {
-                let part = this.node.node.current.closest(".part");
+                let part = this.node.node.current;
                 let findConnector = part.querySelector(".connector");
 
                 if (findConnector && !event.currentTarget.classList.contains("connector")) {
@@ -105,10 +96,7 @@ class SideBarPart extends React.Component {
                     let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
                     if (cursorpt)
-                        part.setAttribute("transform", `translate(${cursorpt.x} ${cursorpt.y})`);
-
-                    if (typeof this.node.disconnect === "function")
-                        this.node.disconnect()
+                        this.node.setState({translation: {x: cursorpt.x, y: cursorpt.y}});
                 }
             },
             end: () => {
@@ -170,6 +158,7 @@ class SideBarPart extends React.Component {
 
     render() {
         const {classes} = this.props;
+        let icon = React.cloneElement(this.props.part, {icon: true})
 
         return (
             <Interactable draggable={true} draggableOptions={this.draggingOptions} onMove={this.onMove}
@@ -178,7 +167,7 @@ class SideBarPart extends React.Component {
                     <ListItem button>
                         <ListItemAvatar>
                             <SvgIcon viewBox="0 0 64 64" fontSize="large">
-                                {this.props.part}
+                                {icon}
                             </SvgIcon>
                         </ListItemAvatar>
                         {this.props.width < 'xs' ?
@@ -213,48 +202,22 @@ class SideBarPart extends React.Component {
     }
 }
 
-function movePart(event) {
+function movePart(event, ref) {
     const scale = svg.getAttribute("scale");
-    const part = event.currentTarget.closest(".part");
-    const regex = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-    const currentTransform = part.getAttribute("transform");
-    const transform = regex.exec(currentTransform);
     
-    if (transform) {
-        let xPos = Number(transform[1]) + event.dx * scale;
-        let yPos = Number(transform[5]) + event.dy * scale;
+    if (ref) {
+        if (ref.state.translation.x && ref.state.translation.y) {
+            let xPos = ref.state.translation.x + event.dx * scale;
+            let yPos = ref.state.translation.y + event.dy * scale;
 
-        part.setAttribute("transform", `translate(${xPos} ${yPos})`);
-        return {dx: event.dx * scale, dy: event.dy * scale}
-    } else {
-        part.setAttribute("transform", `translate(0 0)`);
-        return {dx: 0, dy: 0}
+            ref.setState({translation: {x: xPos, y: yPos}});
+            return {dx: event.dx * scale, dy: event.dy * scale}
+        } else {
+            ref.setState({translation: {x: 0, y: 0}});
+            return {dx: 0, dy: 0}
+        }
     }
-}
-
-function rotatePart(ref) {
-    if (ref && ref.node.current) {
-        const regexRotate = /rotate\((([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?),?[\s]?(([-?\d]+)?,?[\s]?(\.[\d]+)?)\)/i;
-        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-        const translate = regexTranslate.exec(ref.node.current.getAttribute("transform"));
-        const rotate = regexRotate.exec(ref.node.current.getAttribute("transform"));
-    
-        let partBBox = ref.node.current.getBBox();
-        let scale = (ref.scale ? {x: ref.scale.x, y: ref.scale.y} : {x: 1, y: 1})
-        let rotatePointX = (partBBox.x + Number(translate[1]) / scale.x) + (partBBox.width / 2) * scale.x;
-        let rotatePointY = (partBBox.y + Number(translate[5]) / scale.y) + (partBBox.height / 2) * scale.y;
-        
-        if (ref.rotation)
-            ref.rotation += 15;
-        else 
-            ref.rotation = 15;
-    
-        if (rotate)
-            ref.node.current.setAttribute("transform", ref.node.current.getAttribute("transform").replace(regexRotate, `rotate(${ref.rotation}, ${rotatePointX}, ${rotatePointY})`));
-        else
-            ref.node.current.setAttribute("transform", `rotate(${ref.rotation}, ${rotatePointX}, ${rotatePointY}) ` + ref.node.current.getAttribute("transform"));
-    }
-    
+    return {dx: 0, dy: 0}
 }
 
 export default withWidth()(withStyles(styles)(SideBarPart));
