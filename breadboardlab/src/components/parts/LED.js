@@ -14,10 +14,11 @@ export default class LED extends React.Component {
             type: "LED",
             name: "LED",
             colour: "Red",
-            visualColourOuter: "hsl(0, 100%, 31%)",
-            visualColourInner: "hsl(0, 100%, 75%)",
-            cathodePoint: {x: 0.1, y: 0.2},
-            anodePoint: {x: 0.7, y: 0.2},
+            bodyColourRim: "hsl(0, 75%, 50%)",
+            bodyColourTop: "hsl(0, 75%, 64%)",
+            bodyColourBottom: "hsl(0, 75%, 59%)",
+            cathodePoint: {x: 24, y: 62.5},
+            anodePoint: {x: 40, y: 62.5},
             isSelected: false,
             translation: {x: 0, y: 0},
             rotation: 0
@@ -25,10 +26,9 @@ export default class LED extends React.Component {
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
-        this.centerPointX = 13.900001168251038;
-        this.centerPointY = 13.08811616897583;
-        this.scale = {x: 20, y: 20};
-        this.offSet = {x: 0.3, y: 0.5};
+        this.scale = {x: 1, y: 1};
+        this.offSet = {x: -15.3605, y: -0.5};
+        this.rotatePoint = {x: 0, y: 0};
         this.attachTo = new Map();
         this.refArray = [
             {id: "cathode", ref: this.cathode},
@@ -40,11 +40,12 @@ export default class LED extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let angle = this.state.rotation * Math.PI / 180;
 
                 this.setState({
                     cathodePoint: {
-                        x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale / this.scale.x,
-                        y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale / this.scale.y
+                        x: this.state.cathodePoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
+                        y: this.state.cathodePoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
                     }
                 });
             }
@@ -55,11 +56,12 @@ export default class LED extends React.Component {
         listeners: {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let angle = this.state.rotation * Math.PI / 180;
 
                 this.setState({
                     anodePoint: {
-                        x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale / this.scale.x,
-                        y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale / this.scale.y
+                        x: this.state.anodePoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
+                        y: this.state.anodePoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
                     }
                 });
             }
@@ -97,24 +99,39 @@ export default class LED extends React.Component {
             // Changes LED colour based on Properties Panel Colour Selection
             switch (value) {
                 case "Red":
-                    this.setState({visualColourOuter: "hsl(0, 100%, 31%)"})
-                    this.setState({visualColourInner: "hsl(0, 100%, 75%)"})
+                    this.setState({
+                        bodyColourRim: "hsl(0, 75%, 50%)",
+                        bodyColourTop: "hsl(0, 75%, 64%)",
+                        bodyColourBottom: "hsl(0, 75%, 59%)",
+                    })
                     break
                 case "Blue":
-                    this.setState({visualColourOuter: "hsl(210,100%,31%)"})
-                    this.setState({visualColourInner: "hsl(210,100%,75%)"})
+                    this.setState({
+                        bodyColourRim: "hsl(210, 75%, 50%)",
+                        bodyColourTop: "hsl(210, 75%, 64%)",
+                        bodyColourBottom: "hsl(210, 75%, 59%)",
+                    })
                     break
                 case "Green":
-                    this.setState({visualColourOuter: "hsl(100, 100%, 31%)"})
-                    this.setState({visualColourInner: "hsl(125,100%,75%)"})
+                    this.setState({
+                        bodyColourRim: "hsl(115,50%,50%)",
+                        bodyColourTop: "hsl(115, 50%, 64%)",
+                        bodyColourBottom: "hsl(115, 50%, 59%)",
+                    })
                     break
                 case "Yellow":
-                    this.setState({visualColourOuter: "hsl(55,100%,31%)"})
-                    this.setState({visualColourInner: "hsl(55, 100%, 75%)"})
+                    this.setState({
+                        bodyColourRim: "hsl(55, 50%, 50%)",
+                        bodyColourTop: "hsl(55, 50%, 64%)",
+                        bodyColourBottom: "hsl(55, 50%, 59%)",
+                    })
                     break
                 default:
-                    this.setState({visualColourOuter: "hsl(0, 100%, 31%)"})
-                    this.setState({visualColourInner: "hsl(0, 100%, 75%)"})
+                    this.setState({
+                        bodyColourRim: "hsl(0, 78%, 50%)",
+                        bodyColourTop: "hsl(0, 78%, 64%)",
+                        bodyColourBottom: "hsl(0, 78%, 59%)",
+                    })
             }
         }
     }
@@ -197,20 +214,26 @@ export default class LED extends React.Component {
         }
     }
 
+    rotate(attahRef) {
+        let partBBox = this.node.current.firstChild.getBBox();
+        this.rotatePoint.x = partBBox.width / 2;
+        this.rotatePoint.y = partBBox.height / 2;
+
+        this.setState({rotation: this.state.rotation + 15}, () => {
+            if (attahRef) {
+                this.connect(undefined, undefined, attahRef);
+            } else {
+                this.disconnect();
+            }
+        });
+    }
+
     moveConnector(connector, xPos, yPos) {
         if (connector === this.cathode.current.node) {
             this.setState({cathodePoint: {x: xPos, y: yPos}});
         } else {
             this.setState({anodePoint: {x: xPos, y: yPos}});
         }
-    }
-
-    movePart(dx, dy) {
-        const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-        const translate = regexTranslate.exec(this.node.current.closest(".part").getAttribute("transform"));
-
-        if (translate)
-            this.node.current.closest(".part").setAttribute("transform", `translate(${Number(translate[1]) + dx} ${Number(translate[5]) + dy})`);
     }
 
     checkConnected(attachRef) {
@@ -260,52 +283,53 @@ export default class LED extends React.Component {
     render() {
         return (
             <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
-                <g transform={this.props.icon ? `translate(17,28) scale(40,40)` : `scale(${this.scale.x} ${this.scale.y}) rotate(0 0 0) translate(${this.offSet.x} ${this.offSet.y})`}>
-                    <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
-                            d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
-                    <path stroke="#707070" strokeWidth="0.16" strokeLinecap="round"
-                            d={`M ${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
+                <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${this.rotatePoint.x} ${this.rotatePoint.y}) translate(${this.offSet.x} ${this.offSet.y})`}>
+                    <path id="cathode" fill="#707071" d="M24,63.5c-1.104,0-2-0.882-2-1.969v-15.75c0-1.087,0.896-1.969,2-1.969s2,0.882,2,1.969
+                v15.75C26,62.618,25.104,63.5,24,63.5z"/>
+                    <path id="anode" fill="#707071" d="M40,63.5c-1.104,0-2-0.882-2-1.969v-2.884l-5.109-3.354C32.334,54.929,32,54.314,32,53.656
+                v-7.875c0-1.087,0.896-1.969,2-1.969s2,0.882,2,1.969v6.821l5.109,3.354C41.666,56.321,42,56.936,42,57.594v3.938
+                C42,62.618,41.104,63.5,40,63.5z"/>
+                    <path id="rim" fill={this.state.bodyColourRim} d="M30.721,22.431c-6.338,0-11.775,2.932-14.721,6.946v12.846
+                c2.946,3.442,8.383,5.526,14.721,5.526C39.685,47.75,48,42.802,48,35.091C48,24.61,40.266,22.431,30.721,22.431z"/>
+                    <path id="top" fill={this.state.bodyColourTop} d="M30.644,0.5C22.557,0.5,16,6.863,16,14.712v18.509h14.644h14.645V14.712
+                C45.288,6.863,38.731,0.5,30.644,0.5z"/>
+                    <path id="bottom" fill={this.state.bodyColourBottom} d="M45.282,33.22c0,5.662-6.554,10.251-14.639,10.251
+                c-8.084,0-14.637-4.589-14.637-10.251c0-5.659,6.553-10.248,14.637-10.248C38.729,22.972,45.282,27.561,45.282,33.22z"/>
+                
+                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
+                            d={`M ${24} ${62.5} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
+                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
+                            d={`M ${40} ${62.5} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
 
-                    <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
-                            transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                            fill={this.state.visualColourInner} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0.8"/>
-                    <path d="M 0 0.8 A 0.7 0.7 90 1 1 0.8 0.8 Z"
-                            transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                            stroke={this.state.visualColourOuter} strokeWidth="0.1" strokeOpacity="1" fillOpacity="0"/>
-
-
-                    <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.1}
-                            cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
-                            fill="#707070"/>
-                    <circle cx={(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2 + 0.7}
-                            cy={(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2 + 0.2} r="0.08"
-                            fill="#707070"/>
+                    <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeLinecap="round"
+                        strokeLinejoin="round" strokeMiterlimit="10" d="
+                M48,35.091c0-3.75-1.003-6.422-2.712-8.327V14.712c0-7.849-6.557-14.212-14.645-14.212C22.557,0.5,16,6.863,16,14.712v14.666
+                v3.843v9.003c1.455,1.7,3.521,3.068,6,4.019v15.289c0,1.087,0.896,1.969,2,1.969s2-0.882,2-1.969V47.339
+                c1.495,0.269,3.077,0.411,4.721,0.411c0.429,0,0.854-0.021,1.279-0.044v5.95c0,0.658,0.334,1.272,0.891,1.638L38,58.647v2.884
+                c0,1.087,0.896,1.969,2,1.969s2-0.882,2-1.969v-3.938c0-0.658-0.334-1.272-0.891-1.638L36,52.603v-5.448
+                C42.697,45.631,48,41.246,48,35.091z"/>
 
                     <g ref={this.connectorContainer} className="connector">
-                        <Interactable ref={this.cathode} styleCursor={false} draggable={true}
-                                        draggableOptions={this.draggableOptionsCathode}>
+                        <Interactable 
+                            ref={this.cathode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsCathode}>
                             <ellipse
                                 onMouseEnter={this.onMouseEnter}
                                 onMouseLeave={this.onMouseLeave}
-                                className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.cathodePoint.x}
-                                cy={this.state.cathodePoint.y} rx="0.08" ry="0.08"/>
+                                className="connector" strokeOpacity="0" fillOpacity="0"
+                                cx={this.state.cathodePoint.x} cy={this.state.cathodePoint.y}
+                                rx="2" ry="2"/>
                         </Interactable>
 
-                        <Interactable ref={this.anode} styleCursor={false} draggable={true}
-                                        draggableOptions={this.draggableOptionsAnode}>
+                        <Interactable 
+                            ref={this.anode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsAnode}>
                             <ellipse
                                 onMouseEnter={this.onMouseEnter}
                                 onMouseLeave={this.onMouseLeave}
-                                className="connector" strokeOpacity="1" fillOpacity="0" cx={this.state.anodePoint.x}
-                                cy={this.state.anodePoint.y} rx="0.08" ry="0.08"/>
+                                className="connector" strokeOpacity="0" fillOpacity="0"
+                                cx={this.state.anodePoint.x} cy={this.state.anodePoint.y}
+                                rx="2" ry="2"/>
                         </Interactable>
                     </g>
-
-
-                    <path d="M -0.06 0.85 A 0.77 0.77 90 1 1 0.85 0.85 Z"
-                            transform={`translate(${(this.state.cathodePoint.x + this.state.anodePoint.x - 0.8) / 2} ${(this.state.cathodePoint.y + this.state.anodePoint.y - 0.4) / 2})`}
-                            fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.075"
-                            strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round"/>
                 </g>
             </g>
         )
