@@ -21,7 +21,10 @@ export default class LED extends React.Component {
             anodePoint: {x: 40, y: 62.5},
             isSelected: false,
             translation: {x: 0, y: 0},
-            rotation: 0
+            rotation: 0,
+            maxCurrent: 0.02,  // new for simulation (LED-specific)
+            voltageDrop: 1.8,  // new for simulation
+            intensity: 0.0     // new for simulation
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -30,6 +33,8 @@ export default class LED extends React.Component {
         this.offSet = {x: -15.3605, y: -0.5};
         this.rotatePoint = {x: 0, y: 0};
         this.attachTo = new Map();
+
+        // this might be better using a map
         this.refArray = [
             {id: "cathode", ref: this.cathode},
             {id: "anode", ref: this.anode},
@@ -333,5 +338,144 @@ export default class LED extends React.Component {
                 </g>
             </g>
         )
+    }
+
+    /**
+     * getConnectedComponents
+     * 
+     * Note:  This is not implemented, and this is also not the appropriate place for this function.  It has been placed here
+     *        simply to illustrate this LED example.  Many components will need to call this function, so it should be 
+     *        accessible to all of them.
+     *
+     * We will need a function which, given a component, will return a list of components that are 'connected' to it
+     * on the breadboard.  For now, we'll ignore the possibility of cycles in our graph.  We'll build and test using
+     * circuits that have no cycles.
+     *
+     * the function takes one of our terminals, and returns a list of components connected to that terminal
+     *
+     * this function will return an array of objects, each containing:
+     * 1. the component that we are connected to
+     * 2. the terminal on that component that we are connected to
+     *
+     */
+    getConnectedComponents(componentTerminal) {
+        // TODO: Implement me
+        return [];
+    }
+
+    /**
+     * isClosed
+     * 
+     * Recursive function to determine if the circuit is closed.
+     * 
+     * @argument {Component} sourceComponent The previous component, which is calling this function
+     * @argument {string} destinationTerminal The name of the terminal/connector/lead on this component they are connected to
+     * 
+     * @return true if the circuit is closed, false otherwise
+     */
+    isClosed(sourceComponent, destinationTerminal) {
+        // in reality, our functions would be called from components connected to the anode (sourceTerminal == 'anode'), 
+        // so we'd use the cathode lead specifically as the argument to this function.
+        let connectedComponents = this.getConnectedComponents(this.cathode);
+
+        for (let i = 0; i < connectedComponents; i++) {
+            if (connectedComponents[i].isClosed()) {
+                return true;
+            }
+        }
+        return false; // no components that we're connected to complete the circuit
+    }
+
+    /**
+     * measureCurrent
+     * 
+     * Recursive function to determine how much current is possible on a circuit.
+     * 
+     * Note:  When a resistor is added to a circuit, no matter where in the circuit it is, it affects
+     *        the current for that whole closed circuit.
+     * 
+     * @param {int} inputCurrent The maximum current so far
+     * 
+     * @return outputCurrent The new maximum current (for most components, this value remains unchanged - only changed for resistors)
+     */
+    measureCurrent(inputCurrent) {
+        let connectedComponents = this.getConnectedComponents(this.cathode);
+
+        let current = inputCurrent;
+        for (let i = 0; i < connectedComponents; i++) {
+            let componentCurrent = connectedComponents[i].measureCurrent(current);
+
+            if (componentCurrent < current) {
+                current = componentCurrent;
+            }
+        }
+        return current;
+    }
+
+    /**
+     * currentToIntensity
+     * 
+     * This function is specific to LEDs.  It determines how bright the LED should be given the current passing through.
+     * If the current is too high, this function will return -1.0.  If the current is at maximum, then it will return 1.0.
+     * Any current between 0A and the maximum will be calculated on a linear scale.
+     * 
+     * @param {int} current The current passing through this LED
+     * 
+     * @returns a value between 0.0 and 1.0 if current is within tolerance, and -1 if not within tolerance 
+     */
+    currentToIntensity(current) {
+        if (current > this.maxCurrent) {
+            return -1.0;
+        } else {
+            return current / this.maxCurrent;
+        }
+    }
+
+    /**
+     * setIntensity
+     * 
+     * This function will modify the colours of the LED to reflect the current passing through this component.  A value of
+     * 1.0 represents maximum brightness, and 0.0 represents an unlit LED.  Anything beyond the maximum current will produce
+     * an intensity of -1.0.
+     * 
+     * @param {int} intensity The intensity of the LED's brightness, which is between 0.0 and 1.0.
+     */
+    setIntensity(intensity) {
+        // TODO: update the colour
+        console.log(`updating intensity of LED to ${intensity}`);
+    }
+
+    /**
+     * 
+     * @param {int} inputVoltage The voltage so far through the circuit (some components will change this)
+     * @param {int} inputCurrent The current so far through the circuit (should remain unchanged) 
+     * 
+     * @return { outputVoltage, outputCurrent } The new voltage and current for the circuit after passing through this component
+     */
+    simulate({ inputVoltage, inputCurrent }) {
+        let voltage = inputVoltage;
+        let current = inputCurrent;
+
+        // handle the side-effects
+        if (voltage >= this.voltageDrop) {
+            voltage -= this.voltageDrop; // this is LED-specific because an LED is a load - it 'consumes' voltage
+            this.setIntensity(this.currentToIntensity(current));
+        }
+
+        // pass along the modified values
+        let connectedComponents = this.getConnectedComponents(this.cathode);
+
+        for (let i = 0; i < connectedComponents; i++) {
+            let { componentVoltage, componentCurrent } = connectedComponents[i].simulate({ voltage, current });
+
+            // voltage drop
+            if (componentVoltage < voltage) {
+                voltage = componentVoltage;
+            }
+
+            // for now, we're just ignoring the current, since we've calculated that in the previous phase
+        }
+
+        return { voltage, current };
     }
 }
