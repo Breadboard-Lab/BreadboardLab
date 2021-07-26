@@ -177,7 +177,7 @@ class SideBarPart extends React.Component {
                                     primaryTypographyProps={{variant: "body2"}}
                                 />
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" aria-label="delete" onClick={this.handleDialog}>
+                                    <IconButton edge="end" aria-label="info" onClick={this.handleDialog}>
                                         <InfoIcon/>
                                     </IconButton>
                                 </ListItemSecondaryAction>

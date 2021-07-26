@@ -45,10 +45,10 @@ const partsList = {
     gates: [
         {name: 'Quad NAND Chip', component: <QuadNANDChip/>, description: '74HC00'},
         {name: 'Quad NOR Chip', component: <QuadNORChip/>, description: '74HC02'},
-        {name: 'Hex NOT Chip', component: <HexInverterChip/>, description: '74HC04'},
         {name: 'Quad AND Chip', component: <QuadANDChip/>, description: '74HC08'},
         {name: 'Quad OR Chip', component: <QuadORChip/>, description: '74HC32'},
         {name: 'Quad XOR Chip', component: <QuadXORChip/>, description: '74HC86'},
+        {name: 'Hex NOT Chip', component: <HexInverterChip/>, description: '74HC04'},
     ]
 }
 

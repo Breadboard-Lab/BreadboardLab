@@ -157,6 +157,15 @@ class App extends Component {
     handleStart = () => {
         // TODO handle Start
         console.log('Start clicked')
+        // console.log("listOfParts", this.state.listOfParts)
+        // console.log("listOfRefs", App.listOfRefs._currentValue)
+        App.listOfRefs._currentValue.forEach((element, index) => {
+            if (element.state.type === "Breadboard") {
+                console.log(element.connectedParts)
+            }
+        })
+
+
     };
 
     handleShare = () => {
