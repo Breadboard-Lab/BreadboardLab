@@ -14,7 +14,7 @@ export default class Battery extends React.Component {
             translation: {x: 0, y: 0},
             rotation: 0
         }
-        this.scale = {x: 2.5, y: 2.5};
+        this.scale = {x: 3.5, y: 3.5};
         this.offSet = {x: -2.61, y: -20};
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.updateProp = this.updateProp.bind(this);
