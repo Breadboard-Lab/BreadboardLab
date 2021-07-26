@@ -164,8 +164,8 @@ export default class BreadBoard extends React.Component {
 					
 					if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
 						ref.connect(event.relatedTarget, event.currentTarget, this);
-					console.log(this.connectedParts);
-					console.log(ref.attachTo);
+					// console.log(this.connectedParts);
+					// console.log(ref.attachTo);
 				},
 				ondragleave: event => {
 					let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));

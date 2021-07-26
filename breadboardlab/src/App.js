@@ -162,6 +162,9 @@ class App extends Component {
         App.listOfRefs._currentValue.forEach((element, index) => {
             if (element.state.type === "Breadboard") {
                 console.log(element.connectedParts)
+                element.connectedParts.forEach((element, key) => {
+                    console.log(element, key)
+                })
             }
         })
 
