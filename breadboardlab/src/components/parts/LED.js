@@ -175,7 +175,7 @@ export default class LED extends React.Component {
             for (let i = 0; i < this.refArray.length; i++) {
                 if (this.highlightID.ids[i]) {
                     const xPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x / this.scale.x - this.offSet.x + (attachRef.state.translation.x - this.state.translation.x) / this.scale.x;
-                    const yPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y / this.scale.x - this.offSet.y + (attachRef.state.translation.y - this.state.translation.y) / this.scale.y;
+                    const yPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y / this.scale.y - this.offSet.y + (attachRef.state.translation.y - this.state.translation.y) / this.scale.y;
 
                     this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
 

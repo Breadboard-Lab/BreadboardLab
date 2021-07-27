@@ -1,10 +1,14 @@
 import React from "react";
 import interact from "interactjs";
+import Interactable from "../Interactable";
 
 export default class Resistor extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
+        this.connectorContainer = React.createRef();
+        this.left = React.createRef();
+        this.right = React.createRef();
 
         this.state = {
             type: "Resistor",
@@ -16,6 +20,8 @@ export default class Resistor extends React.Component {
             band3Colour: "#964b00",
             band4Colour: "#cfb53b",
             isSelected: false,
+            leftPoint: {x: -0.5, y: -0.453},
+            rightPoint: {x: -0.182, y: -0.453},
             translation: {x: 0, y: 0},
             rotation: 0
         }
@@ -25,13 +31,56 @@ export default class Resistor extends React.Component {
         this.scale = {x: 100, y: 75};
         this.offSet = {x: 0.5, y: 0.53};
         this.rotation = 0;
+        this.attachTo = new Map();
+        this.refArray = [
+            {id: "left", ref: this.left},
+            {id: "right", ref: this.right},
+        ];
+    }
+    
+    draggableOptionsLeft = {
+        listeners: {
+            move: (event) => {
+                let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let angle = this.state.rotation * Math.PI / 180;
+
+                this.setState({
+                    leftPoint: {
+                        x: this.state.leftPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
+                        y: this.state.leftPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
+                    }
+                });
+            }
+        }
+    }
+
+    draggableOptionsRight = {
+        listeners: {
+            move: (event) => {
+                let scale = document.getElementById("AppSVG").getAttribute("scale");
+                let angle = this.state.rotation * Math.PI / 180;
+
+                this.setState({
+                    rightPoint: {
+                        x: this.state.rightPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
+                        y: this.state.rightPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
+                    }
+                });
+            }
+        }
     }
 
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: (event) => {
-                    this.props.movePart(event, this)
+                move: event => {
+                    if (event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") {
+                        this.props.movePart(event, this);
+                    } else {
+                        const {interaction} = event;
+                        interaction.stop()
+                        interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
+                    }
                 }
             },
         })
@@ -197,6 +246,116 @@ export default class Resistor extends React.Component {
         )
     }
 
+    highlight(event, attachRef) {
+        let elementID = this.checkConnected(attachRef);
+        this.highlightID = {ids: elementID, ref: attachRef};
+
+        for (let connectorID of this.highlightID.ids)
+            if (connectorID)
+                attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
+    }
+
+    connect(relatedTarget, currentTarget, attachRef) {
+        if (this.highlightID) {
+            for (let i = 0; i < this.refArray.length; i++) {
+                if (this.highlightID.ids[i]) {
+                    const xPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x / this.scale.x - this.offSet.x + (attachRef.state.translation.x - this.state.translation.x) / this.scale.x;
+                    const yPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y / this.scale.y - this.offSet.y + (attachRef.state.translation.y - this.state.translation.y) / this.scale.y;
+
+                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
+
+                    if (typeof attachRef.connectPart === "function") {
+                        attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
+                    }
+                    this.moveConnector(this.refArray[i].ref.current.node, xPos, yPos);
+                }
+            }
+        }
+        
+    }
+
+    disconnect(event) {
+        if (event && (event.relatedTarget === this.right.current.node || event.relatedTarget === this.left.current.node)) {
+            if (event.relatedTarget === this.right.current.node) {
+                if (this.attachTo.get("right") && typeof this.attachTo.get("right").ref.disconnectPart === "function") {
+                    this.attachTo.get("right").ref.disconnectPart(this.attachTo.get("right").id, this);
+                }
+                this.attachTo.set("right", undefined);
+                event.currentTarget.setAttribute("filter", "");
+            } else if (event.relatedTarget === this.left.current.node) {
+                if (this.attachTo.get("left") && typeof this.attachTo.get("left").ref.disconnectPart === "function") {
+                    this.attachTo.get("left").ref.disconnectPart(this.attachTo.get("left").id, this);
+                }
+                this.attachTo.set("left", undefined);
+                event.currentTarget.setAttribute("filter", "");
+            }
+        } else {
+            if (this.highlightID)
+                for (let id of this.highlightID.ids)
+                    if (id)
+                        this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
+
+            for (let refData of this.refArray) {
+                if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
+                    this.attachTo.get(refData.id).ref.disconnectPart(this.attachTo.get(refData.id).id, this);
+                }
+                this.attachTo.set(refData.id, undefined);
+            }
+        }
+    }
+
+    moveConnector(connector, xPos, yPos) {
+        if (connector === this.left.current.node) {
+            this.setState({leftPoint: {x: xPos, y: yPos}});
+        } else {
+            this.setState({rightPoint: {x: xPos, y: yPos}});
+        }
+    }
+
+    checkConnected(attachRef) {
+        let elementID = [];
+        let connectors = Array.prototype.slice.call(attachRef.connectors);
+
+        if (connectors) {
+            for (let refData of this.refArray) {
+                let element = undefined;
+
+                for (let connector of connectors) {
+                    let rect1 = refData.ref.current.node.getBoundingClientRect();
+                    let rect2 = connector.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap) {
+                        element = connector;
+                        break;
+                    }
+                }
+
+                if (element) {
+                    let rect1 = refData.ref.current.node.getBoundingClientRect();
+                    let rect2 = element.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
+                        elementID.push(element.id);
+                    else
+                        elementID.push(undefined);
+                } else {
+                    elementID.push(undefined);
+                }
+            }
+        }
+        return elementID;
+    }
+
+    onMouseEnter(event) {
+        event.target.setAttribute("style", "cursor: move");
+    }
+
+    onMouseLeave(event) {
+        event.target.setAttribute("style", "");
+    }
+
     render() {
         let rotatePointX;
         let rotatePointY;
@@ -214,6 +373,11 @@ export default class Resistor extends React.Component {
         return (
             <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(100,105) scale(200,150)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
+                    <path stroke="#707071" strokeWidth="0.036" strokeLinecap="round"
+                            d={`M ${-0.5} ${-0.453} L ${this.state.leftPoint.x} ${this.state.leftPoint.y}`}/>
+                    <path stroke="#707071" strokeWidth="0.036" strokeLinecap="round"
+                            d={`M ${-0.182} ${-0.453} L ${this.state.rightPoint.x} ${this.state.rightPoint.y}`}/>
+                    
                     <path fill="#A08968" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
                     c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                     c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
@@ -227,7 +391,29 @@ export default class Resistor extends React.Component {
                         strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
                     c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                     c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
-                </g>
+                    
+                    <g ref={this.connectorContainer} className="connector">
+                        <Interactable 
+                            ref={this.left} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsLeft}>
+                            <ellipse
+                                onMouseEnter={this.onMouseEnter}
+                                onMouseLeave={this.onMouseLeave}
+                                className="connector" strokeOpacity="0" fillOpacity="0"
+                                cx={this.state.leftPoint.x} cy={this.state.leftPoint.y}
+                                rx="0.02" ry="0.02"/>
+                        </Interactable>
+
+                        <Interactable 
+                            ref={this.right} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsRight}>
+                            <ellipse
+                                onMouseEnter={this.onMouseEnter}
+                                onMouseLeave={this.onMouseLeave}
+                                className="connector" strokeOpacity="0" fillOpacity="0"
+                                cx={this.state.rightPoint.x} cy={this.state.rightPoint.y}
+                                rx="0.02" ry="0.02"/>
+                        </Interactable>
+                    </g>
+                </g>                
             </g>
         )
     }
