@@ -69,14 +69,25 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            open: true,
+            openDrawer: true,
             listOfParts: [],
             themeState: true,
             selectedTool: 'select_tool',
             theme: {...themeDark},
             hideProperties: true,
             partData: {},
+            isSimulating: false
         }
+    }
+
+    unselectPart() {
+        this.setState({
+            hideProperties: true,
+            partData: {},
+        });
+        this.selectedPart.ref.setState({isSelected: false});
+        this.previousPartState = undefined;
+        this.selectedPart = undefined;
     }
 
     componentDidMount() {
@@ -118,28 +129,23 @@ class App extends Component {
         if (this.selectedPart) {
             if (typeof this.selectedPart.ref.disconnect === "function")
                 this.selectedPart.ref.disconnect();
-            
+
             let newListOfParts = this.state.listOfParts.filter(part => {
                 return part.key !== this.selectedPart.ref._reactInternals.key
             });
             App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => {
                 return ref !== this.selectedPart.ref
             });
-            
+
             this.setState({listOfParts: newListOfParts});
 
             // Unselects deleted part
-            this.setState({
-                hideProperties: true,
-                partData: {},
-            });
-            this.previousPartState = undefined;
-            this.selectedPart = undefined;
+            this.unselectPart()
         }
     };
 
     handleKeyPress = (event) => {
-        if (event.key === 'Delete'){
+        if (event.key === 'Delete') {
             this.handleDelete()
         }
     }
@@ -154,19 +160,43 @@ class App extends Component {
         console.log('Redo clicked')
     };
 
-    handleStart = () => {
-        // TODO handle Start
-        console.log('Start clicked')
-        // console.log("listOfParts", this.state.listOfParts)
-        // console.log("listOfRefs", App.listOfRefs._currentValue)
-        App.listOfRefs._currentValue.forEach((element, index) => {
-            if (element.state.type === "Breadboard") {
-                console.log(element.connectedParts)
-                element.connectedParts.forEach((element, key) => {
-                    console.log(element, key)
-                })
-            }
-        })
+    handleSimulation = () => {
+        console.log('Start clicked', this.state.isSimulating)
+        // if not simulating, start simulating, else stop simulating.
+        if (!this.state.isSimulating) {
+            App.listOfRefs._currentValue.forEach((element, index) => {
+                //console.log(element.connectedParts)
+                if (element.state.type === "Breadboard") {
+                    element.findCircuits()
+                    /* if element.findCircuits() is not empty
+                        - unselects any selected parts
+                        - disable most buttons
+                        - replace Start button with Stop button
+                        - hide drawer
+                        - disable drawer open button
+                        */
+                    if (this.selectedPart) {
+                        this.unselectPart()
+                    }
+                    this.setState({
+                        isSimulating: !this.state.isSimulating,
+                        openDrawer: !this.state.openDrawer
+                    })
+                }
+            })
+        } else {
+            /*
+                if done simulating
+                   - re-enable most buttons
+                   - replace Stop button with Start button
+                   - unhide drawer
+                   - disable drawer open button
+             */
+            this.setState({
+                isSimulating: !this.state.isSimulating,
+                openDrawer: !this.state.openDrawer
+            })
+        }
 
 
     };
@@ -180,13 +210,7 @@ class App extends Component {
         if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
             // TODO catch case for when property panel form event is called but no changes are made
             //  (thus unselecting the part as previous state and current state are same)
-            this.setState({
-                hideProperties: true,
-                partData: {},
-            });
-            this.selectedPart.ref.setState({isSelected: false});
-            this.previousPartState = undefined;
-            this.selectedPart = undefined;
+            this.unselectPart()
         } else {
             this.setState({
                 hideProperties: false,
@@ -250,7 +274,7 @@ class App extends Component {
                     <AppBar
                         position="fixed"
                         className={clsx(classes.appBar, {
-                            [classes.appBarShift]: this.state.open,
+                            [classes.appBarShift]: this.state.openDrawer,
                         })}
                     >
                         <Toolbar variant="dense">
@@ -260,11 +284,12 @@ class App extends Component {
                             */}
                             <Tooltip title="Open Drawer">
                                 <IconButton
+                                    disabled={this.state.isSimulating}
                                     color="inherit"
                                     aria-label="open drawer"
                                     onClick={this.handleDrawer}
                                     edge="start"
-                                    className={this.state.open && classes.menuHide}
+                                    className={this.state.openDrawer && classes.menuHide}
                                 >
                                     <MenuIcon/>
                                 </IconButton>
@@ -273,28 +298,30 @@ class App extends Component {
                             { /* Tools */}
                             {this.props.width < 'xs' ?
                                 <AppbarToolsMenu
+                                    isSimulating={this.state.isSimulating}
                                     selectedTool={this.state.selectedTool}
                                     handleTool={this.handleTool}
                                     handleRotate={this.handleRotate}
                                     handleDelete={this.handleDelete}
                                     handleUndo={this.handleUndo}
                                     handleRedo={this.handleRedo}
-                                    handleStart={this.handleStart}
+                                    handleSimulation={this.handleSimulation}
                                 />
                                 : <AppbarToolsCollapseMenu
+                                    isSimulating={this.state.isSimulating}
                                     handleTool={this.handleTool}
                                     handleRotate={this.handleRotate}
                                     handleDelete={this.handleDelete}
                                     handleUndo={this.handleUndo}
                                     handleRedo={this.handleRedo}
-                                    handleStart={this.handleStart}
+                                    handleSimulation={this.handleSimulation}
                                 />}
                         </Toolbar>
                     </AppBar>
 
                     { /* Components/Properties Sidebar */}
                     <Drawer
-                        open={this.state.open}
+                        open={this.state.openDrawer}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
                         handlePartSelect={this.handlePartSelect}

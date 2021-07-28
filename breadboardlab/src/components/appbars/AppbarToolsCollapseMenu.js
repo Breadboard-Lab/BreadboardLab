@@ -85,7 +85,7 @@ const AppbarToolsCollapseMenu = (props) => {
                         <ListItemText primary="Redo" />
                     </MenuItem>
 
-                    <MenuItem onClick={props.handleStart}>
+                    <MenuItem onClick={props.handleSimulation}>
                         <ListItemIcon>
                             <PlayArrowIcon/>
                         </ListItemIcon>

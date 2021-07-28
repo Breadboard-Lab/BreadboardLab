@@ -17,6 +17,7 @@ import RedoIcon from '@material-ui/icons/Redo';
 import LinearScaleIcon from '@material-ui/icons/LinearScale';
 import SplitButton from "./SplitButton";
 import {ToggleButton, ToggleButtonGroup} from "@material-ui/lab";
+import StopIcon from '@material-ui/icons/Stop';
 
 const StyledToggleButtonGroup = withStyles({
     grouped: {
@@ -28,7 +29,8 @@ const StyledToggleButtonGroup = withStyles({
 const AppbarToolsMenu = (props) => {
     return (
         <Grid container>
-            <SplitButton>
+            <SplitButton
+                isSimulating={props.isSimulating}>
                 <StyledToggleButtonGroup
                     value={props.selectedTool}
                     exclusive
@@ -36,6 +38,7 @@ const AppbarToolsMenu = (props) => {
                     aria-label="Tool Menu"
                 >
                     <ToggleButton
+                        disabled={props.isSimulating}
                         aria-label="select"
                         value="select_tool"
                     >
@@ -46,6 +49,7 @@ const AppbarToolsMenu = (props) => {
                         </Tooltip>
                     </ToggleButton>
                     <ToggleButton
+                        disabled={props.isSimulating}
                         aria-label="draw wire"
                         value="wire_tool"
                     >
@@ -60,6 +64,7 @@ const AppbarToolsMenu = (props) => {
 
             <Tooltip title="Rotate">
                 <IconButton
+                    disabled={props.isSimulating}
                     aria-label="rotate"
                     value="rotate_tool"
                     onClick={props.handleRotate}
@@ -69,6 +74,7 @@ const AppbarToolsMenu = (props) => {
             </Tooltip>
             <Tooltip title="Delete">
                 <IconButton
+                    disabled={props.isSimulating}
                     aria-label="delete"
                     onClick={props.handleDelete}
                 >
@@ -100,10 +106,10 @@ const AppbarToolsMenu = (props) => {
                 <Button
                     color="inherit"
                     aria-label="start simulation"
-                    startIcon={<PlayArrowIcon/>}
-                    onClick={props.handleStart}
+                    startIcon={props.isSimulating ? <StopIcon/> : <PlayArrowIcon/>}
+                    onClick={props.handleSimulation}
                 >
-                    Start
+                    { props.isSimulating ? "Stop" : "Start" }
                 </Button>
             </Tooltip>
         </Grid>

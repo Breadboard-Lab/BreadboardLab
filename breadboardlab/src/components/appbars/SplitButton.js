@@ -59,6 +59,7 @@ const SplitButton = props => {
                     aria-label="select wire colour"
                     aria-haspopup="menu"
                     onClick={handleClick}
+                    disabled={props.isSimulating}
                 >
                     <Tooltip
                         title="Select wire colour"
