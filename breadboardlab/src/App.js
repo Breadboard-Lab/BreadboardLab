@@ -102,7 +102,7 @@ class App extends Component {
 
     handleDrawer = () => {
         // Switches between drawer opened or closed.
-        this.setState(state => ({open: !state.open}));
+        this.setState(state => ({openDrawer: !state.openDrawer}));
     };
 
     addPart = (part) => {
