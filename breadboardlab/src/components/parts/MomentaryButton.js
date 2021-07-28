@@ -5,9 +5,9 @@ export default class Button extends React.Component {
     constructor(props) {
         super(props);
         this.node = React.createRef();
-        this.topLeftConector = React.createRef();
-        this.topRightConector = React.createRef();
-        this.bottomLeftConector = React.createRef();
+        this.topLeftConnector = React.createRef();
+        this.topRightConnector = React.createRef();
+        this.bottomLeftConnector = React.createRef();
         this.bottomRightConector = React.createRef();
         
         this.state = {
@@ -24,9 +24,9 @@ export default class Button extends React.Component {
         this.offSet = {x: 0.3, y: 0.35};
         this.attachTo = new Map();
         this.refArray = [
-            {id: "topLeft", ref: this.topLeftConector},
-            {id: "topRight", ref: this.topRightConector},
-            {id: "bottomLeft", ref: this.bottomLeftConector},
+            {id: "topLeft", ref: this.topLeftConnector},
+            {id: "topRight", ref: this.topRightConnector},
+            {id: "bottomLeft", ref: this.bottomLeftConnector},
             {id: "bottomRight", ref: this.bottomRightConector}
         ];
     }
@@ -35,12 +35,12 @@ export default class Button extends React.Component {
         interact(this.node.current.parentNode).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
-                    if (event.currentTarget === this.topLeftConector.current && typeof this.props.movePart === "function") {
+                    if (event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") {
                         this.props.movePart(event, this);
                     } else {
                         const {interaction} = event;
                         interaction.stop();
-                        interaction.start({name: "drag"}, event.interactable, this.topLeftConector.current)
+                        interaction.start({name: "drag"}, event.interactable, this.topLeftConnector.current)
                     }
                 }
 			},
@@ -89,8 +89,8 @@ export default class Button extends React.Component {
         const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
         let pointConnector = document.getElementById("AppSVG").createSVGPoint();
-        pointConnector.x = this.topLeftConector.current.getBoundingClientRect().x + this.topLeftConector.current.getBoundingClientRect().width / 2;
-        pointConnector.y = this.topLeftConector.current.getBoundingClientRect().y + this.topLeftConector.current.getBoundingClientRect().height / 2;
+        pointConnector.x = this.topLeftConnector.current.getBoundingClientRect().x + this.topLeftConnector.current.getBoundingClientRect().width / 2;
+        pointConnector.y = this.topLeftConnector.current.getBoundingClientRect().y + this.topLeftConnector.current.getBoundingClientRect().height / 2;
         const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
 
@@ -125,7 +125,7 @@ export default class Button extends React.Component {
     rotate(attahRef) {
         this.setState({rotation: this.state.rotation + 15}, () => {
             if (attahRef) {
-                this.connect(this.topLeftConector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
+                this.connect(this.topLeftConnector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
             } else {
                 this.disconnect();
             }
@@ -204,9 +204,9 @@ export default class Button extends React.Component {
                 <g transform={this.props.icon ? `translate(30,33),scale(90,90)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
                     <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />
-                    <rect ref={this.topLeftConector} className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                    <rect ref={this.topRightConector} x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
-                    <rect ref={this.bottomLeftConector} x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.topLeftConnector} className="connector" x="-0.2" y="-0.35" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.topRightConnector} x="0.14" y="-0.35" width="0.06" height="0.05" fill="#707070" />
+                    <rect ref={this.bottomLeftConnector} x="-0.2" y="0.3" width="0.06" height="0.05" fill="#707070" />
                     <rect ref={this.bottomRightConector} x="0.14" y="0.3" width="0.06" height="0.05" fill="#707070" />
                     <circle cx="0" cy="0" r="0.15" fill="#000000" />
                     <circle cx="0" cy="0" r="0.1" fill="#202020" />
