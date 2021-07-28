@@ -138,8 +138,7 @@ export default class Wire extends React.Component {
 	}
 
     disconnect(event) {
-        if (event) {
-            
+        if (event) {   
             if (this.startPoint.current.node === event.relatedTarget && this.attachTo.get("start") !== undefined) {
                 if (typeof this.attachTo.get("start").ref.disconnectPart === "function")
                     this.attachTo.get("start").ref.disconnectPart(this.attachTo.get("start").id, this);

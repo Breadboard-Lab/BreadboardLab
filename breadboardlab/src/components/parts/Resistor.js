@@ -301,6 +301,7 @@ export default class Resistor extends React.Component {
                 }
                 this.attachTo.set(refData.id, undefined);
             }
+            this.highlightID = undefined;
         }
     }
 

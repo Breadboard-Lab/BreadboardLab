@@ -170,6 +170,7 @@ export default class Battery extends React.Component {
                 }
                 this.attachTo.set(refData.id, undefined);
             }
+            this.highlightID = undefined;
         }
     }
 

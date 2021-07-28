@@ -216,6 +216,7 @@ export default class LED extends React.Component {
                 }
                 this.attachTo.set(refData.id, undefined);
             }
+            this.highlightID = undefined;
         }
     }
 
