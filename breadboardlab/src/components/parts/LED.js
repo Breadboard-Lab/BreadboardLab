@@ -14,9 +14,9 @@ export default class LED extends React.Component {
             type: "LED",
             name: "LED",
             colour: "Red",
-            bodyColourRim: "hsl(0, 75%, 50%)",
-            bodyColourTop: "hsl(0, 75%, 64%)",
-            bodyColourBottom: "hsl(0, 75%, 59%)",
+            bodyColourRim: "hsl(0, 50%, 25%)",
+            bodyColourTop: "hsl(0, 50%, 39%)",
+            bodyColourBottom: "hsl(0, 50%, 34%)",
             cathodePoint: {x: 24, y: 62.5},
             anodePoint: {x: 40, y: 62.5},
             isSelected: false,
@@ -105,37 +105,37 @@ export default class LED extends React.Component {
             switch (value) {
                 case "Red":
                     this.setState({
-                        bodyColourRim: "hsl(0, 75%, 50%)",
-                        bodyColourTop: "hsl(0, 75%, 64%)",
-                        bodyColourBottom: "hsl(0, 75%, 59%)",
+                        bodyColourRim: "hsl(0, 50%, 25%)",
+                        bodyColourTop: "hsl(0, 50%, 39%)",
+                        bodyColourBottom: "hsl(0, 50%, 34%)",
                     })
                     break
                 case "Blue":
                     this.setState({
-                        bodyColourRim: "hsl(210, 75%, 50%)",
-                        bodyColourTop: "hsl(210, 75%, 64%)",
-                        bodyColourBottom: "hsl(210, 75%, 59%)",
+                        bodyColourRim: "hsl(210, 50%, 25%)",
+                        bodyColourTop: "hsl(210, 50%, 39%)",
+                        bodyColourBottom: "hsl(210, 50%, 34%)",
                     })
                     break
                 case "Green":
                     this.setState({
-                        bodyColourRim: "hsl(115,50%,50%)",
-                        bodyColourTop: "hsl(115, 50%, 64%)",
-                        bodyColourBottom: "hsl(115, 50%, 59%)",
+                        bodyColourRim: "hsl(115,25%,25%)",
+                        bodyColourTop: "hsl(115, 25%, 39%)",
+                        bodyColourBottom: "hsl(115, 25%, 34%)",
                     })
                     break
                 case "Yellow":
                     this.setState({
-                        bodyColourRim: "hsl(55, 50%, 50%)",
-                        bodyColourTop: "hsl(55, 50%, 64%)",
-                        bodyColourBottom: "hsl(55, 50%, 59%)",
+                        bodyColourRim: "hsl(55, 25%, 25%)",
+                        bodyColourTop: "hsl(55, 25%, 39%)",
+                        bodyColourBottom: "hsl(55, 25%, 34%)",
                     })
                     break
                 default:
                     this.setState({
-                        bodyColourRim: "hsl(0, 78%, 50%)",
-                        bodyColourTop: "hsl(0, 78%, 64%)",
-                        bodyColourBottom: "hsl(0, 78%, 59%)",
+                        bodyColourRim: "hsl(0, 50%, 25%)",
+                        bodyColourTop: "hsl(0, 50%, 39%)",
+                        bodyColourBottom: "hsl(0, 50%, 34%)",
                     })
             }
         }
@@ -441,9 +441,47 @@ export default class LED extends React.Component {
      * 
      * @param {int} intensity The intensity of the LED's brightness, which is between 0.0 and 1.0.
      */
-    setIntensity(intensity) {
+    setIntensity() {
         // TODO: update the colour
-        console.log(`updating intensity of LED to ${intensity}`);
+        // console.log(`updating intensity of LED to ${intensity}`);
+
+        switch (this.state.colour) {
+            case "Red":
+                this.setState({
+                    bodyColourRim: "hsl(0, 75%, 50%)",
+                    bodyColourTop: "hsl(0, 75%, 64%)",
+                    bodyColourBottom: "hsl(0, 75%, 59%)",
+                })
+                break
+            case "Blue":
+                this.setState({
+                    bodyColourRim: "hsl(210, 75%, 50%)",
+                    bodyColourTop: "hsl(210, 75%, 64%)",
+                    bodyColourBottom: "hsl(210, 75%, 59%)",
+                })
+                break
+            case "Green":
+                this.setState({
+                    bodyColourRim: "hsl(115,50%,50%)",
+                    bodyColourTop: "hsl(115, 50%, 64%)",
+                    bodyColourBottom: "hsl(115, 50%, 59%)",
+                })
+                break
+            case "Yellow":
+                this.setState({
+                    bodyColourRim: "hsl(55, 50%, 50%)",
+                    bodyColourTop: "hsl(55, 50%, 64%)",
+                    bodyColourBottom: "hsl(55, 50%, 59%)",
+                })
+                break
+            default:
+                this.setState({
+                    bodyColourRim: "hsl(0, 78%, 50%)",
+                    bodyColourTop: "hsl(0, 78%, 64%)",
+                    bodyColourBottom: "hsl(0, 78%, 59%)",
+                })
+        }
+
     }
 
     /**
