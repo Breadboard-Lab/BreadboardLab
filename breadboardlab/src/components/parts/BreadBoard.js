@@ -7417,6 +7417,12 @@ export default class BreadBoard extends React.Component {
                 console.log("Power found at:", key)
                 console.log("Checking for if closed circuit...")
                 console.log(this.isClosed(key, element.ref))
+                /*
+                    if isClosed, check if any resistors
+                        if any resistors, add to totalCircuitResistance
+                        calculate circuit current; I=V/R    // TODO differentiate between serial and parallel circuits
+                        if any LEDs, LED.setIntensity(current) // changes light intensity
+                 */
                 break
             }
         }
