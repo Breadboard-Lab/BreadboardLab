@@ -161,10 +161,11 @@ class App extends Component {
     };
 
     handleSimulation = () => {
-        console.log('Start clicked', this.state.isSimulating)
+        console.log('handleSimulation clicked. isSimulating:', this.state.isSimulating)
         // if not simulating, start simulating, else stop simulating.
         if (!this.state.isSimulating) {
-            App.listOfRefs._currentValue.forEach((element, index) => {
+            console.log("Starting simulation...")
+            App.listOfRefs._currentValue.forEach((element) => {
                 //console.log(element.connectedParts)
                 if (element.state.type === "Breadboard") {
                     element.findCircuits()
@@ -185,6 +186,7 @@ class App extends Component {
                 }
             })
         } else {
+            console.log("Stopping simulation...")
             /*
                 if done simulating
                    - re-enable most buttons

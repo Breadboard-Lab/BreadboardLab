@@ -7409,21 +7409,59 @@ export default class BreadBoard extends React.Component {
      */
     findCircuits() {
         console.log("findCircuits() called.")
-        console.log(this.connectedParts)
-        this.connectedParts.forEach((element, key) => {
-            // check
+        // console.log(this.connectedParts)
 
-            console.log(element, key)
-            if (element.ref.state.type === 'Battery') {
-                let circuitVoltage = element.ref.state.voltage
-                console.log(circuitVoltage)
+        for (const [key, element] of this.connectedParts) {
+            // console.log(key, element)
+            if (element.ref.state.type === 'Battery' && element.id === "power") {
+                console.log("Power found at:", key)
+                console.log("Checking for if closed circuit...")
+                console.log(this.isClosed(key, element.ref))
+                break
             }
-            if (element.ref.state.type === 'LED') {
-                element.ref.setIntensity()
-                // console.log(circuitVoltage)
+        }
+    }
+
+
+    /**
+     * isClosed
+     *
+     * Recursive function to determine if the circuit is closed.
+     * Iterates through entire breadboard and finds where a component has a pin in the same terminal group as the
+     * reference component. Afterwards, finds a different pin in found component and recurs.
+     *
+     * @param {string} referenceTerminal The name of the terminal/connector/lead on this component they are connected to
+     * @param {Object} referenceComponent The previous component, which is calling this function
+     *
+     * @return true if the circuit is closed, false otherwise
+     */
+    isClosed(referenceTerminal, referenceComponent) {
+        console.log("isClosed() called at:", referenceTerminal, referenceComponent)
+        if (document.getElementById(referenceTerminal).parentElement.id.includes("ground")){
+            return true
+        }
+
+        // Searches entire breadboard
+        for (const [key, element] of this.connectedParts) {
+            // console.log(key, element)
+            let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
+            let currentTerminalGroup = document.getElementById(key).parentElement.id
+            // Checks for other components in same terminal group.
+            if (referenceTerminalGroup === currentTerminalGroup && !Object.is(element.ref, referenceComponent)) {
+                console.log("Connected component found:", element.ref)
+                console.log("Connected component's pins found:", element.ref.attachTo)
+                // Searches for other pins in found connected component
+                for (const [key2, element2] of element.ref.attachTo) {
+                    if(typeof element2 !== "undefined"){  // Checks if part is even connected to anything at all.
+                        if (document.getElementById(element2.id).parentElement.id !== currentTerminalGroup) {
+                            if (this.isClosed(element2.id, element.ref)) {
+                                return true
+                            }
+                        }
+                    }
+                }
             }
-
-        })
-
+        }
+        return false
     }
 }
