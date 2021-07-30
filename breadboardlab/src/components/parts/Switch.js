@@ -87,17 +87,39 @@ export default class Switch extends React.Component {
         }
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {        
-        let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
-        pointBreadboard.x = currentTarget.getBoundingClientRect().x + currentTarget.getBoundingClientRect().width / 2;
-        pointBreadboard.y = currentTarget.getBoundingClientRect().y + currentTarget.getBoundingClientRect().height / 2;
-        const svgBreadboard = pointBreadboard.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+    connect(relatedTarget, currentTarget, attachRef) {  
+        let point = document.getElementById("AppSVG").createSVGPoint();
+        let matrix = currentTarget.getCTM();
+        let t = this.state.rotation * Math.PI / 180;
+        
+        point.x = currentTarget.getBBox().x;  
+        point.y = currentTarget.getBBox().y;  
+        let breadboardXY = point.matrixTransform(matrix);
+
+        point.x = currentTarget.getBBox().x + currentTarget.getBBox().width;  
+        point.y = currentTarget.getBBox().y + currentTarget.getBBox().height;  
+        let breadboardRB = point.matrixTransform(matrix);
+
+        point.x = breadboardXY.x + (breadboardRB.x - breadboardXY.x) / 2;
+        point.y = breadboardXY.y + (breadboardRB.y - breadboardXY.y) / 2;
+        const svgBreadboard = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+
+        
+        matrix = this.leftConnector.current.getCTM();
+        point.x = this.leftConnector.current.getBBox().x;  
+        point.y = this.leftConnector.current.getBBox().y;  
+        let connectorXY = point.matrixTransform(matrix);
+        
+        point.x = this.leftConnector.current.getBBox().x + this.leftConnector.current.getBBox().width;
+        point.y = this.leftConnector.current.getBBox().y + this.leftConnector.current.getBBox().height;
+        let connectorRB = point.matrixTransform(matrix);
+        
+        let connectorWidth = Math.abs((connectorRB.x - connectorXY.x) * Math.cos(t) + (connectorRB.y - connectorXY.y) * Math.sin(t));
 
         let pointConnector = document.getElementById("AppSVG").createSVGPoint();
-        pointConnector.x = this.leftConnector.current.getBoundingClientRect().x + this.leftConnector.current.getBoundingClientRect().width / 2;
-        pointConnector.y = this.leftConnector.current.getBoundingClientRect().bottom;
+        pointConnector.x = connectorRB.x - (connectorWidth / 2) * Math.cos(t);
+        pointConnector.y = connectorRB.y - (connectorWidth / 2) * Math.sin(t);
         const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
-
 
         if (this.highlightID && this.highlightID.ids.length === 3) {
             for (let i = 0; i < this.refArray.length; i++) {
@@ -106,9 +128,10 @@ export default class Switch extends React.Component {
                 if (typeof attachRef.connectPart === "function") 
                     attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
             }
+            
             this.setState({translation: {
-                x: this.state.translation.x + svgBreadboard.x - svgConnector.x + 0.3 * Math.abs(Math.cos(this.state.rotation * Math.PI / 180)),
-                y: this.state.translation.y + svgBreadboard.y - svgConnector.y + 0.3 * Math.abs(Math.sin(this.state.rotation * Math.PI / 180))}
+                x: this.state.translation.x + svgBreadboard.x - svgConnector.x + 0.4 * Math.cos(t),
+                y: this.state.translation.y + svgBreadboard.y - svgConnector.y + 0.4 * Math.sin(t)}
             });
         }
     }
@@ -178,11 +201,7 @@ export default class Switch extends React.Component {
                 }
                 
                 if (element) {
-                    let rect1 = refData.ref.current.getBoundingClientRect();
-                    let rect2 = element.getBoundingClientRect();
-                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
+                    if (attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
                         elementID.push(element.id);
                 }
             }
