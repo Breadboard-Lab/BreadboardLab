@@ -155,16 +155,16 @@ export default class Switch extends React.Component {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
+                    
                     if (overlap) {
                         let point = document.getElementById("AppSVG").createSVGPoint();
                         let t = attachRef.state.rotation * Math.PI / 180;
                         let breadboardDim = this.props.getDimensions(connector);
-                        let breadboardWidth = (breadboardDim.width) * Math.cos(t) + (breadboardDim.height) * Math.sin(t);
-                        let breadboardHeight = (breadboardDim.height) * Math.cos(t) + (breadboardDim.width) * Math.sin(t);
+                        let breadboardWidth = breadboardDim.width * Math.cos(t) + breadboardDim.height * Math.sin(t);
+                        let breadboardHeight = breadboardDim.height * Math.cos(t) + breadboardDim.width * Math.sin(t);
 
-                        point.x = breadboardDim.x + (breadboardDim.width) / 2;
-                        point.y = breadboardDim.y + (breadboardDim.height) / 2;
+                        point.x = breadboardDim.x + breadboardWidth / 2;
+                        point.y = breadboardDim.y + breadboardHeight / 2;
                         const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
                         point.x = breadboardWidth / 2 * Math.cos(t) + breadboardHeight / 2 * Math.sin(t);
@@ -175,8 +175,8 @@ export default class Switch extends React.Component {
                         let connectorDim = this.props.getDimensions(refData.ref.current);
                         let connectorWidth = Math.abs((connectorDim.width) * Math.cos(t) + (connectorDim.height) * Math.sin(t));
 
-                        point.x = connectorDim.right - (connectorWidth / 2) * Math.cos(t);
-                        point.y = connectorDim.bottom - (connectorWidth / 2) * Math.sin(t);
+                        point.x = connectorDim.right - connectorWidth / 2 * Math.cos(t);
+                        point.y = connectorDim.bottom - connectorWidth / 2 * Math.sin(t);
                         const svgConnector = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
                         point.x = 0;
@@ -185,14 +185,13 @@ export default class Switch extends React.Component {
 
                         let radiusX = radius.x - origin.x;
                         let radiusY = radius.y - origin.y;
-                        console.log(svgConnector.x - svgBreadboard.x, svgConnector.y - svgBreadboard.y)
-                        console.log()
 
                         let ellispeArea = (svgConnector.x - svgBreadboard.x) * (svgConnector.x - svgBreadboard.x) / (radiusX * radiusX) + (svgConnector.y - svgBreadboard.y) * (svgConnector.y - svgBreadboard.y) / (radiusY * radiusY);
     
-                        if (ellispeArea <= 1) 
+                        if (ellispeArea <= 1) {
                             element = connector;
-                        break;
+                            break;
+                        }
                     }
                 }
                 
