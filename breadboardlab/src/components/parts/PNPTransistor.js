@@ -20,7 +20,7 @@ export default class PNPTransistor extends React.Component {
     }
 
     componentDidMount() {
-        interact(this.node.current.parentNode).styleCursor(false).draggable({
+        interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: (event) => {
                     this.props.movePart(event, this)

@@ -32,7 +32,7 @@ export default class Button extends React.Component {
     }
 
     componentDidMount() {
-        interact(this.node.current.parentNode).styleCursor(false).draggable({
+        interact(this.node.current).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
                     if (event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") {
