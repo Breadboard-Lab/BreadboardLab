@@ -102,7 +102,7 @@ export default class Switch extends React.Component {
         let pointConnector = document.getElementById("AppSVG").createSVGPoint();
         pointConnector.x = connectorDim.right - (connectorWidth / 2) * Math.cos(t);
         pointConnector.y = connectorDim.bottom - (connectorWidth / 2) * Math.sin(t);
-        const svgConnector = pointConnector.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+        const svgConnector = pointConnector.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
         if (this.highlightID && this.highlightID.ids.length === 3) {
             for (let i = 0; i < this.refArray.length; i++) {
@@ -160,16 +160,10 @@ export default class Switch extends React.Component {
                         let point = document.getElementById("AppSVG").createSVGPoint();
                         let t = attachRef.state.rotation * Math.PI / 180;
                         let breadboardDim = this.props.getDimensions(connector);
-                        let breadboardWidth = breadboardDim.width * Math.cos(t) + breadboardDim.height * Math.sin(t);
-                        let breadboardHeight = breadboardDim.height * Math.cos(t) + breadboardDim.width * Math.sin(t);
 
-                        point.x = breadboardDim.x + breadboardWidth / 2;
-                        point.y = breadboardDim.y + breadboardHeight / 2;
+                        point.x = breadboardDim.x + breadboardDim.width / 2;
+                        point.y = breadboardDim.y + breadboardDim.height / 2;
                         const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
-
-                        point.x = breadboardWidth / 2 * Math.cos(t) + breadboardHeight / 2 * Math.sin(t);
-                        point.y = breadboardHeight / 2 * Math.cos(t) + breadboardWidth / 2 * Math.sin(t);
-                        const radius = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
 
                         t = this.state.rotation * Math.PI / 180;
                         let connectorDim = this.props.getDimensions(refData.ref.current);
@@ -177,15 +171,10 @@ export default class Switch extends React.Component {
 
                         point.x = connectorDim.right - connectorWidth / 2 * Math.cos(t);
                         point.y = connectorDim.bottom - connectorWidth / 2 * Math.sin(t);
-                        const svgConnector = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
+                        const svgConnector = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
-                        point.x = 0;
-                        point.y = 0;
-                        const origin = point.matrixTransform( document.getElementById("AppSVG").getScreenCTM().inverse() );
-
-                        let radiusX = radius.x - origin.x;
-                        let radiusY = radius.y - origin.y;
-
+                        let radiusX = connector.getBBox().width / 2 * attachRef.scale.x;
+                        let radiusY = connector.getBBox().height / 2 * attachRef.scale.y;
                         let ellispeArea = (svgConnector.x - svgBreadboard.x) * (svgConnector.x - svgBreadboard.x) / (radiusX * radiusX) + (svgConnector.y - svgBreadboard.y) * (svgConnector.y - svgBreadboard.y) / (radiusY * radiusY);
     
                         if (ellispeArea <= 1) {
