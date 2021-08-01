@@ -400,7 +400,7 @@ export default class Resistor extends React.Component {
                                 <ellipse
                                     onMouseEnter={this.onMouseEnter}
                                     onMouseLeave={this.onMouseLeave}
-                                    className="connector" strokeOpacity="0" fillOpacity="1"
+                                    className="connector" strokeOpacity="0" fillOpacity="0"
                                     cx={this.state.leftPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2} cy={this.state.leftPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
                                     rx="0.015" ry="0.02"/>
                             </Interactable>
@@ -410,7 +410,7 @@ export default class Resistor extends React.Component {
                                 <ellipse
                                     onMouseEnter={this.onMouseEnter}
                                     onMouseLeave={this.onMouseLeave}
-                                    className="connector" strokeOpacity="0" fillOpacity="1"
+                                    className="connector" strokeOpacity="0" fillOpacity="0"
                                     cx={this.state.rightPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2} cy={this.state.rightPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
                                     rx="0.015" ry="0.02"/>
                             </Interactable>
