@@ -141,10 +141,10 @@ export default class BreadBoard extends React.Component {
                 })
                 .dropzone({
                     accept: ".connector",
-                    overlap: 0.0001,
+                    overlap: 0.1,
                     ondragenter: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-
+                        console.log(event.currentTarget)
 
                         if (ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id))
                             ref.highlight(event, this);

@@ -55,6 +55,7 @@ class SideBarPart extends React.Component {
                         ref: (node) => this.node = node,
                         addPart: this.props.ondrag,
                         movePart: movePart,
+                        getDimensions: getDimensions,
                         onDoubleTap: this.props.onDoubleTap,
                         key: App.partKey._currentValue,
                     }
@@ -218,6 +219,21 @@ function movePart(event, ref) {
         }
     }
     return {dx: 0, dy: 0}
+}
+
+function getDimensions(element) {
+    let point = svg.createSVGPoint();
+    const matrix = element.getCTM();
+    
+    point.x = element.getBBox().x;
+    point.y = element.getBBox().y;
+    const XY = point.matrixTransform(matrix);
+
+    point.x = element.getBBox().x + element.getBBox().width;
+    point.y = element.getBBox().y + element.getBBox().height;
+    const RB = point.matrixTransform(matrix);
+
+    return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: RB.x - XY.x, height: RB.y - XY.y}
 }
 
 export default withWidth()(withStyles(styles)(SideBarPart));
