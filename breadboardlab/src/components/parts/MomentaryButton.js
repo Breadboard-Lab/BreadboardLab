@@ -83,17 +83,22 @@ export default class Button extends React.Component {
     }
 
     connect(relatedTarget, currentTarget, attachRef) {     
-        let pointBreadboard = document.getElementById("AppSVG").createSVGPoint();
-        pointBreadboard.x = currentTarget.getBoundingClientRect().x + currentTarget.getBoundingClientRect().width / 2;
-        pointBreadboard.y = currentTarget.getBoundingClientRect().y + currentTarget.getBoundingClientRect().height / 2;
-        const svgBreadboard = pointBreadboard.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
-
-        let pointConnector = document.getElementById("AppSVG").createSVGPoint();
-        pointConnector.x = this.topLeftConnector.current.getBoundingClientRect().x + this.topLeftConnector.current.getBoundingClientRect().width / 2;
-        pointConnector.y = this.topLeftConnector.current.getBoundingClientRect().y + this.topLeftConnector.current.getBoundingClientRect().height / 2;
-        const svgConnector = pointConnector.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
-
         if (this.highlightID && this.highlightID.ids.length === 4) {
+            let point = document.getElementById("AppSVG").createSVGPoint();
+            let t = attachRef.state.rotation * Math.PI / 180;
+            let breadboardDim = this.props.getDimensions(attachRef.node.current.querySelector("#" + this.highlightID.ids[0]), t);
+
+            point.x = breadboardDim.x + breadboardDim.width / 2 * Math.cos(t) + breadboardDim.height / 2 * Math.sin(-t);
+            point.y = breadboardDim.y + breadboardDim.width / 2 * Math.sin(t) + breadboardDim.height / 2 * Math.cos(t);
+            const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+            t = this.state.rotation * Math.PI / 180;
+            let connectorDim = this.props.getDimensions(this.topLeftConnector.current, t);
+
+            point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height / 2 * Math.sin(-t);
+            point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height / 2 * Math.cos(t);
+            const svgConnector = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+            
             for (let i = 0; i < this.refArray.length; i++) {
                 this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
                 
@@ -147,19 +152,17 @@ export default class Button extends React.Component {
                     if (overlap) {
                         let point = document.getElementById("AppSVG").createSVGPoint();
                         let t = attachRef.state.rotation * Math.PI / 180;
-                        let breadboardDim = this.props.getDimensions(connector);
+                        let breadboardDim = this.props.getDimensions(connector, t);
 
-                        point.x = breadboardDim.x + breadboardDim.width / 2;
-                        point.y = breadboardDim.y + breadboardDim.height / 2;
+                        point.x = breadboardDim.x + breadboardDim.width / 2 * Math.cos(t) + breadboardDim.height / 2 * Math.sin(-t);
+                        point.y = breadboardDim.y + breadboardDim.width / 2 * Math.sin(t) + breadboardDim.height / 2 * Math.cos(t);
                         const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
                         t = this.state.rotation * Math.PI / 180;
-                        let connectorDim = this.props.getDimensions(refData.ref.current);
-                        let connectorWidth = Math.abs((connectorDim.width) * Math.cos(t) + (connectorDim.height) * Math.sin(t));
-                        let connectorHeight = Math.abs((connectorDim.height) * Math.cos(t) + (connectorDim.width) * Math.sin(t));
+                        let connectorDim = this.props.getDimensions(refData.ref.current, t);
 
-                        point.x = connectorDim.right - connectorWidth / 2 * Math.cos(t) - connectorHeight / 2 * Math.sin(-t);
-                        point.y = connectorDim.bottom - connectorWidth / 2 * Math.sin(-t) - connectorHeight / 2 * Math.cos(t);
+                        point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height / 2 * Math.sin(-t);
+                        point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height / 2 * Math.cos(t);
                         const svgConnector = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
                         let radiusX = connector.getBBox().width / 2 * attachRef.scale.x;

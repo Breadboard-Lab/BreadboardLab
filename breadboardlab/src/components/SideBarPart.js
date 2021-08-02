@@ -221,7 +221,8 @@ function movePart(event, ref) {
     return {dx: 0, dy: 0}
 }
 
-function getDimensions(element) {
+function getDimensions(element, angle) {
+    let t = angle || 0;
     let point = svg.createSVGPoint();
     const matrix = element.getCTM();
     
@@ -233,7 +234,7 @@ function getDimensions(element) {
     point.y = element.getBBox().y + element.getBBox().height;
     const RB = point.matrixTransform(matrix);
 
-    return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: RB.x - XY.x, height: RB.y - XY.y}
+    return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: Math.abs((RB.x - XY.x) * Math.cos(t) + (RB.y - XY.y) * Math.sin(t)), height: Math.abs((RB.y - XY.y) * Math.cos(t) + (RB.x - XY.x) * Math.sin(-t))}
 }
 
 export default withWidth()(withStyles(styles)(SideBarPart));
