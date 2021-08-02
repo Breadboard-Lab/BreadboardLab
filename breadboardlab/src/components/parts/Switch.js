@@ -88,23 +88,23 @@ export default class Switch extends React.Component {
     }
 
     connect(relatedTarget, currentTarget, attachRef) {
-        let t = this.state.rotation * Math.PI / 180;
-        let point = document.getElementById("AppSVG").createSVGPoint();
-        let breadboardDim = this.props.getDimensions(currentTarget);
-
-        point.x = breadboardDim.x + (breadboardDim.width) / 2;
-        point.y = breadboardDim.y + (breadboardDim.height) / 2;
-        const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
-
-        let connectorDim = this.props.getDimensions(this.leftConnector.current);
-        let connectorWidth = Math.abs((connectorDim.width) * Math.cos(t) + (connectorDim.height) * Math.sin(t));
-
-        let pointConnector = document.getElementById("AppSVG").createSVGPoint();
-        pointConnector.x = connectorDim.right - (connectorWidth / 2) * Math.cos(t);
-        pointConnector.y = connectorDim.bottom - (connectorWidth / 2) * Math.sin(t);
-        const svgConnector = pointConnector.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
-
         if (this.highlightID && this.highlightID.ids.length === 3) {
+            let t = this.state.rotation * Math.PI / 180;
+            let point = document.getElementById("AppSVG").createSVGPoint();
+            let breadboardDim = this.props.getDimensions(attachRef.node.current.querySelector("#" + this.highlightID.ids[0]));
+
+            point.x = breadboardDim.x + (breadboardDim.width) / 2;
+            point.y = breadboardDim.y + (breadboardDim.height) / 2;
+            const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+            let connectorDim = this.props.getDimensions(this.leftConnector.current);
+            let connectorWidth = Math.abs((connectorDim.width) * Math.cos(t) + (connectorDim.height) * Math.sin(t));
+
+            let pointConnector = document.getElementById("AppSVG").createSVGPoint();
+            pointConnector.x = connectorDim.right - (connectorWidth / 2) * Math.cos(t);
+            pointConnector.y = connectorDim.bottom - (connectorWidth / 2) * Math.sin(t);
+            const svgConnector = pointConnector.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
             for (let i = 0; i < this.refArray.length; i++) {
                 this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
                 
