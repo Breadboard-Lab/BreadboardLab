@@ -188,7 +188,7 @@ export default class Battery extends React.Component {
 
         if (connectors) {
             for (let refData of this.refArray) {
-                let element = undefined;
+                let found = false;
 
                 for (let connector of connectors) {
                     let rect1 = refData.ref.current.node.getBoundingClientRect();
@@ -196,13 +196,13 @@ export default class Battery extends React.Component {
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
                     if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === this)) {
-                        element = connector;
+                        found = true;
                         elementID.push(connector.id);
                         break;
                     }
                 }
                 
-                if (!element)
+                if (!found)
                     elementID.push(undefined);
             }
         }
