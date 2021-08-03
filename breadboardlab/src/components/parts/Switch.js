@@ -148,8 +148,6 @@ export default class Switch extends React.Component {
 
         if (connectors) {
             for (let refData of this.refArray) {
-                let element = undefined;
-
                 for (let connector of connectors) {
                     let rect1 = refData.ref.current.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
@@ -176,15 +174,11 @@ export default class Switch extends React.Component {
                         let ellispeArea = (svgConnector.x - svgBreadboard.x) * (svgConnector.x - svgBreadboard.x) / (radiusX * radiusX) + (svgConnector.y - svgBreadboard.y) * (svgConnector.y - svgBreadboard.y) / (radiusY * radiusY);
     
                         if (ellispeArea <= 1) {
-                            element = connector;
+                            if (attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === this))
+                                elementID.push(connector.id);
                             break;
                         }
                     }
-                }
-                
-                if (element) {
-                    if (attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
-                        elementID.push(element.id);
                 }
             }
         }

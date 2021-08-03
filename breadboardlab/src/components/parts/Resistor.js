@@ -326,24 +326,15 @@ export default class Resistor extends React.Component {
                     let rect2 = connector.getBoundingClientRect();
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
-                    if (overlap) {
+                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === this)) {
                         element = connector;
+                        elementID.push(connector.id);
                         break;
                     }
                 }
-
-                if (element) {
-                    let rect1 = refData.ref.current.node.getBoundingClientRect();
-                    let rect2 = element.getBoundingClientRect();
-                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
-                        elementID.push(element.id);
-                    else
-                        elementID.push(undefined);
-                } else {
+                
+                if (!element)
                     elementID.push(undefined);
-                }
             }
         }
         return elementID;

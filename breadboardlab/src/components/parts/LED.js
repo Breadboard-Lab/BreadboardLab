@@ -256,22 +256,14 @@ export default class LED extends React.Component {
                     let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
 
                     if (overlap) {
-                        element = connector;
+                        if (attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === this))
+                            elementID.push(element.id);
+                        else
+                            elementID.push(undefined);
                         break;
-                    }
-                }
-
-                if (element) {
-                    let rect1 = refData.ref.current.node.getBoundingClientRect();
-                    let rect2 = element.getBoundingClientRect();
-                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(element.id) === undefined || attachRef.connectedParts.get(element.id).ref === this))
-                        elementID.push(element.id);
-                    else
+                    } else {
                         elementID.push(undefined);
-                } else {
-                    elementID.push(undefined);
+                    }
                 }
             }
         }
