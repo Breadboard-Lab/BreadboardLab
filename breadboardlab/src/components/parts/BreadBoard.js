@@ -7431,42 +7431,60 @@ export default class BreadBoard extends React.Component {
     /**
      * isClosed
      *
-     * Recursive function to determine if the circuit is closed.
-     * Iterates through entire breadboard and finds where a component has a pin in the same terminal group as the
-     * reference component. Afterwards, finds a different pin in found component and recurs.
-     *
      * @param {string} referenceTerminal The name of the terminal/connector/lead on this component they are connected to
      * @param {Object} referenceComponent The previous component, which is calling this function
      *
      * @return true if the circuit is closed, false otherwise
      */
     isClosed(referenceTerminal, referenceComponent) {
-        console.log("isClosed() called at:", referenceTerminal, referenceComponent)
-        if (document.getElementById(referenceTerminal).parentElement.id.includes("ground")){
+        console.log("isClosed() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
+
+        if (referenceTerminalGroup.includes("ground")) {
+            // Circuit is connected from power to ground.
             return true
         }
 
-        // Searches entire breadboard
-        for (const [key, element] of this.connectedParts) {
-            // console.log(key, element)
-            let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
-            let currentTerminalGroup = document.getElementById(key).parentElement.id
-            // Checks for other components in same terminal group.
-            if (referenceTerminalGroup === currentTerminalGroup && !Object.is(element.ref, referenceComponent)) {
-                console.log("Connected component found:", element.ref)
-                console.log("Connected component's pins found:", element.ref.attachTo)
-                // Searches for other pins in found connected component
-                for (const [key2, element2] of element.ref.attachTo) {
-                    if(typeof element2 !== "undefined"){  // Checks if part is even connected to anything at all.
-                        if (document.getElementById(element2.id).parentElement.id !== currentTerminalGroup) {
-                            if (this.isClosed(element2.id, element.ref)) {
-                                return true
-                            }
+        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
+        console.log("Connected Components Found:", "\n\t", connectedComponents)
+        for (let i = 0; i < connectedComponents.length; i++) {
+            // console.log("connectedComponent:", connectedComponents[i])
+            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
+                // console.log("attached", connectedComponent)
+                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
+                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
+                        if (this.isClosed(connectedComponent.id, connectedComponents[i])) {
+                            return true
                         }
                     }
                 }
             }
         }
+
         return false
+    }
+
+    /** getConnectedComponents
+     *
+     * @param {String} referenceTerminal The terminal the referenceComponent is connected to.
+     * @param {Object} referenceComponent The component to compare to.
+     *
+     * @return {Array} Returns a list of components in the same terminal group as referenceComponent.
+     */
+
+    getConnectedComponents(referenceTerminal, referenceComponent) {
+        console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        let connectedComponents = []
+
+        for (const [terminalKey, component] of this.connectedParts) {
+            let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
+            let currentTerminalGroup = document.getElementById(terminalKey).parentElement.id
+
+            if (referenceTerminalGroup === currentTerminalGroup && !Object.is(component.ref, referenceComponent)) {
+                // console.log("Connected component found:", component.ref)
+                connectedComponents.push(component.ref)
+            }
+        }
+        return connectedComponents
     }
 }
