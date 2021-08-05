@@ -13,7 +13,8 @@ export default class BreadBoard extends React.Component {
             name: "Breadboard",
             isSelected: false,
             translation: {x: 0, y: 0},
-            rotation: 0
+            rotation: 0,
+            resistance: 0,
         }
         this.onDoubleClick = this.onDoubleClick.bind(this);
         this.connectPart = this.connectPart.bind(this);
@@ -7399,14 +7400,12 @@ export default class BreadBoard extends React.Component {
         )
     }
 
-    /**
-     findCircuits
-
-     checks rows and columns for connected parts and if any parts form a complete circuit.
-
-     @return {circuitsList} A list of complete circuits
+    /** findCircuits
+     *      Checks rows and columns for connected parts and if any parts form a complete circuit.
+     *
+     *  TODO @return {circuitsList} A list of complete circuits
      */
-    findCircuits() {
+    async findCircuits() {
         console.log("findCircuits() called.")
         // console.log(this.connectedParts)
 
@@ -7415,26 +7414,26 @@ export default class BreadBoard extends React.Component {
             if (element.ref.state.type === 'Battery' && element.id === "power") {
                 console.log("Power found at:", key)
                 console.log("Checking for if closed circuit...")
-                console.log(this.isClosed(key, element.ref))
-                /*
-                    if isClosed, check if any resistors
-                        if any resistors, add to totalCircuitResistance
-                        calculate circuit current; I=V/R    // TODO differentiate between serial and parallel circuits
-                        if any LEDs, LED.setIntensity(current) // changes light intensity
-                 */
+                // console.log(this.isClosed(key, element.ref))
+                if (this.isClosed(key, element.ref)) {
+                    await this.getResistance(key, element.ref)
+                    let voltage = parseInt(element.ref.state.voltage)
+                    let current = voltage / this.state.resistance
+                    console.log(current, voltage, this.state.resistance)
+                    this.setCurrent(key, element.ref, current)
+                }
                 break
             }
         }
     }
 
 
-    /**
-     * isClosed
+    /** isClosed
      *
-     * @param {string} referenceTerminal The name of the terminal/connector/lead on this component they are connected to
-     * @param {Object} referenceComponent The previous component, which is calling this function
+     *  @param {string} referenceTerminal The name of the terminal/connector/lead on this component they are connected to
+     *  @param {Object} referenceComponent The previous component, which is calling this function
      *
-     * @return true if the circuit is closed, false otherwise
+     *  @return true if the circuit is closed, false otherwise
      */
     isClosed(referenceTerminal, referenceComponent) {
         console.log("isClosed() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
@@ -7450,10 +7449,10 @@ export default class BreadBoard extends React.Component {
         for (let i = 0; i < connectedComponents.length; i++) {
             // console.log("connectedComponent:", connectedComponents[i])
             for (const connectedComponent of connectedComponents[i].attachTo.values()) {
-                // console.log("attached", connectedComponent)
                 if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
                     if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
                         if (this.isClosed(connectedComponent.id, connectedComponents[i])) {
+                            // console.log("connectedComponent", connectedComponents[i])
                             return true
                         }
                     }
@@ -7487,4 +7486,94 @@ export default class BreadBoard extends React.Component {
         }
         return connectedComponents
     }
+
+    /** getResistance
+     *      Similar to isClosed, excepts checks for any Resistors in closed circuit.
+     *
+     *  @param referenceTerminal
+     *  @param referenceComponent
+     *
+     *  @returns {boolean}
+     */
+    getResistance(referenceTerminal, referenceComponent) {
+        console.log("getResistance() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
+
+        if (referenceComponent.state.type === "Resistor") {
+            this.setState({resistance: this.state.resistance + parseInt(referenceComponent.state.resistance)}, () => {
+
+                console.log("Resistor found", this.state.resistance, referenceComponent.state.resistance)
+            })
+        }
+
+        if (referenceTerminalGroup.includes("ground")) {
+            // Circuit is connected from power to ground.
+            return true
+        }
+
+        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
+        console.log("Connected Components Found:", "\n\t", connectedComponents)
+        for (let i = 0; i < connectedComponents.length; i++) {
+            // console.log("connectedComponent:", connectedComponents[i])
+            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
+                // console.log("attached", connectedComponent)
+                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
+                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
+                        if (this.getResistance(connectedComponent.id, connectedComponents[i])) {
+                            // console.log("connectedComponent", connectedComponents[i])
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+
+        return false
+
+    }
+
+    /** setCurrent
+     *      Similar to isClosed, excepts sets each child component to have its own current value.
+     *
+     *  @param referenceTerminal
+     *  @param referenceComponent
+     *  @param current Calculated total circuit current.
+     *
+     *  @returns {boolean}
+     */
+    setCurrent(referenceTerminal, referenceComponent, current) {
+        console.log("setCurrent() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
+
+        referenceComponent.setState({current: current}, () => {
+            if (referenceComponent.state.type === "LED") {
+                referenceComponent.setIntensity()
+            }
+        })
+
+        if (referenceTerminalGroup.includes("ground")) {
+            // Circuit is connected from power to ground.
+            return true
+        }
+
+        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
+        console.log("Connected Components Found:", "\n\t", connectedComponents)
+        for (let i = 0; i < connectedComponents.length; i++) {
+            // console.log("connectedComponent:", connectedComponents[i])
+            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
+                // console.log("attached", connectedComponent)
+                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
+                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
+                        if (this.setCurrent(connectedComponent.id, connectedComponents[i], current)) {
+                            // console.log("connectedComponent", connectedComponents[i])
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+
+        return false
+    }
+
 }
