@@ -24,6 +24,7 @@ import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
 const drawerWidth = 240;
 const listOfRefs = React.createContext([]);
 const partKey = React.createContext(0);
+const selectedTool = React.createContext("select_tool");
 
 const styles = theme => ({
     root: {
@@ -65,6 +66,7 @@ const styles = theme => ({
 class App extends Component {
     static listOfRefs = listOfRefs;
     static partKey = partKey;
+    static selectedTool = selectedTool;
 
     constructor(props) {
         super(props)
@@ -113,6 +115,7 @@ class App extends Component {
     handleTool = (event, newTool) => {
         this.setState({selectedTool: newTool});
         console.log(this.state.selectedTool + " clicked")
+        App.selectedTool._currentValue = newTool
     };
 
     handleRotate = () => {

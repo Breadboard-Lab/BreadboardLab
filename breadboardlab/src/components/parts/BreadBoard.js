@@ -111,7 +111,7 @@ export default class BreadBoard extends React.Component {
                 .on("move", (event) => {
                     const {interaction} = event;
 
-                    if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown) {
+                    if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown && App.selectedTool._currentValue === "wire_tool") {
                         let startPoint = {
                             x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x,
                             y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y

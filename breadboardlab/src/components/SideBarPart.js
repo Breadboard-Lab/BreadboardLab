@@ -205,8 +205,8 @@ class SideBarPart extends React.Component {
 
 function movePart(event, ref) {
     const scale = svg.getAttribute("scale");
-    
-    if (ref) {
+    console.log(App.selectedTool)
+    if (ref && App.selectedTool._currentValue === "select_tool") {
         if (ref.state.translation.x && ref.state.translation.y) {
             let xPos = ref.state.translation.x + event.dx * scale;
             let yPos = ref.state.translation.y + event.dy * scale;
