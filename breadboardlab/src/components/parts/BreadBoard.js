@@ -7403,11 +7403,12 @@ export default class BreadBoard extends React.Component {
     /** findCircuits
      *      Checks rows and columns for connected parts and if any parts form a complete circuit.
      *
-     *  TODO @return {circuitsList} A list of complete circuits
+     *  @return {*[]} A list of complete circuits
      */
-    async findCircuits() {
+    findCircuits() {
         console.log("findCircuits() called.")
         // console.log(this.connectedParts)
+        const circuits = []
 
         for (const [key, element] of this.connectedParts) {
             // console.log(key, element)
@@ -7416,15 +7417,13 @@ export default class BreadBoard extends React.Component {
                 console.log("Checking for if closed circuit...")
                 // console.log(this.isClosed(key, element.ref))
                 if (this.isClosed(key, element.ref)) {
-                    await this.getResistance(key, element.ref)
-                    let voltage = parseInt(element.ref.state.voltage)
-                    let current = voltage / this.state.resistance
-                    console.log(current, voltage, this.state.resistance)
-                    this.setCurrent(key, element.ref, current)
+                    circuits.push(this.getCircuit(key, element.ref))
                 }
                 break
             }
         }
+
+        return circuits
     }
 
 
@@ -7487,28 +7486,20 @@ export default class BreadBoard extends React.Component {
         return connectedComponents
     }
 
-    /** getResistance
-     *      Similar to isClosed, excepts checks for any Resistors in closed circuit.
+    /** getCircuit
+     *      Gets the found closed circuit.
      *
-     *  @param referenceTerminal
-     *  @param referenceComponent
-     *
-     *  @returns {boolean}
+     * @param referenceTerminal
+     * @param referenceComponent
+     * @returns {*[]}   Returns a list of components
      */
-    getResistance(referenceTerminal, referenceComponent) {
-        console.log("getResistance() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+    getCircuit(referenceTerminal, referenceComponent) {
+        console.log("getCircuit() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
         let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
-
-        if (referenceComponent.state.type === "Resistor") {
-            this.setState({resistance: this.state.resistance + parseInt(referenceComponent.state.resistance)}, () => {
-
-                console.log("Resistor found", this.state.resistance, referenceComponent.state.resistance)
-            })
-        }
 
         if (referenceTerminalGroup.includes("ground")) {
             // Circuit is connected from power to ground.
-            return true
+            return [referenceComponent]
         }
 
         let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
@@ -7516,64 +7507,18 @@ export default class BreadBoard extends React.Component {
         for (let i = 0; i < connectedComponents.length; i++) {
             // console.log("connectedComponent:", connectedComponents[i])
             for (const connectedComponent of connectedComponents[i].attachTo.values()) {
-                // console.log("attached", connectedComponent)
                 if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
                     if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
-                        if (this.getResistance(connectedComponent.id, connectedComponents[i])) {
+                        if (this.getCircuit(connectedComponent.id, connectedComponents[i]) !== undefined) {
                             // console.log("connectedComponent", connectedComponents[i])
-                            return true
+                            let childArray = this.getCircuit(connectedComponent.id, connectedComponents[i])
+                            return [referenceComponent, ...childArray]
                         }
                     }
                 }
             }
         }
 
-        return false
-
+        return []
     }
-
-    /** setCurrent
-     *      Similar to isClosed, excepts sets each child component to have its own current value.
-     *
-     *  @param referenceTerminal
-     *  @param referenceComponent
-     *  @param current Calculated total circuit current.
-     *
-     *  @returns {boolean}
-     */
-    setCurrent(referenceTerminal, referenceComponent, current) {
-        console.log("setCurrent() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
-        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
-
-        referenceComponent.setState({current: current}, () => {
-            if (referenceComponent.state.type === "LED") {
-                referenceComponent.setIntensity()
-            }
-        })
-
-        if (referenceTerminalGroup.includes("ground")) {
-            // Circuit is connected from power to ground.
-            return true
-        }
-
-        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
-        console.log("Connected Components Found:", "\n\t", connectedComponents)
-        for (let i = 0; i < connectedComponents.length; i++) {
-            // console.log("connectedComponent:", connectedComponents[i])
-            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
-                // console.log("attached", connectedComponent)
-                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
-                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
-                        if (this.setCurrent(connectedComponent.id, connectedComponents[i], current)) {
-                            // console.log("connectedComponent", connectedComponents[i])
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-
-        return false
-    }
-
 }

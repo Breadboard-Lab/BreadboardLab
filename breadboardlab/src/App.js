@@ -171,7 +171,8 @@ class App extends Component {
             App.listOfRefs._currentValue.forEach((element) => {
                 //console.log(element.connectedParts)
                 if (element.state.type === "Breadboard") {
-                    element.findCircuits()
+                    // console.log(element.findCircuits())
+                    let circuits = element.findCircuits()
                     /* if element.findCircuits() is not empty
                         - unselects any selected parts
                         - disable most buttons
@@ -179,6 +180,13 @@ class App extends Component {
                         - hide drawer
                         - disable drawer open button
                         */
+
+                    for (let i = 0; i < circuits.length; i++){
+                        let resistance = this.getResistance(circuits[i])
+                        let current = circuits[i][0].state.voltage + resistance
+                        this.setCurrent(circuits[i], current)
+                    }
+
                     if (this.selectedPart) {
                         this.unselectPart()
                     }
@@ -342,6 +350,37 @@ class App extends Component {
                 </div>
             </ThemeProvider>
         );
+    }
+
+    /** getResistance
+     *
+     * @param circuit       A list of components that form a closed circuit.
+     * @returns {number}    The total resistance as found by any resistors in the closed circuit.
+     */
+    getResistance(circuit) {
+        console.log(circuit)
+        let resistance = 0
+        for (var i = 0; i < circuit.length; i++){
+            console.log(circuit[i])
+            if ((circuit[i]).state.type === "Resistor"){
+                resistance += (circuit[i]).state.resistance
+            }
+        }
+        return resistance;
+    }
+
+    /** setCurrent
+     *
+     * @param circuit   A list of components that form a closed circuit.
+     * @param current   The calculated current based on the resistance from getResistance
+     */
+    setCurrent(circuit, current) {
+        for (var i = 0; i < circuit.length; i++){
+            circuit[i].setState({current: current})
+            if (circuit[i].state.type === "LED") {
+                circuit[i].setIntensity()
+            }
+        }
     }
 }
 
