@@ -116,7 +116,12 @@ class App extends Component {
 
     handleTool = (event, newTool) => {
         this.setState({selectedTool: newTool});
-        console.log(this.state.selectedTool + " clicked")
+
+        if (newTool === "wire_tool")
+            this.setState({openDrawer: false});
+        else if (newTool === "select_tool")
+            this.setState({openDrawer: true});
+
         App.selectedTool._currentValue = newTool
     };
 
@@ -194,7 +199,7 @@ class App extends Component {
                     }
                     this.setState({
                         isSimulating: !this.state.isSimulating,
-                        openDrawer: !this.state.openDrawer
+                        openDrawer: false
                     })
                 }
             })
@@ -209,7 +214,7 @@ class App extends Component {
              */
             this.setState({
                 isSimulating: !this.state.isSimulating,
-                openDrawer: !this.state.openDrawer
+                openDrawer: true
             })
         }
 
@@ -324,7 +329,7 @@ class App extends Component {
                             */}
                             <Tooltip title="Open Drawer">
                                 <IconButton
-                                    disabled={this.state.isSimulating}
+                                    disabled={this.state.isSimulating || this.state.selectedTool === "wire_tool"}
                                     color="inherit"
                                     aria-label="open drawer"
                                     onClick={this.handleDrawer}

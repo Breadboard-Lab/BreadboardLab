@@ -147,7 +147,7 @@ export default class BreadBoard extends React.Component {
                     ondragenter: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id))
+                        if ((ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire")
                             ref.highlight(event, this);
                     },
                     ondropmove: event => {
