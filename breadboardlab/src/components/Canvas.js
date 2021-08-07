@@ -43,7 +43,8 @@ export default class Canvas extends React.Component {
                 height: window.innerHeight * this.scale
             }
         };
-        this.handleResize = this.handleResize.bind(this)
+        this.handleResize = this.handleResize.bind(this);
+        this.setViewBox = this.setViewBox.bind(this);
         window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false });
     }
     

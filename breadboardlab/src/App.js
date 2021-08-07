@@ -80,6 +80,8 @@ class App extends Component {
             partData: {},
             isSimulating: false
         }
+        this.movePart = this.movePart.bind(this);
+        this.canvasNode = React.createRef();
     }
 
     unselectPart() {
@@ -242,8 +244,33 @@ class App extends Component {
         }
     }
 
+    movePart(event, ref) {
+        const scale = this.canvasNode.current.scale;
+        
+        if (ref && App.selectedTool._currentValue === "select_tool") {
+            if (ref.state.translation.x && ref.state.translation.y) {
+                let xPos = ref.state.translation.x + event.dx * scale;
+                let yPos = ref.state.translation.y + event.dy * scale;
+    
+                ref.setState({translation: {x: xPos, y: yPos}});
+                return {dx: event.dx * scale, dy: event.dy * scale}
+            } else {
+                ref.setState({translation: {x: 0, y: 0}});
+                return {dx: 0, dy: 0}
+            }
+        } else {
+            let viewBox = {...this.canvasNode.current.state.viewBox};
+            viewBox.x -= event.delta.x * scale;
+            viewBox.y -= event.delta.y * scale;
+            this.canvasNode.current.setViewBox(viewBox);
+        }
+        return {dx: 0, dy: 0}
+    }
+
     render() {
         const {classes} = this.props;
+        this.canvas = <Canvas ref={this.canvasNode} listOfParts={this.state.listOfParts}/>;
+
         return (
             <ThemeProvider theme={this.state.theme}>
                 <div className={classes.root}>
@@ -337,6 +364,7 @@ class App extends Component {
                         open={this.state.openDrawer}
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
+                        movePart={this.movePart}
                         handlePartSelect={this.handlePartSelect}
                         hideProperties={this.state.hideProperties}
                         partData={this.state.partData}
@@ -344,7 +372,7 @@ class App extends Component {
 
                     { /* Canvas */}
                     <div className={classes.canvas}>
-                        <Canvas listOfParts={this.state.listOfParts}/>
+                        {this.canvas}
                     </div>
 
                 </div>

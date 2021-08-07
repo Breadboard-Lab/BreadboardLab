@@ -174,26 +174,26 @@ class Drawer extends Component {
                              */
                             this.state.searchFilter !== "" ? (
                                 partsList.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
-                                    <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component}
+                                    <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component} movePart={this.props.movePart}
                                                  name={filteredPart.name} description={filteredPart.description}
                                                  onDoubleTap={this.props.handlePartSelect}/>
                                 ))
                             ) : ({
                                 'all':
                                     partsList.all.map((part, index) => (
-                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>
                                     )),
                                 'basics':
                                     partsList.basics.map((part, index) => (
-                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>
                                     )),
                                 'gates':
                                     partsList.gates.map((part, index) => (
-                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component}
+                                        <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
                                                      onDoubleTap={this.props.handlePartSelect}/>
                                     )),

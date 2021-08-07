@@ -63,12 +63,13 @@ export default class BreadBoard extends React.Component {
                     if (typeof this.props.movePart === "function") {
                         this.props.movePart(event, this);
 
-                        this.connectedParts.forEach((item, key) => {
-                            if (item && !visited[item.ref._reactInternals.key]) {
-                                visited[item.ref._reactInternals.key] = item;
-                                this.props.movePart(event, item.ref);
-                            }
-                        });
+                        if (App.selectedTool._currentValue === "select_tool")
+                            this.connectedParts.forEach((item, key) => {
+                                if (item && !visited[item.ref._reactInternals.key]) {
+                                    visited[item.ref._reactInternals.key] = item;
+                                    this.props.movePart(event, item.ref);
+                                }
+                            });
                     }
                 }
             },
@@ -80,7 +81,7 @@ export default class BreadBoard extends React.Component {
             });
 
             this.connectors[i].addEventListener("mouseover", (e) => {
-                if (e.srcElement.getAttribute("filter") !== "url(#f3)") {
+                if (e.srcElement.getAttribute("filter") !== "url(#f3)" && App.selectedTool._currentValue === "wire_tool") {
                     e.srcElement.setAttribute("filter", "url(#f1)");
                     e.srcElement.setAttribute("style", "cursor: pointer");
                 }
@@ -152,10 +153,10 @@ export default class BreadBoard extends React.Component {
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) {
-                            if (ref && typeof ref.disconnect === "function")
+                        if ((ref && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire") {
+                            if (typeof ref.disconnect === "function")
                                 ref.disconnect(event, event.currentTarget.id);
-                            if (ref && typeof ref.highlight === "function")
+                            if (typeof ref.highlight === "function")
                                 ref.highlight(event, this);
                         }
                     },
@@ -170,7 +171,7 @@ export default class BreadBoard extends React.Component {
                     ondragleave: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref))
+                        if ((ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire")
                             ref.disconnect(event, event.currentTarget.id);
                     }
                 });
