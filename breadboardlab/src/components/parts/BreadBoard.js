@@ -147,13 +147,15 @@ export default class BreadBoard extends React.Component {
                     ondragenter: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if ((ref && typeof ref.highlight === "function" && !this.connectedParts.get(event.currentTarget.id) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire")
+                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
                             ref.highlight(event, this);
                     },
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if ((ref && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire") {
+                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
                             if (typeof ref.disconnect === "function")
                                 ref.disconnect(event, event.currentTarget.id);
                             if (typeof ref.highlight === "function")
@@ -171,7 +173,8 @@ export default class BreadBoard extends React.Component {
                     ondragleave: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if ((ref && typeof ref.disconnect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && App.selectedTool._currentValue === "select_tool") || ref.state.name === "Wire")
+                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
                             ref.disconnect(event, event.currentTarget.id);
                     }
                 });

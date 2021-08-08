@@ -1,6 +1,7 @@
 import React from "react";
 import interact from "interactjs";
 import Interactable from "../Interactable";
+import App from "../../App";
 
 export default class LED extends React.Component {
     constructor(props) {
@@ -77,9 +78,9 @@ export default class LED extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: event => {
-                    if (event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") {
+                    if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
-                    } else {
+                    } else if (App.selectedTool._currentValue === "select_tool") {
                         const {interaction} = event;
                         interaction.stop()
                         interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
