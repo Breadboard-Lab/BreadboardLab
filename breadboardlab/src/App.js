@@ -172,25 +172,30 @@ class App extends Component {
 
     handleSimulation = () => {
         console.log('handleSimulation clicked. isSimulating:', this.state.isSimulating)
-        // if not simulating, start simulating, else stop simulating.
+
+        let circuits = []
+
         if (!this.state.isSimulating) {
             console.log("Starting simulation...")
+            /**
+                If element.findCircuits() is not empty:
+                    - Unselects any selected parts.
+                    - Disable most buttons.
+                    - Replace Start button with Stop button.
+                    - Hide drawer.
+                    - Disable drawer open button.
+                    - Simulate.
+            */
             App.listOfRefs._currentValue.forEach((element) => {
                 //console.log(element.connectedParts)
                 if (element.state.type === "Breadboard") {
                     // console.log(element.findCircuits())
-                    let circuits = element.findCircuits()
-                    /* if element.findCircuits() is not empty
-                        - unselects any selected parts
-                        - disable most buttons
-                        - replace Start button with Stop button
-                        - hide drawer
-                        - disable drawer open button
-                        */
+                    circuits = element.findCircuits()
 
-                    for (let i = 0; i < circuits.length; i++){
+                    for (let i = 0; i < circuits.length; i++) {
                         let resistance = this.getResistance(circuits[i])
-                        let current = circuits[i][0].state.voltage + resistance
+                        // console.log("current", circuits[i][0].state.voltage, resistance)
+                        let current = circuits[i][0].state.voltage / resistance
                         this.setCurrent(circuits[i], current)
                     }
 
@@ -205,17 +210,32 @@ class App extends Component {
             })
         } else {
             console.log("Stopping simulation...")
-            /*
-                if done simulating
-                   - re-enable most buttons
-                   - replace Stop button with Start button
-                   - unhide drawer
-                   - disable drawer open button
+            /**
+                If done simulating:
+                   - Re-enable most buttons.
+                   - Replace Stop button with Start button.
+                   - Unhide drawer.
+                   - Disable drawer open button.
+                   - Reset all components to Off state.
              */
-            this.setState({
-                isSimulating: !this.state.isSimulating,
-                openDrawer: true
+            App.listOfRefs._currentValue.forEach((element) => {
+                //console.log(element.connectedParts)
+                if (element.state.type === "Breadboard") {
+                    // console.log(element.findCircuits())
+                    circuits = element.findCircuits()
+
+                    for (let i = 0; i < circuits.length; i++) {
+                            let current = 0
+                            this.setCurrent(circuits[i], current)
+                    }
+
+                    this.setState({
+                        isSimulating: !this.state.isSimulating,
+                        openDrawer: true
+                    })
+                }
             })
+
         }
 
 
@@ -251,12 +271,12 @@ class App extends Component {
 
     movePart(event, ref) {
         const scale = this.canvasNode.current.scale;
-        
+
         if (ref && App.selectedTool._currentValue === "select_tool") {
             if (ref.state.translation.x && ref.state.translation.y) {
                 let xPos = ref.state.translation.x + event.dx * scale;
                 let yPos = ref.state.translation.y + event.dy * scale;
-    
+
                 ref.setState({translation: {x: xPos, y: yPos}});
                 return {dx: event.dx * scale, dy: event.dy * scale}
             } else {
@@ -387,19 +407,36 @@ class App extends Component {
 
     /** getResistance
      *
+     *  Calculates total circuit resistance.
+     *
      * @param circuit       A list of components that form a closed circuit.
+     *
      * @returns {number}    The total resistance as found by any resistors in the closed circuit.
      */
     getResistance(circuit) {
-        console.log(circuit)
-        let resistance = 0
-        for (var i = 0; i < circuit.length; i++){
-            console.log(circuit[i])
-            if ((circuit[i]).state.type === "Resistor"){
-                resistance += (circuit[i]).state.resistance
+        // console.log(circuit)
+        let totalResistance = 0
+        for (let i = 0; i < circuit.length; i++) {
+            // console.log(circuit[i])
+            if ((circuit[i]).state.type === "Resistor") {
+                let componentUnitPrefix = circuit[i].state.unit
+                let componentResistance = circuit[i].state.resistance
+
+                switch (componentUnitPrefix) {
+                    case 'kΩ':
+                        componentResistance = (componentResistance * 1000)
+                        break
+                    case 'MΩ':
+                        componentResistance = (componentResistance * 1000000)
+                        break
+                    default:
+                        componentResistance = (componentResistance * 1)
+                }
+
+                totalResistance += componentResistance
             }
         }
-        return resistance;
+        return totalResistance;
     }
 
     /** setCurrent
@@ -408,11 +445,12 @@ class App extends Component {
      * @param current   The calculated current based on the resistance from getResistance
      */
     setCurrent(circuit, current) {
-        for (var i = 0; i < circuit.length; i++){
-            circuit[i].setState({current: current})
-            if (circuit[i].state.type === "LED") {
-                circuit[i].setIntensity()
-            }
+        for (let i = 0; i < circuit.length; i++) {
+            circuit[i].setState({current: current}, () => {
+                if (circuit[i].state.type === "LED") {
+                    circuit[i].setIntensity()
+                }
+            })
         }
     }
 }
