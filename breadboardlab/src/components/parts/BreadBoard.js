@@ -28,14 +28,14 @@ export default class BreadBoard extends React.Component {
     }
 
     onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+        this.props.handlePartSelect(this.getProps());
     }
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type")
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         else if (propName.toLowerCase() === "name")
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
     }
 
     getProps() {
@@ -127,7 +127,7 @@ export default class BreadBoard extends React.Component {
                                     endPoint: startPoint,
                                     translation: {x: this.state.translation.x, y: this.state.translation.y},
                                     rotation: this.state.rotation,
-                                    onDoubleTap: this.props.onDoubleTap,
+                                    handlePartSelect: this.props.handlePartSelect,
                                     key: App.partKey._currentValue
                                 }
                             );
@@ -167,15 +167,13 @@ export default class BreadBoard extends React.Component {
 
                         if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
                             ref.connect(event.relatedTarget, event.currentTarget, this);
-                        // console.log(this.connectedParts);
-                        // console.log(ref.attachTo);
                     },
                     ondragleave: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
-                            ref.disconnect(event, event.currentTarget.id);
+                        if (this.connectedParts.get(event.currentTarget.id) && this.connectedParts.get(event.currentTarget.id).ref === ref && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                           (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
+                                ref.disconnect(event, event.currentTarget.id);
                     }
                 });
         }

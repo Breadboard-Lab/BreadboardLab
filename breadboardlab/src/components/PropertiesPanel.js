@@ -25,22 +25,19 @@ class PropertiesPanel extends React.Component {
         }
     }
 
-    handleAutocomplete = (event, value, propName) => {
-        /*
-            Checks if theres an event and whether its a dropdown select event or if its a user typing.
-         */
-        if (event) {
-            if (event.type === "click") {
-                console.log("click")
-                if (typeof this.props.partData.callback === "function") {
-                    this.props.partData.callback(propName, value.unit);
-                    this.props.partData.callback(propName, value.value);
-                }
-            } else {
-                console.log("change")
-                if (typeof this.props.partData.callback === "function") {
-                    this.props.partData.callback(propName, value);
-                }
+    handleAutocompleteOnChange = (event, value, propName) => {
+        if (event && event.type === "click") {
+            if (typeof this.props.partData.callback === "function") {
+                this.props.partData.callback(propName, value.unit);
+                this.props.partData.callback(propName, value.value);
+            }
+        }
+    }
+
+    handleAutocompleteInputChange = (event, value, propName) => {
+        if (event && event.type === "change") {
+            if (typeof this.props.partData.callback === "function") {
+                this.props.partData.callback(propName, value);
             }
         }
     }
@@ -135,8 +132,8 @@ class PropertiesPanel extends React.Component {
                                 options={prop.defaultOptions}
                                 value={prop.value}
                                 getOptionLabel={option => typeof option === 'string' ? option : option.value}
-                                onChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
-                                onInputChange={(event, value) => this.handleAutocomplete(event, value, prop.propName)}
+                                onChange={(event, value) => this.handleAutocompleteOnChange(event, value, prop.propName)}
+                                onInputChange={(event, value) => this.handleAutocompleteInputChange(event, value, prop.propName)}
                             />
                         </Grid>
                     )

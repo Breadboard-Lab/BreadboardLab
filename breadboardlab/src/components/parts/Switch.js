@@ -49,7 +49,7 @@ export default class Switch extends React.Component {
     }
 
     onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+        this.props.handlePartSelect(this.getProps());
 
         //For testing purposes:
         this.setState({isToggled: !this.state.isToggled})
@@ -57,9 +57,9 @@ export default class Switch extends React.Component {
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type") {
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "name") {
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         }
     }
 

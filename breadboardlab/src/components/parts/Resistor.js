@@ -26,7 +26,7 @@ export default class Resistor extends React.Component {
             translation: {x: 0, y: 0},
             rotation: 0
         }
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 100, y: 75};
@@ -75,6 +75,8 @@ export default class Resistor extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: event => {
+                    this.dragged = true;
+
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -87,8 +89,11 @@ export default class Resistor extends React.Component {
         })
     }
 
-    onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     setBandColour(band, value) {
@@ -199,21 +204,20 @@ export default class Resistor extends React.Component {
     }
 
     updateProp(propName, value) {
-        console.log(propName, value)
         if (propName.toLowerCase() === "type") {
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, this.props.updatePropertiesPanel);
         } else if (propName.toLowerCase() === "name") {
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, this.props.updatePropertiesPanel);
         } else if (propName.toLowerCase() === "resistance") {
             if (isNaN(value)) {
                 this.setState({unit: value}, () => {
                     this.updateBands()
-                    this.onDoubleClick()
+                    this.props.updatePropertiesPanel(this.getProps())
                 })
             } else {
                 this.setState({resistance: value}, () => {
                     this.updateBands()
-                    this.onDoubleClick()
+                    this.props.updatePropertiesPanel(this.getProps())
                 });
             }
         }
@@ -365,7 +369,7 @@ export default class Resistor extends React.Component {
         let angle = Math.atan2((this.state.rightPoint.y - this.state.leftPoint.y), this.state.rightPoint.x - this.state.leftPoint.x );
         
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(100,105) scale(200,150)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path stroke="#707071" strokeWidth="0.036" strokeLinecap="round"
                             d={`M ${this.state.leftPoint.x} ${this.state.leftPoint.y} L ${this.state.rightPoint.x} ${this.state.rightPoint.y}`}/>

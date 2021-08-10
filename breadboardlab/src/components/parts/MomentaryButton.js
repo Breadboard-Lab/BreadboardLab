@@ -18,7 +18,7 @@ export default class Button extends React.Component {
             translation: {x: 0, y: 0},
             rotation: 0
         }
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 50, y: 50};
@@ -36,6 +36,8 @@ export default class Button extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
+                    this.dragged = true;
+
                     if ((event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -48,15 +50,18 @@ export default class Button extends React.Component {
 		})
     }
 
-    onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type")
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         else if (propName.toLowerCase() === "name")
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
     }
 
     getProps() {
@@ -195,7 +200,7 @@ export default class Button extends React.Component {
         }
 
         return(
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(30,33),scale(90,90)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020" />
                     <rect x="-0.27" y="-0.27" width="0.54" height="0.54" rx=".1" fill="#707070" />

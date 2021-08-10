@@ -53,16 +53,16 @@ export default class Wire extends React.Component {
     }
 
     onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+        this.props.handlePartSelect(this.getProps());
     }
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type") {
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "name") {
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "colour") {
-            this.setState({colour: value}, this.onDoubleClick);
+            this.setState({colour: value}, () => this.props.updatePropertiesPanel(this.getProps()));
 
             // Changes LED colour based on Properties Panel Colour Selection
             switch (value) {

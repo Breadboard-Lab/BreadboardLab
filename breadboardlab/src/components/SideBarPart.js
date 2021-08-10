@@ -56,7 +56,8 @@ class SideBarPart extends React.Component {
                         addPart: this.props.ondrag,
                         movePart: this.props.movePart,
                         getDimensions: getDimensions,
-                        onDoubleTap: this.props.onDoubleTap,
+                        handlePartSelect: this.props.handlePartSelect,
+                        updatePropertiesPanel: this.props.updatePropertiesPanel,
                         key: App.partKey._currentValue,
                     }
                 );
@@ -96,8 +97,10 @@ class SideBarPart extends React.Component {
                     pos.y = event.client.y - part.getBoundingClientRect().height / 2;
                     let cursorpt = pos.matrixTransform(svg.getScreenCTM().inverse());
 
-                    if (cursorpt)
+                    if (cursorpt) {
                         this.node.setState({translation: {x: cursorpt.x, y: cursorpt.y}});
+                        this.node.dragged = true;
+                    }
                 }
             },
             end: () => {

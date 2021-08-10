@@ -71,33 +71,6 @@ class Drawer extends Component {
         }
     }
 
-    /*onDoubleTap = (childData) => {
-        if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
-            this.setState({
-                hideProperties: true,
-                partData: {},
-            });
-            this.selectedPart.ref.setState({isSelected: false});
-            this.previousPartState = undefined;
-            this.selectedPart = undefined;
-        } else {
-            this.setState({
-                hideProperties: false,
-                partData: childData
-            });
-
-            if (this.selectedPart) {
-                this.selectedPart.ref.setState({isSelected: false});
-                this.previousPartState = childData.ref.state;
-                this.selectedPart = childData;
-            }
-            childData.ref.setState({isSelected: true}, () => {
-                this.previousPartState = childData.ref.state;
-                this.selectedPart = childData;
-            });
-        }
-    }*/
-
     handleCategorySelect = event => {
         this.setState({selectedCategory: event.target.value})
     }
@@ -176,26 +149,26 @@ class Drawer extends Component {
                                 partsList.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component} movePart={this.props.movePart}
                                                  name={filteredPart.name} description={filteredPart.description}
-                                                 onDoubleTap={this.props.handlePartSelect}/>
+                                                 handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}/>
                                 ))
                             ) : ({
                                 'all':
                                     partsList.all.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
-                                                     onDoubleTap={this.props.handlePartSelect}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}/>
                                     )),
                                 'basics':
                                     partsList.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
-                                                     onDoubleTap={this.props.handlePartSelect}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}/>
                                     )),
                                 'gates':
                                     partsList.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart}
                                                      name={part.name} description={part.description}
-                                                     onDoubleTap={this.props.handlePartSelect}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}/>
                                     )),
                             }[this.state.selectedCategory])
                         }

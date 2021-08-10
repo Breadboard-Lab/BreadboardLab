@@ -32,19 +32,19 @@ export default class CeramicCapacitor extends React.Component {
     }
 
     onDoubleClick() {
-        this.props.onDoubleTap(this.getProps());
+        this.props.handlePartSelect(this.getProps());
     }
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type") {
-            this.setState({type: value}, this.onDoubleClick);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "name") {
-            this.setState({name: value}, this.onDoubleClick);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "capacitance") {
             if (isNaN(value)) {
-                this.setState({unit: value}, this.onDoubleClick)
+                this.setState({unit: value}, () => this.props.updatePropertiesPanel(this.getProps()))
             } else {
-                this.setState({capacitance: value}, this.onDoubleClick);
+                this.setState({capacitance: value}, () => this.props.updatePropertiesPanel(this.getProps()));
             }
 
         }

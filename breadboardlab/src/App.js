@@ -81,6 +81,7 @@ class App extends Component {
             isSimulating: false
         }
         this.movePart = this.movePart.bind(this);
+        this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
         this.canvasNode = React.createRef();
     }
 
@@ -90,7 +91,6 @@ class App extends Component {
             partData: {},
         });
         this.selectedPart.ref.setState({isSelected: false});
-        this.previousPartState = undefined;
         this.selectedPart = undefined;
     }
 
@@ -247,11 +247,7 @@ class App extends Component {
     };
 
     handlePartSelect = (childData) => {
-        if (this.selectedPart && this.selectedPart.ref === childData.ref && this.previousPartState === childData.ref.state) {
-            // TODO catch case for when property panel form event is called but no changes are made
-            //  (thus unselecting the part as previous state and current state are same)
-            this.unselectPart()
-        } else {
+        if (!childData.ref.state.isSelected) {
             this.setState({
                 hideProperties: false,
                 partData: childData
@@ -259,14 +255,20 @@ class App extends Component {
 
             if (this.selectedPart) {
                 this.selectedPart.ref.setState({isSelected: false});
-                this.previousPartState = childData.ref.state;
-                this.selectedPart = childData;
             }
             childData.ref.setState({isSelected: true}, () => {
-                this.previousPartState = childData.ref.state;
                 this.selectedPart = childData;
             });
+        } else {
+            this.unselectPart();
         }
+    }
+
+    updatePropertiesPanel(childData) {
+        this.setState({
+            hideProperties: false,
+            partData: childData
+        });
     }
 
     movePart(event, ref) {
@@ -391,6 +393,7 @@ class App extends Component {
                         addPart={this.addPart}
                         movePart={this.movePart}
                         handlePartSelect={this.handlePartSelect}
+                        updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
                         partData={this.state.partData}
                     />
