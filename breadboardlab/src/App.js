@@ -173,24 +173,23 @@ class App extends Component {
     handleSimulation = () => {
         console.log('handleSimulation clicked. isSimulating:', this.state.isSimulating)
 
-        let circuits = []
+        App.listOfRefs._currentValue.forEach((element) => {
+            if (element.state.type === "Breadboard") {
+                let circuits = element.findCircuits()
 
-        if (!this.state.isSimulating) {
-            console.log("Starting simulation...")
-            /**
-                If element.findCircuits() is not empty:
-                    - Unselects any selected parts.
-                    - Disable most buttons.
-                    - Replace Start button with Stop button.
-                    - Hide drawer.
-                    - Disable drawer open button.
-                    - Simulate.
-            */
-            App.listOfRefs._currentValue.forEach((element) => {
-                //console.log(element.connectedParts)
-                if (element.state.type === "Breadboard") {
+                if (!this.state.isSimulating) {
+                    console.log("Starting simulation...")
+                    /**
+                     If element.findCircuits() is not empty:
+                     - Unselects any selected parts.
+                     - Disable most buttons.
+                     - Replace Start button with Stop button.
+                     - Hide drawer.
+                     - Disable drawer open button.
+                     - Simulate.
+                     */
+                    //console.log(element.connectedParts)
                     // console.log(element.findCircuits())
-                    circuits = element.findCircuits()
 
                     for (let i = 0; i < circuits.length; i++) {
                         let resistance = this.getResistance(circuits[i])
@@ -206,37 +205,34 @@ class App extends Component {
                         isSimulating: !this.state.isSimulating,
                         openDrawer: false
                     })
-                }
-            })
-        } else {
-            console.log("Stopping simulation...")
-            /**
-                If done simulating:
-                   - Re-enable most buttons.
-                   - Replace Stop button with Start button.
-                   - Unhide drawer.
-                   - Disable drawer open button.
-                   - Reset all components to Off state.
-             */
-            App.listOfRefs._currentValue.forEach((element) => {
-                //console.log(element.connectedParts)
-                if (element.state.type === "Breadboard") {
+                } else {
+                    console.log("Stopping simulation...")
+                    /**
+                     If done simulating:
+                     - Re-enable most buttons.
+                     - Replace Stop button with Start button.
+                     - Unhide drawer.
+                     - Disable drawer open button.
+                     - Reset all components to Off state.
+                     */
+                    //console.log(element.connectedParts)
                     // console.log(element.findCircuits())
                     circuits = element.findCircuits()
 
                     for (let i = 0; i < circuits.length; i++) {
-                            let current = 0
-                            this.setCurrent(circuits[i], current)
+                        let current = 0
+                        this.setCurrent(circuits[i], current)
                     }
 
                     this.setState({
                         isSimulating: !this.state.isSimulating,
                         openDrawer: true
                     })
-                }
-            })
 
-        }
+
+                }
+            }
+        })
 
 
     };
