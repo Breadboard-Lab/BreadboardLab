@@ -61,7 +61,8 @@ export default class NPNTransistor extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp}
+               transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${0} ${0} ${0}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path id="collectorpin" fill="#606161" d="M16.311,63.488c-0.829,0-1.5-0.672-1.5-1.5v-5.352l4.729-4.729v-4.11c0-0.827,0.671-1.5,1.5-1.5
             s1.5,0.673,1.5,1.5v5.353l-4.729,4.729v4.108C17.811,62.816,17.139,63.488,16.311,63.488z"/>
@@ -80,7 +81,7 @@ export default class NPNTransistor extends React.Component {
 
                     <g id="labels">
                         <path id="E" fill="#8C8C8C"
-                            d="M43.767,43.891h-1.088v1.033h1.303v0.537h-1.99v-3.555h1.984v0.539h-1.297v0.908h1.088V43.891z"/>
+                              d="M43.767,43.891h-1.088v1.033h1.303v0.537h-1.99v-3.555h1.984v0.539h-1.297v0.908h1.088V43.891z"/>
                         <path id="B" fill="#8C8C8C" d="M30.879,45.461v-3.555h1.018c0.371,0,0.66,0.08,0.867,0.242s0.31,0.404,0.31,0.727
                 c0,0.168-0.037,0.316-0.114,0.447c-0.075,0.131-0.188,0.229-0.335,0.293c0.199,0.041,0.346,0.135,0.443,0.285
                 c0.097,0.15,0.145,0.324,0.145,0.525c0,0.34-0.098,0.598-0.296,0.771c-0.197,0.176-0.479,0.264-0.846,0.264H30.879z M31.568,43.41
@@ -97,8 +98,8 @@ export default class NPNTransistor extends React.Component {
                 v-9.526h2.893V35.137z"/>
                     </g>
 
-                    <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeLinecap="round"
-                        strokeLinejoin="round" strokeMiterlimit="10" d="M50.92,9.96c0-5.224-8.472-9.46-18.92-9.46S13.08,4.736,13.08,9.96
+                    <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="3.5"
+                          strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M50.92,9.96c0-5.224-8.472-9.46-18.92-9.46S13.08,4.736,13.08,9.96
             c0,0.023,0.007,0.046,0.007,0.069c0,0.026-0.007,0.05-0.007,0.076v33.794c0,1.402,0.679,2.62,1.688,3.308
             c0.004,0.002,0.008,0.004,0.012,0.007c0.173,0.116,0.354,0.222,0.545,0.305c0.062,0.027,0.129,0.042,0.192,0.065
             c0.141,0.051,0.28,0.106,0.428,0.139c0.221,0.048,0.448,0.075,0.683,0.075h2.912v4.11l-4.729,4.729v5.351

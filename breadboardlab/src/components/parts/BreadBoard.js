@@ -158,7 +158,7 @@ export default class BreadBoard extends React.Component {
                             if (typeof ref.highlight === "function")
                                 ref.highlight(event, this);
                         }
-                            
+
                     },
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
@@ -179,10 +179,10 @@ export default class BreadBoard extends React.Component {
                     },
                     ondragleave: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-                        
+
                         if (this.connectedParts.get(event.currentTarget.id) && this.connectedParts.get(event.currentTarget.id).ref === ref && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                           (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
-                                ref.disconnect(event, event.currentTarget.id);
+                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
+                            ref.disconnect(event, event.currentTarget.id);
                     }
                 });
         }
@@ -7403,7 +7403,7 @@ export default class BreadBoard extends React.Component {
                         height="55.881859"
                         x="-0.45604399"
                         y="9.6281099e-08"
-                        fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.25"
+                        fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.6"
                         strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round"/>
                 </g>
             </g>

@@ -38,7 +38,7 @@ export default class Resistor extends React.Component {
             {id: "right", ref: this.right},
         ];
     }
-    
+
     draggableOptionsLeft = {
         listeners: {
             move: (event) => {
@@ -276,7 +276,7 @@ export default class Resistor extends React.Component {
                 }
             }
         }
-        
+
     }
 
     disconnect(event) {
@@ -337,7 +337,7 @@ export default class Resistor extends React.Component {
                         break;
                     }
                 }
-                
+
                 if (!found)
                     elementID.push(undefined);
             }
@@ -366,13 +366,14 @@ export default class Resistor extends React.Component {
             rotatePointY = 0;
         }
 
-        let angle = Math.atan2((this.state.rightPoint.y - this.state.leftPoint.y), this.state.rightPoint.x - this.state.leftPoint.x );
-        
+        let angle = Math.atan2((this.state.rightPoint.y - this.state.leftPoint.y), this.state.rightPoint.x - this.state.leftPoint.x);
+
         return (
-            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp}
+               transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(100,105) scale(200,150)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path stroke="#707071" strokeWidth="0.036" strokeLinecap="round"
-                            d={`M ${this.state.leftPoint.x} ${this.state.leftPoint.y} L ${this.state.rightPoint.x} ${this.state.rightPoint.y}`}/>
+                          d={`M ${this.state.leftPoint.x} ${this.state.leftPoint.y} L ${this.state.rightPoint.x} ${this.state.rightPoint.y}`}/>
 
                     <g transform={`translate(${(this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2} ${(this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2})`}>
                         <g transform={`rotate(${angle * 180 / Math.PI} ${-0.344} ${-0.453})`}>
@@ -380,40 +381,44 @@ export default class Resistor extends React.Component {
                             c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                             c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
                             <path fill={this.state.band1Colour}
-                                d="M-0.447-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
+                                  d="M-0.447-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
                             <path fill={this.state.band2Colour} d="M-0.378-0.389h0.025v-0.129h-0.025"/>
                             <path fill={this.state.band3Colour} d="M-0.325-0.389H-0.3v-0.129h-0.025"/>
                             <path fill={this.state.band4Colour}
-                                d="M-0.261-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
-                            <path fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.015"
-                                strokeMiterlimit="50" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
+                                  d="M-0.261-0.382c0.009,0.005,0.019,0.005,0.028,0v-0.143c-0.009-0.005-0.019-0.005-0.028,0"/>
+                            <path fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="0.04"
+                                  strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" d="M -0.5 -0.435 c 0.025 0 0.036 0.053 0.053 0.053 h 0.028 c 0.009 -0.005 0.017 -0.007 0.021 -0.007 h 0.071 h 0.043
                             c 0.009 0.005 0.017 0.007 0.021 0.007 h 0.028 c 0.018 0 0.028 -0.053 0.053 -0.053 v -0.036 c -0.025 0 -0.036 -0.053 -0.053 -0.053 h -0.027 c -0.005 0 -0.012 0.002 -0.021 0.007 h -0.122
                             c 0 0 -0.005 -0.002 -0.014 -0.007 h -0.029 c -0.018 0 -0.028 0.053 -0.052 0.053z"/>
                         </g>
                         <g ref={this.connectorContainer} className="connector">
-                            <Interactable 
-                                ref={this.left} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsLeft}>
+                            <Interactable
+                                ref={this.left} styleCursor={false} draggable={true}
+                                draggableOptions={this.draggableOptionsLeft}>
                                 <ellipse
                                     onMouseEnter={this.onMouseEnter}
                                     onMouseLeave={this.onMouseLeave}
                                     className="connector" strokeOpacity="0" fillOpacity="0"
-                                    cx={this.state.leftPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2} cy={this.state.leftPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
+                                    cx={this.state.leftPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2}
+                                    cy={this.state.leftPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
                                     rx="0.015" ry="0.02"/>
                             </Interactable>
 
-                            <Interactable 
-                                ref={this.right} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsRight}>
+                            <Interactable
+                                ref={this.right} styleCursor={false} draggable={true}
+                                draggableOptions={this.draggableOptionsRight}>
                                 <ellipse
                                     onMouseEnter={this.onMouseEnter}
                                     onMouseLeave={this.onMouseLeave}
                                     className="connector" strokeOpacity="0" fillOpacity="0"
-                                    cx={this.state.rightPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2} cy={this.state.rightPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
+                                    cx={this.state.rightPoint.x - (this.state.leftPoint.x + this.state.rightPoint.x + 0.5 + 0.182) / 2}
+                                    cy={this.state.rightPoint.y - (this.state.leftPoint.y + this.state.rightPoint.y + 0.453 + 0.453) / 2}
                                     rx="0.015" ry="0.02"/>
                             </Interactable>
                         </g>
-                    
+
                     </g>
-                </g>                
+                </g>
             </g>
         )
     }

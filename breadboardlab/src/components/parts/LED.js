@@ -81,7 +81,7 @@ export default class LED extends React.Component {
             listeners: {
                 move: event => {
                     this.dragged = true;
-                    
+
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -194,7 +194,7 @@ export default class LED extends React.Component {
                 }
             }
         }
-        
+
     }
 
     disconnect(event) {
@@ -287,7 +287,8 @@ export default class LED extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp}
+               transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${this.rotatePoint.x} ${this.rotatePoint.y}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path id="cathode" fill="#707071" d="M24,63.5c-1.104,0-2-0.882-2-1.969v-15.75c0-1.087,0.896-1.969,2-1.969s2,0.882,2,1.969
                 v15.75C26,62.618,25.104,63.5,24,63.5z"/>
@@ -300,14 +301,14 @@ export default class LED extends React.Component {
                 C45.288,6.863,38.731,0.5,30.644,0.5z"/>
                     <path id="bottom" fill={this.state.bodyColourBottom} d="M45.282,33.22c0,5.662-6.554,10.251-14.639,10.251
                 c-8.084,0-14.637-4.589-14.637-10.251c0-5.659,6.553-10.248,14.637-10.248C38.729,22.972,45.282,27.561,45.282,33.22z"/>
-                
-                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
-                            d={`M ${24} ${62.5} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
-                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
-                            d={`M ${40} ${62.5} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
 
-                    <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"} strokeLinecap="round"
-                        strokeLinejoin="round" strokeMiterlimit="10" d="
+                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
+                          d={`M ${24} ${62.5} L ${this.state.cathodePoint.x} ${this.state.cathodePoint.y}`}/>
+                    <path stroke="#707071" strokeWidth="4" strokeLinecap="round"
+                          d={`M ${40} ${62.5} L ${this.state.anodePoint.x} ${this.state.anodePoint.y}`}/>
+
+                    <path id="select" fill="none" stroke={this.state.isSelected ? "#2453ff" : "none"}
+                          strokeLinecap="round" strokeWidth="4" strokeLinejoin="round" strokeMiterlimit="10" d="
                 M48,35.091c0-3.75-1.003-6.422-2.712-8.327V14.712c0-7.849-6.557-14.212-14.645-14.212C22.557,0.5,16,6.863,16,14.712v14.666
                 v3.843v9.003c1.455,1.7,3.521,3.068,6,4.019v15.289c0,1.087,0.896,1.969,2,1.969s2-0.882,2-1.969V47.339
                 c1.495,0.269,3.077,0.411,4.721,0.411c0.429,0,0.854-0.021,1.279-0.044v5.95c0,0.658,0.334,1.272,0.891,1.638L38,58.647v2.884
@@ -315,8 +316,9 @@ export default class LED extends React.Component {
                 C42.697,45.631,48,41.246,48,35.091z"/>
 
                     <g ref={this.connectorContainer} className="connector">
-                        <Interactable 
-                            ref={this.cathode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsCathode}>
+                        <Interactable
+                            ref={this.cathode} styleCursor={false} draggable={true}
+                            draggableOptions={this.draggableOptionsCathode}>
                             <ellipse
                                 onMouseEnter={this.onMouseEnter}
                                 onMouseLeave={this.onMouseLeave}
@@ -325,8 +327,9 @@ export default class LED extends React.Component {
                                 rx="2" ry="2"/>
                         </Interactable>
 
-                        <Interactable 
-                            ref={this.anode} styleCursor={false} draggable={true} draggableOptions={this.draggableOptionsAnode}>
+                        <Interactable
+                            ref={this.anode} styleCursor={false} draggable={true}
+                            draggableOptions={this.draggableOptionsAnode}>
                             <ellipse
                                 onMouseEnter={this.onMouseEnter}
                                 onMouseLeave={this.onMouseLeave}
@@ -342,10 +345,10 @@ export default class LED extends React.Component {
 
     /**
      * currentToIntensity
-     * 
+     *
      * Determines how bright the LED should be given the current passing through.
      * Any current between 0A and the maximum will be calculated on a linear scale.
-     * 
+     *
      * @returns {number} A value between 0.0 and 1.0, defaults to 0 (off) if not within tolerance.
      */
     currentToIntensity() {
@@ -359,7 +362,7 @@ export default class LED extends React.Component {
 
     /**
      * setIntensity
-     * 
+     *
      * Maps intensity to hsl value.
      */
     setIntensity() {
