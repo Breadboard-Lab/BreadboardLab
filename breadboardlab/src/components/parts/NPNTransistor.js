@@ -15,7 +15,7 @@ export default class NPNTransistor extends React.Component {
         }
         this.scale = {x: 1, y: 1};
         this.offSet = {x: -12.72975, y: -0.5};
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
     }
 
@@ -23,14 +23,18 @@ export default class NPNTransistor extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: (event) => {
+                    this.dragged = true;
                     this.props.movePart(event, this)
                 }
             },
         })
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -57,7 +61,7 @@ export default class NPNTransistor extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${0} ${0} ${0}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path id="collectorpin" fill="#606161" d="M16.311,63.488c-0.829,0-1.5-0.672-1.5-1.5v-5.352l4.729-4.729v-4.11c0-0.827,0.671-1.5,1.5-1.5
             s1.5,0.673,1.5,1.5v5.353l-4.729,4.729v4.108C17.811,62.816,17.139,63.488,16.311,63.488z"/>

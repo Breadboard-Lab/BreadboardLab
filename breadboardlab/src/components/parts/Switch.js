@@ -18,7 +18,7 @@ export default class Switch extends React.Component {
             translation: {x: 0, y: 0},
             rotation: 0
         }
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 0.65, y: 0.65};
@@ -36,6 +36,8 @@ export default class Switch extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: event => {
+                    this.dragged = true;
+                    
                     if ((event.currentTarget === this.leftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -48,9 +50,12 @@ export default class Switch extends React.Component {
         })
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
-
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
+        
         //For testing purposes:
         this.setState({isToggled: !this.state.isToggled})
     }
@@ -201,7 +206,7 @@ export default class Switch extends React.Component {
         }
 
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick}  transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp}  transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path ref={this.leftConnector} className="connector" id="pin1" fill="#606161" d="M10.023,47.095c0,0.81-0.657,1.465-1.465,1.465l0,0c-0.809,0-1.465-0.655-1.465-1.465
             L5.628,36.441c0-0.811,2.122-1.466,2.93-1.466l0,0c0.809,0,2.93,0.655,2.93,1.466L10.023,47.095z"/>

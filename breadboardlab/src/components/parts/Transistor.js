@@ -24,14 +24,18 @@ export default class Transistor extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
 			listeners: {
 				move: event => {
+                    this.dragged = true;
                     this.props.movePart(event, this)
                 }
 			},
 		})
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -70,7 +74,7 @@ export default class Transistor extends React.Component {
         }
         
         return(
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(30,40),scale(50,50)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path d="M -0.50 0.22 A 0.525 0.525 90 1 1 0.50 0.22 ZZ"
                         fill="#707070" strokeOpacity="0"/>

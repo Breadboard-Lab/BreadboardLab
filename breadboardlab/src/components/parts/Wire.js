@@ -22,7 +22,7 @@ export default class Wire extends React.Component {
         }
         this.setPoints = this.setPoints.bind(this);
         this.movePart = this.movePart.bind(this);
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.attachTo = new Map();
@@ -33,6 +33,7 @@ export default class Wire extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let endPoint = this.endPoint.current.node;
+                this.dragged = true;
 
                 this.setPoints({x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale},
                                {x: Number(endPoint.getAttribute("cx")), y: Number(endPoint.getAttribute("cy"))});
@@ -45,6 +46,7 @@ export default class Wire extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let startPoint = this.startPoint.current.node;
+                this.dragged = true;
 
                 this.setPoints({x: Number(startPoint.getAttribute("cx")), y: Number(startPoint.getAttribute("cy"))},
                                {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale});
@@ -52,8 +54,11 @@ export default class Wire extends React.Component {
         }
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -206,7 +211,7 @@ export default class Wire extends React.Component {
 
     render() {                        
         return(
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <path stroke={this.state.isSelected ? "#2453ff" : "none"} strokeWidth="9" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke={this.state.visualColourOuter} strokeWidth="6" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>
                 <path stroke={this.state.visualColourInner} strokeWidth="3" strokeLinecap="round" d={`M ${this.state.startPoint.x} ${this.state.startPoint.y} L ${this.state.endPoint.x} ${this.state.endPoint.y}`}/>

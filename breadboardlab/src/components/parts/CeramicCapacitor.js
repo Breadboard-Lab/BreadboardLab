@@ -17,7 +17,7 @@ export default class CeramicCapacitor extends React.Component {
         }
         this.scale = {x: 0.65, y: 0.65};
         this.offSet = {x: -3.437, y: -0.563};
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
     }
 
@@ -25,14 +25,18 @@ export default class CeramicCapacitor extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: (event) => {
+                    this.dragged = true;
                     this.props.movePart(event, this)
                 }
             },
         })
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -92,7 +96,7 @@ export default class CeramicCapacitor extends React.Component {
         }
 
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                 <path id="rightpin" fill="#cb6c34" d="M46.799,62.589c0,0.498-0.805,0.911-1.787,0.911l0,0c-0.982,0-1.787-0.411-1.787-0.911
 			l-4.338-12.817c0-0.502,5.143-0.908,6.125-0.908l0,0c0.982,0,6.125,0.406,6.125,0.908L46.799,62.589z"/>

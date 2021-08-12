@@ -16,7 +16,7 @@ export default class BreadBoard extends React.Component {
             rotation: 0,
             resistance: 0,
         }
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.connectPart = this.connectPart.bind(this);
         this.disconnectPart = this.disconnectPart.bind(this);
         this.updateProp = this.updateProp.bind(this);
@@ -27,8 +27,11 @@ export default class BreadBoard extends React.Component {
         this.connectedParts = new Map();
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -58,6 +61,7 @@ export default class BreadBoard extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: event => {
+                    this.dragged = true;
                     let visited = {};
 
                     if (typeof this.props.movePart === "function") {
@@ -148,8 +152,13 @@ export default class BreadBoard extends React.Component {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
                         if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
-                            ref.highlight(event, this);
+                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
+                            if (typeof ref.disconnect === "function")
+                                ref.disconnect(event, event.currentTarget.id);
+                            if (typeof ref.highlight === "function")
+                                ref.highlight(event, this);
+                        }
+                            
                     },
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
@@ -170,7 +179,7 @@ export default class BreadBoard extends React.Component {
                     },
                     ondragleave: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-
+                        
                         if (this.connectedParts.get(event.currentTarget.id) && this.connectedParts.get(event.currentTarget.id).ref === ref && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
                                 ref.disconnect(event, event.currentTarget.id);
@@ -225,7 +234,7 @@ export default class BreadBoard extends React.Component {
         }
 
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick}
+            <g ref={this.node} onMouseUp={this.onMouseUp}
                transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(6, 30) scale(0.3, 0.3)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <g id="layer1">

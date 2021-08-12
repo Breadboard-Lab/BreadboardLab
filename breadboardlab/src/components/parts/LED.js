@@ -27,7 +27,7 @@ export default class LED extends React.Component {
             voltageDrop: 1.8,  // new for simulation
             intensity: 0.0     // new for simulation
         }
-        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 1, y: 1};
@@ -47,6 +47,7 @@ export default class LED extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let angle = this.state.rotation * Math.PI / 180;
+                this.dragged = true;
 
                 this.setState({
                     cathodePoint: {
@@ -63,6 +64,7 @@ export default class LED extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let angle = this.state.rotation * Math.PI / 180;
+                this.dragged = true;
 
                 this.setState({
                     anodePoint: {
@@ -78,6 +80,8 @@ export default class LED extends React.Component {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
                 move: event => {
+                    this.dragged = true;
+                    
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -90,8 +94,11 @@ export default class LED extends React.Component {
         })
     }
 
-    onDoubleClick() {
-        this.props.handlePartSelect(this.getProps());
+    onMouseUp() {
+        if (!this.dragged) {
+            this.props.handlePartSelect(this.getProps());
+        }
+        this.dragged = false;
     }
 
     updateProp(propName, value) {
@@ -280,7 +287,7 @@ export default class LED extends React.Component {
 
     render() {
         return (
-            <g ref={this.node} onDoubleClick={this.onDoubleClick} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
+            <g ref={this.node} onMouseUp={this.onMouseUp} transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${this.rotatePoint.x} ${this.rotatePoint.y}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path id="cathode" fill="#707071" d="M24,63.5c-1.104,0-2-0.882-2-1.969v-15.75c0-1.087,0.896-1.969,2-1.969s2,0.882,2,1.969
                 v15.75C26,62.618,25.104,63.5,24,63.5z"/>
