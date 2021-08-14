@@ -44,6 +44,7 @@ export default class Resistor extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let angle = this.state.rotation * Math.PI / 180;
+                this.dragged = true;
 
                 this.setState({
                     leftPoint: {
@@ -60,6 +61,7 @@ export default class Resistor extends React.Component {
             move: (event) => {
                 let scale = document.getElementById("AppSVG").getAttribute("scale");
                 let angle = this.state.rotation * Math.PI / 180;
+                this.dragged = true;
 
                 this.setState({
                     rightPoint: {

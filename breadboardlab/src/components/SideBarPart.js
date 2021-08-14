@@ -56,6 +56,7 @@ class SideBarPart extends React.Component {
                         addPart: this.props.ondrag,
                         movePart: this.props.movePart,
                         getDimensions: getDimensions,
+                        checkConnected: checkConnected,
                         handlePartSelect: this.props.handlePartSelect,
                         updatePropertiesPanel: this.props.updatePropertiesPanel,
                         key: App.partKey._currentValue,
@@ -220,6 +221,57 @@ function getDimensions(element, angle) {
     const RB = point.matrixTransform(matrix);
 
     return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: Math.abs((RB.x - XY.x) * Math.cos(t) + (RB.y - XY.y) * Math.sin(t)), height: Math.abs((RB.y - XY.y) * Math.cos(t) + (RB.x - XY.x) * Math.sin(-t))}
+}
+
+function checkConnected(ref, attachRef, connectorPosition) {
+    let elementID = [];
+    let connectors = Array.prototype.slice.call(attachRef.connectors);
+
+    if (connectors) {
+        for (let refData of ref.refArray) {
+            for (let connector of connectors) {
+                let rect1 = refData.ref.current.getBoundingClientRect();
+                let rect2 = connector.getBoundingClientRect();
+                let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                if (overlap) {
+                    let t = attachRef.state.rotation * Math.PI / 180;
+                    let point = document.getElementById("AppSVG").createSVGPoint();
+                    let breadboardDim = getDimensions(connector, t);
+
+                    point.x = breadboardDim.x + breadboardDim.width / 2 * Math.cos(t) + breadboardDim.height / 2 * Math.sin(-t);
+                    point.y = breadboardDim.y + breadboardDim.width / 2 * Math.sin(t) + breadboardDim.height / 2 * Math.cos(t);
+                    const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+                    t = ref.state.rotation * Math.PI / 180;
+                    let connectorDim = getDimensions(refData.ref.current, t);
+
+                    switch(connectorPosition) {
+                        case "bottomCentre":
+                            point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height * Math.sin(-t);
+                            point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height * Math.cos(t);
+                            break;
+                        default:
+                            point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height / 2 * Math.sin(-t);
+                            point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height / 2 * Math.cos(t);
+                            break;
+                    }
+                    const svgConnector = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+                    let radiusX = connector.getBBox().width / 2 * attachRef.scale.x;
+                    let radiusY = connector.getBBox().height / 2 * attachRef.scale.y;
+                    let ellispeArea = (svgConnector.x - svgBreadboard.x) * (svgConnector.x - svgBreadboard.x) / (radiusX * radiusX) + (svgConnector.y - svgBreadboard.y) * (svgConnector.y - svgBreadboard.y) / (radiusY * radiusY);
+
+                    if (ellispeArea <= 1) {
+                        if (attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === ref))
+                            elementID.push(connector.id);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return elementID;
 }
 
 export default withWidth()(withStyles(styles)(SideBarPart));
