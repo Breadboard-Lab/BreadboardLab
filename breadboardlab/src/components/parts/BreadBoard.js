@@ -134,6 +134,7 @@ export default class BreadBoard extends React.Component {
                                     rotation: this.state.rotation,
                                     handlePartSelect: this.props.handlePartSelect,
                                     updatePropertiesPanel: this.props.updatePropertiesPanel,
+                                    checkConnected: this.props.checkConnected,
                                     key: App.partKey._currentValue
                                 }
                             );

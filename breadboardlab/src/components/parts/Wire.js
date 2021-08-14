@@ -26,6 +26,10 @@ export default class Wire extends React.Component {
         this.updateProp = this.updateProp.bind(this);
 
         this.attachTo = new Map();
+        this.refArray = [
+            {id: "start", ref: this.startPoint},
+            {id: "end", ref: this.endPoint},
+        ];
     }
 
     draggableOptionsStartPoint = {
@@ -114,32 +118,31 @@ export default class Wire extends React.Component {
         )
     }
 
-    highlight(event) {
-        event.currentTarget.setAttribute("filter", "url(#f3)");
+    highlight(event, attachRef) {
+        let elementID = this.props.checkConnected(this, attachRef);
+        this.highlightID = {ids: elementID, ref: attachRef};
+
+        for (let connectorID of this.highlightID.ids)
+            if (connectorID)
+                attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
     }
 
     connect(relatedTarget, currentTarget, attachRef) {
-		const regexTranslate = /translate\((([-?\d]+)?(\.[\d]+)?)(px)?,?[\s]?(([-?\d]+)?(\.[\d]+)?)(px)?\)/i;
-		const relatedTargetTranslate = regexTranslate.exec(this.node.current.getAttribute("transform"));
+		if (this.highlightID) {
+            for (let i = 0; i < this.refArray.length; i++) {
+                if (this.highlightID.ids[i]) {
+                    const xPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x + attachRef.state.translation.x - this.state.translation.x;
+                    const yPos = (Number(attachRef.node.current.querySelector("#" + this.highlightID.ids[i]).getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y + attachRef.state.translation.y - this.state.translation.y;
 
-		if (relatedTargetTranslate) {
-			const xPos = (Number(currentTarget.getAttribute("cx")) + attachRef.offSet.x) * attachRef.scale.x - Number(relatedTargetTranslate[1]) + attachRef.state.translation.x;
-			const yPos = (Number(currentTarget.getAttribute("cy")) + attachRef.offSet.y) * attachRef.scale.y - Number(relatedTargetTranslate[5]) + attachRef.state.translation.y;
-            
-            if (this.startPoint.current.node === relatedTarget && (!this.attachTo.get("end") || this.attachTo.get("end").id !== currentTarget.id)) {
-                this.attachTo.set("start", {id: currentTarget.id, ref: attachRef});
-                this.moveConnector(relatedTarget, xPos, yPos);
+                    this.attachTo.set(this.refArray[i].id, {id: this.highlightID.ids[i], ref: attachRef});
 
-                if (typeof attachRef.connectPart === "function")
-                    attachRef.connectPart(currentTarget.id, "start", this);
-            } else if (this.endPoint.current.node === relatedTarget && (!this.attachTo.get("start") || this.attachTo.get("start").id !== currentTarget.id)) {
-                this.attachTo.set("end", {id: currentTarget.id, ref: attachRef});
-                this.moveConnector(relatedTarget, xPos, yPos);
-
-                if (typeof attachRef.connectPart === "function")
-                    attachRef.connectPart(currentTarget.id, "end", this);
+                    if (typeof attachRef.connectPart === "function") {
+                        attachRef.connectPart(this.highlightID.ids[i], this.refArray[i].id, this);
+                    }
+                    this.moveConnector(this.refArray[i].ref.current.node, xPos, yPos);
+                }
             }
-		}
+        }
 	}
 
     disconnect(event) {
@@ -159,23 +162,18 @@ export default class Wire extends React.Component {
                 event.currentTarget.setAttribute("filter", "");
             }
         } else {
-            if (this.attachTo.get("start")) {
-                this.attachTo.get("start").ref.node.current.querySelector("#" + this.attachTo.get("start").id).setAttribute("filter", "");
+            if (this.highlightID)
+                for (let id of this.highlightID.ids)
+                    if (id)
+                        this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
 
-                if (typeof this.attachTo.get("start").ref.disconnectPart === "function") {
-                    this.attachTo.get("start").ref.disconnectPart(this.attachTo.get("start").id, this);
+            for (let refData of this.refArray) {
+                if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
+                    this.attachTo.get(refData.id).ref.disconnectPart(this.attachTo.get(refData.id).id, this);
                 }
+                this.attachTo.set(refData.id, undefined);
             }
-             
-            if (this.attachTo.get("end")) {
-                this.attachTo.get("end").ref.node.current.querySelector("#" + this.attachTo.get("end").id).setAttribute("filter", "");
-
-                if (typeof this.attachTo.get("end").ref.disconnectPart === "function") {
-                    this.attachTo.get("end").ref.disconnectPart(this.attachTo.get("end").id, this);
-                }
-            }
-            this.attachTo.set("start", undefined);
-            this.attachTo.set("end", undefined);
+            this.highlightID = undefined;
         }
     }
 

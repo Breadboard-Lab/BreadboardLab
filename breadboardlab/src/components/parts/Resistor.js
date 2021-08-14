@@ -254,7 +254,7 @@ export default class Resistor extends React.Component {
     }
 
     highlight(event, attachRef) {
-        let elementID = this.checkConnected(attachRef);
+        let elementID = this.props.checkConnected(this, attachRef);
         this.highlightID = {ids: elementID, ref: attachRef};
 
         for (let connectorID of this.highlightID.ids)
@@ -318,33 +318,6 @@ export default class Resistor extends React.Component {
         } else {
             this.setState({rightPoint: {x: xPos, y: yPos}});
         }
-    }
-
-    checkConnected(attachRef) {
-        let elementID = [];
-        let connectors = Array.prototype.slice.call(attachRef.connectors);
-
-        if (connectors) {
-            for (let refData of this.refArray) {
-                let found = false;
-
-                for (let connector of connectors) {
-                    let rect1 = refData.ref.current.node.getBoundingClientRect();
-                    let rect2 = connector.getBoundingClientRect();
-                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
-
-                    if (overlap && attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === this)) {
-                        found = true;
-                        elementID.push(connector.id);
-                        break;
-                    }
-                }
-
-                if (!found)
-                    elementID.push(undefined);
-            }
-        }
-        return elementID;
     }
 
     onMouseEnter(event) {
