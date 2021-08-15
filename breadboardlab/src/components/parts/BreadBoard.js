@@ -2,6 +2,7 @@ import React from "react";
 import interact from "interactjs";
 import Wire from "./Wire";
 import App from "../../App";
+import Graph from "graph-data-structure";
 
 export default class BreadBoard extends React.Component {
     constructor(props) {
@@ -7426,7 +7427,7 @@ export default class BreadBoard extends React.Component {
         // console.log(this.connectedParts)
         const circuits = []
 
-        for (const [key, element] of this.connectedParts) {
+        /*for (const [key, element] of this.connectedParts) {
             // console.log(key, element)
             if (element.ref.state.type === 'Battery' && element.id === "power") {
                 console.log("Power found at:", key)
@@ -7437,7 +7438,11 @@ export default class BreadBoard extends React.Component {
                 }
                 break
             }
-        }
+        }*/
+
+        let graph = new Graph()
+        graph.addEdge("a", "b")
+        console.log(graph.serialize())
 
         return circuits
     }
