@@ -81,6 +81,8 @@ class App extends Component {
             isSimulating: false
         }
         this.movePart = this.movePart.bind(this);
+        this.moveLead = this.moveLead.bind(this);
+        this.addLeadHistory = this.addLeadHistory.bind(this);
         this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
         this.canvasNode = React.createRef();
     }
@@ -161,13 +163,30 @@ class App extends Component {
     }
 
     handleUndo = () => {
-        // TODO handle undo
-        console.log('Undo clicked')
+        if (this.current) {
+            if (this.current.data.actionType === "lead") {
+                this.moveLead(this.current.data.undoParameters[0], this.current.data.undoParameters[1], this.current.data.undoParameters[2], this.current.data.undoParameters[3])
+            }
+            if (this.current.prev) {
+                this.current = this.current.prev;
+            } else {
+                this.current = this.head;
+            }
+        }
     };
 
     handleRedo = () => {
-        // TODO handle redo
-        console.log('Redo clicked')
+        if (this.current) {
+            if (this.current.data.actionType === "lead") {
+                this.moveLead(this.current.data.redoParameters[0], this.current.data.redoParameters[1], this.current.data.redoParameters[2], this.current.data.redoParameters[3])
+            }
+
+            if (this.current.next) {
+                this.current = this.current.next;
+            } else {
+                this.current = this.tail;
+            }
+        }
     };
 
     handleSimulation = () => {
@@ -290,9 +309,43 @@ class App extends Component {
         return {dx: 0, dy: 0}
     }
 
+    moveLead(dx, dy, ref, propertyName) {
+        const scale = this.canvasNode.current.scale;
+        let angle = ref.state.rotation * Math.PI / 180;
+
+        ref.setState({
+            [propertyName]: {
+                x: ref.state[propertyName].x + dx * scale / ref.scale.x * Math.cos(angle) + dy * scale / ref.scale.y * Math.sin(angle),
+                y: ref.state[propertyName].y + dy * scale / ref.scale.y * Math.cos(angle) + dx * scale / ref.scale.x * Math.sin(-angle)
+            }
+        });
+    }
+
+    addLeadHistory(dx, dy, ref, propertyName) {
+        this.addtoHistory({
+            actionType: "lead",
+            undoParameters: [dx, dy, ref, propertyName],
+            redoParameters: [-dx, -dy, ref, propertyName]
+        });
+    }
+
+    addtoHistory(data) {
+        let node = new LinkedListNode(data);
+
+        if (this.head === undefined) {
+            this.head = node;
+            this.tail = node;
+            this.current = node;
+        } else {
+            node.prev = this.current;
+            this.current.next = node;
+            this.tail = node;
+            this.current = node;
+        }
+    }
+
     render() {
         const {classes} = this.props;
-        this.canvas = <Canvas ref={this.canvasNode} listOfParts={this.state.listOfParts}/>;
 
         return (
             <ThemeProvider theme={this.state.theme}>
@@ -388,6 +441,8 @@ class App extends Component {
                         handleDrawerClose={this.handleDrawer}
                         addPart={this.addPart}
                         movePart={this.movePart}
+                        moveLead={this.moveLead}
+                        addLeadHistory={this.addLeadHistory}
                         handlePartSelect={this.handlePartSelect}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
@@ -396,7 +451,7 @@ class App extends Component {
 
                     { /* Canvas */}
                     <div className={classes.canvas}>
-                        {this.canvas}
+                        <Canvas ref={this.canvasNode} listOfParts={this.state.listOfParts}/>
                     </div>
 
                 </div>
@@ -451,6 +506,14 @@ class App extends Component {
                 }
             })
         }
+    }
+}
+
+class LinkedListNode {
+    constructor(data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
     }
 }
 

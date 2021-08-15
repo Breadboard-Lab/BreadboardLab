@@ -41,34 +41,29 @@ export default class Resistor extends React.Component {
 
     draggableOptionsLeft = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
+            start: () => {
                 this.dragged = true;
-
-                this.setState({
-                    leftPoint: {
-                        x: this.state.leftPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.leftPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "leftPoint");
+            },
+            end: (event) => {
+                console.log(event.clientX0)
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this, "leftPoint");
             }
         }
     }
 
     draggableOptionsRight = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
+            start: () => {
                 this.dragged = true;
-
-                this.setState({
-                    rightPoint: {
-                        x: this.state.rightPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.rightPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "rightPoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this, "rightPoint");
             }
         }
     }
@@ -278,7 +273,6 @@ export default class Resistor extends React.Component {
                 }
             }
         }
-
     }
 
     disconnect(event) {
