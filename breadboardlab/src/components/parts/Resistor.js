@@ -48,7 +48,6 @@ export default class Resistor extends React.Component {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "leftPoint");
             },
             end: (event) => {
-                console.log(event.clientX0)
                 this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this, "leftPoint");
             }
         }

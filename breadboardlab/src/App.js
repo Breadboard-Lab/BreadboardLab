@@ -85,6 +85,9 @@ class App extends Component {
         this.addLeadHistory = this.addLeadHistory.bind(this);
         this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
         this.canvasNode = React.createRef();
+
+        this.tail = new LinkedListNode();
+        this.current = this.tail;
     }
 
     unselectPart() {
@@ -163,28 +166,33 @@ class App extends Component {
     }
 
     handleUndo = () => {
-        if (this.current) {
-            if (this.current.data.actionType === "lead") {
-                this.moveLead(this.current.data.undoParameters[0], this.current.data.undoParameters[1], this.current.data.undoParameters[2], this.current.data.undoParameters[3])
-            }
-            if (this.current.prev) {
-                this.current = this.current.prev;
-            } else {
-                this.current = this.head;
+        if (this.current.prev) {
+            this.current = this.current.prev;
+            
+            if (this.current.data) {
+                switch(this.current.data.actionType) {
+                    case "lead":
+                        this.moveLead(this.current.data.undoParameters[0], this.current.data.undoParameters[1], this.current.data.undoParameters[2], this.current.data.undoParameters[3]);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     };
 
     handleRedo = () => {
-        if (this.current) {
-            if (this.current.data.actionType === "lead") {
-                this.moveLead(this.current.data.redoParameters[0], this.current.data.redoParameters[1], this.current.data.redoParameters[2], this.current.data.redoParameters[3])
-            }
+        if (this.current.next) {
+            this.current = this.current.next;
 
-            if (this.current.next) {
-                this.current = this.current.next;
-            } else {
-                this.current = this.tail;
+            if (this.current.data) {
+                switch(this.current.data.actionType) {
+                    case "lead":
+                        this.moveLead(this.current.data.redoParameters[0], this.current.data.redoParameters[1], this.current.data.redoParameters[2], this.current.data.redoParameters[3]);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     };
@@ -322,26 +330,22 @@ class App extends Component {
     }
 
     addLeadHistory(dx, dy, ref, propertyName) {
-        this.addtoHistory({
-            actionType: "lead",
-            undoParameters: [dx, dy, ref, propertyName],
-            redoParameters: [-dx, -dy, ref, propertyName]
-        });
+        this.addtoHistory("lead", [dx, dy, ref, propertyName], [-dx, -dy, ref, propertyName]);
     }
 
-    addtoHistory(data) {
-        let node = new LinkedListNode(data);
+    addtoHistory(actionType, undoParameters, redoParameters) {
+        let newTail = new LinkedListNode();
 
-        if (this.head === undefined) {
-            this.head = node;
-            this.tail = node;
-            this.current = node;
-        } else {
-            node.prev = this.current;
-            this.current.next = node;
-            this.tail = node;
-            this.current = node;
-        }
+        this.current.data.actionType = actionType;
+        this.current.data.undoParameters = undoParameters;
+        this.current.next = newTail;
+
+        newTail.prev = this.current;
+        newTail.data.actionType = actionType;
+        newTail.data.redoParameters = redoParameters;
+
+        this.tail = newTail;
+        this.current = this.tail;
     }
 
     render() {
@@ -510,10 +514,10 @@ class App extends Component {
 }
 
 class LinkedListNode {
-    constructor(data) {
-        this.data = data;
-        this.next = null;
-        this.prev = null;
+    constructor(actionType, undoParameters, redoParameters) {
+        this.data = {actionType: actionType, undoParameters: undoParameters, redoParameters: redoParameters}
+        this.next = undefined;
+        this.prev = undefined;
     }
 }
 
