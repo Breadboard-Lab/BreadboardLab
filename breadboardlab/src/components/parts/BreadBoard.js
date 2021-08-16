@@ -21,6 +21,7 @@ export default class BreadBoard extends React.Component {
         this.connectPart = this.connectPart.bind(this);
         this.disconnectPart = this.disconnectPart.bind(this);
         this.updateProp = this.updateProp.bind(this);
+        this.circuitsGraph = new Graph()
 
         this.scale = {x: 6, y: 6};
         this.offSet = {x: 0.45604399, y: 0};
@@ -154,7 +155,7 @@ export default class BreadBoard extends React.Component {
                     overlap: 0.0001,
                     ondragenter: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-                        
+
                         if (typeof ref.disconnect === "function")
                             ref.disconnect(event, event.currentTarget.id);
 
@@ -170,7 +171,7 @@ export default class BreadBoard extends React.Component {
 
                         if (typeof ref.disconnect === "function")
                             ref.disconnect(event, event.currentTarget.id);
-                            
+
                         if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                             (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
                             if (typeof ref.highlight === "function")
@@ -7424,63 +7425,41 @@ export default class BreadBoard extends React.Component {
      */
     findCircuits() {
         console.log("findCircuits() called.")
-        // console.log(this.connectedParts)
-        const circuits = []
 
-        /*for (const [key, element] of this.connectedParts) {
-            // console.log(key, element)
-            if (element.ref.state.type === 'Battery' && element.id === "power") {
-                console.log("Power found at:", key)
-                console.log("Checking for if closed circuit...")
-                // console.log(this.isClosed(key, element.ref))
-                if (this.isClosed(key, element.ref)) {
-                    circuits.push(this.getCircuit(key, element.ref))
-                }
-                break
+        for (const [key, element] of this.connectedParts) { // Iterates over parts to find Battery
+            if (element.ref.state.type === 'Battery' && element.id === "power") {   // Finds battery
+                console.log("Power found at:", key)             // Terminal that battery power is at.
+                this.addToGraph(key, element.ref)
             }
-        }*/
-
-        let graph = new Graph()
-        graph.addEdge("a", "b")
-        console.log(graph.serialize())
-
-        return circuits
+        }
+        console.log("circuitsGraph", this.circuitsGraph.serialize())
     }
 
-
-    /** isClosed
+    /** addToGraph
+     *      Pushes found connected parts to this.circuitsGraph.
      *
-     *  @param {string} referenceTerminal The name of the terminal/connector/lead on this component they are connected to
-     *  @param {Object} referenceComponent The previous component, which is calling this function
-     *
-     *  @return true if the circuit is closed, false otherwise
+     * @param referenceTerminal
+     * @param referenceComponent
+     * @returns {number}            Breaks recursion if back at ground.
      */
-    isClosed(referenceTerminal, referenceComponent) {
-        console.log("isClosed() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
-        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
-
-        if (referenceTerminalGroup.includes("ground")) {
-            // Circuit is connected from power to ground.
-            return true
+    addToGraph(referenceTerminal, referenceComponent) {
+        console.log("addToGraph() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        if (referenceTerminal.toLowerCase().includes("ground")) {
+            let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
+            for (let i = 0; i < connectedComponents.length; i++) {
+                if (connectedComponents[i].componentRef.state.type === "Battery") {
+                    this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i].componentRef._reactInternals.key)
+                    return 0
+                }
+            }
         }
 
         let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
-        console.log("Connected Components Found:", "\n\t", connectedComponents)
         for (let i = 0; i < connectedComponents.length; i++) {
-            // console.log("connectedComponent:", connectedComponents[i])
-            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
-                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
-                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
-                        if (this.isClosed(connectedComponent.id, connectedComponents[i])) {
-                            // console.log("connectedComponent", connectedComponents[i])
-                            return true
-                        }
-                    }
-                }
-            }
+            this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i].componentRef._reactInternals.key)
+            this.addToGraph(connectedComponents[i].terminalNode, connectedComponents[i].componentRef)
         }
 
-        return false
     }
 
     /** getConnectedComponents
@@ -7490,9 +7469,8 @@ export default class BreadBoard extends React.Component {
      *
      * @return {Array} Returns a list of components in the same terminal group as referenceComponent.
      */
-
     getConnectedComponents(referenceTerminal, referenceComponent) {
-        console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        // console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
         let connectedComponents = []
 
         for (const [terminalKey, component] of this.connectedParts) {
@@ -7501,45 +7479,16 @@ export default class BreadBoard extends React.Component {
 
             if (referenceTerminalGroup === currentTerminalGroup && !Object.is(component.ref, referenceComponent)) {
                 // console.log("Connected component found:", component.ref)
-                connectedComponents.push(component.ref)
-            }
-        }
-        return connectedComponents
-    }
-
-    /** getCircuit
-     *      Gets the found closed circuit.
-     *
-     * @param referenceTerminal
-     * @param referenceComponent
-     * @returns {*[]}   Returns a list of components
-     */
-    getCircuit(referenceTerminal, referenceComponent) {
-        console.log("getCircuit() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
-        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
-
-        if (referenceTerminalGroup.includes("ground")) {
-            // Circuit is connected from power to ground.
-            return [referenceComponent]
-        }
-
-        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
-        console.log("Connected Components Found:", "\n\t", connectedComponents)
-        for (let i = 0; i < connectedComponents.length; i++) {
-            // console.log("connectedComponent:", connectedComponents[i])
-            for (const connectedComponent of connectedComponents[i].attachTo.values()) {
-                if (typeof connectedComponent !== "undefined") {  // Checks if part is even connected to anything at all.
-                    if (document.getElementById(connectedComponent.id).parentElement.id !== referenceTerminalGroup) {
-                        if (this.getCircuit(connectedComponent.id, connectedComponents[i]) !== undefined) {
-                            // console.log("connectedComponent", connectedComponents[i])
-                            let childArray = this.getCircuit(connectedComponent.id, connectedComponents[i])
-                            return [referenceComponent, ...childArray]
-                        }
+                for (const [key, value] of component.ref.attachTo) {
+                    if (referenceTerminalGroup !== document.getElementById(value.id).parentElement.id) {
+                        connectedComponents.push({
+                            terminalNode: value.id,
+                            componentRef: component.ref
+                        })
                     }
                 }
             }
         }
-
-        return []
+        return connectedComponents
     }
 }

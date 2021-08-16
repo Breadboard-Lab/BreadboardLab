@@ -218,12 +218,12 @@ class App extends Component {
                     //console.log(element.connectedParts)
                     // console.log(element.findCircuits())
 
-                    for (let i = 0; i < circuits.length; i++) {
+                    /*for (let i = 0; i < circuits.length; i++) {
                         let resistance = this.getResistance(circuits[i])
                         // console.log("current", circuits[i][0].state.voltage, resistance)
                         let current = circuits[i][0].state.voltage / resistance
                         this.setCurrent(circuits[i], current)
-                    }
+                    }*/
 
                     if (this.selectedPart) {
                         this.unselectPart()
@@ -246,10 +246,10 @@ class App extends Component {
                     // console.log(element.findCircuits())
                     circuits = element.findCircuits()
 
-                    for (let i = 0; i < circuits.length; i++) {
+                    /*for (let i = 0; i < circuits.length; i++) {
                         let current = 0
                         this.setCurrent(circuits[i], current)
-                    }
+                    }*/
 
                     this.setState({
                         isSimulating: !this.state.isSimulating,
