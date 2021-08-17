@@ -149,26 +149,30 @@ class Drawer extends Component {
                                 partsList.all.filter(part => part.name.toLowerCase().includes(this.state.searchFilter.toLowerCase())).map((filteredPart, index) => (
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                  name={filteredPart.name} description={filteredPart.description}
-                                                 handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} addLeadHistory={this.props.addLeadHistory}/>
+                                                 handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}
+                                                 addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
                                 ))
                             ) : ({
                                 'all':
                                     partsList.all.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
-                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} addLeadHistory={this.props.addLeadHistory}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
                                     )),
                                 'basics':
                                     partsList.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
-                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} addLeadHistory={this.props.addLeadHistory}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
                                     )),
                                 'gates':
                                     partsList.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
-                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} addLeadHistory={this.props.addLeadHistory}/>
+                                                     handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel}
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
                                     )),
                             }[this.state.selectedCategory])
                         }

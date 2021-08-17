@@ -24,7 +24,7 @@ export default class NPNTransistor extends React.Component {
             listeners: {
                 move: (event) => {
                     this.dragged = true;
-                    this.props.movePart(event, this)
+                    this.props.movePart(event.dx, event.dy, this);
                 }
             },
         })

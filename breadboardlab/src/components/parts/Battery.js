@@ -74,7 +74,7 @@ export default class Battery extends React.Component {
                     this.dragged = true;
 
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
-                        this.props.movePart(event, this);
+                        this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
                         const {interaction} = event;
                         interaction.stop()

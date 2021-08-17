@@ -39,7 +39,7 @@ export default class Button extends React.Component {
                     this.dragged = true;
 
                     if ((event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
-                        this.props.movePart(event, this);
+                        this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
                         const {interaction} = event;
                         interaction.stop();

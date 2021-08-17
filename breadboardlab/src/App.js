@@ -83,6 +83,7 @@ class App extends Component {
         this.movePart = this.movePart.bind(this);
         this.moveLead = this.moveLead.bind(this);
         this.addLeadHistory = this.addLeadHistory.bind(this);
+        this.addMoveHistory = this.addMoveHistory.bind(this);
         this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
         this.canvasNode = React.createRef();
 
@@ -169,10 +170,13 @@ class App extends Component {
         if (this.current.prev) {
             this.current = this.current.prev;
             
-            if (this.current.data) {
-                switch(this.current.data.actionType) {
+            if (this.current.undoOptions) {
+                switch(this.current.undoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.data.undoParameters[0], this.current.data.undoParameters[1], this.current.data.undoParameters[2], this.current.data.undoParameters[3]);
+                        this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3]);
+                        break;
+                    case "move":
+                        this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2]);
                         break;
                     default:
                         break;
@@ -185,10 +189,13 @@ class App extends Component {
         if (this.current.next) {
             this.current = this.current.next;
 
-            if (this.current.data) {
-                switch(this.current.data.actionType) {
+            if (this.current.redoOptions) {
+                switch(this.current.redoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.data.redoParameters[0], this.current.data.redoParameters[1], this.current.data.redoParameters[2], this.current.data.redoParameters[3]);
+                        this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3]);
+                        break;
+                    case "move":
+                        this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2]);
                         break;
                     default:
                         break;
@@ -294,24 +301,24 @@ class App extends Component {
         });
     }
 
-    movePart(event, ref) {
+    movePart(dx, dy, ref) {
         const scale = this.canvasNode.current.scale;
 
         if (ref && App.selectedTool._currentValue === "select_tool") {
             if (ref.state.translation.x && ref.state.translation.y) {
-                let xPos = ref.state.translation.x + event.dx * scale;
-                let yPos = ref.state.translation.y + event.dy * scale;
+                let xPos = ref.state.translation.x + dx * scale;
+                let yPos = ref.state.translation.y + dy * scale;
 
                 ref.setState({translation: {x: xPos, y: yPos}});
-                return {dx: event.dx * scale, dy: event.dy * scale}
+                return {dx: dx * scale, dy: dy * scale}
             } else {
                 ref.setState({translation: {x: 0, y: 0}});
                 return {dx: 0, dy: 0}
             }
         } else {
             let viewBox = {...this.canvasNode.current.state.viewBox};
-            viewBox.x -= event.delta.x * scale;
-            viewBox.y -= event.delta.y * scale;
+            viewBox.x -= dx * scale;
+            viewBox.y -= dy * scale;
             this.canvasNode.current.setViewBox(viewBox);
         }
         return {dx: 0, dy: 0}
@@ -333,16 +340,20 @@ class App extends Component {
         this.addtoHistory("lead", [dx, dy, ref, propertyName], [-dx, -dy, ref, propertyName]);
     }
 
+    addMoveHistory(dx, dy, ref) {
+        this.addtoHistory("move", [dx, dy, ref], [-dx, -dy, ref]);
+    }
+
     addtoHistory(actionType, undoParameters, redoParameters) {
         let newTail = new LinkedListNode();
 
-        this.current.data.actionType = actionType;
-        this.current.data.undoParameters = undoParameters;
+        this.current.undoOptions.actionType = actionType;
+        this.current.undoOptions.parameters = undoParameters;
         this.current.next = newTail;
 
         newTail.prev = this.current;
-        newTail.data.actionType = actionType;
-        newTail.data.redoParameters = redoParameters;
+        newTail.redoOptions.actionType = actionType;
+        newTail.redoOptions.parameters = redoParameters;
 
         this.tail = newTail;
         this.current = this.tail;
@@ -447,6 +458,7 @@ class App extends Component {
                         movePart={this.movePart}
                         moveLead={this.moveLead}
                         addLeadHistory={this.addLeadHistory}
+                        addMoveHistory={this.addMoveHistory}
                         handlePartSelect={this.handlePartSelect}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
@@ -515,7 +527,8 @@ class App extends Component {
 
 class LinkedListNode {
     constructor(actionType, undoParameters, redoParameters) {
-        this.data = {actionType: actionType, undoParameters: undoParameters, redoParameters: redoParameters}
+        this.undoOptions = {actionType: actionType, parameters: undoParameters}
+        this.redoOptions = {actionType: actionType, parameters: redoParameters}
         this.next = undefined;
         this.prev = undefined;
     }

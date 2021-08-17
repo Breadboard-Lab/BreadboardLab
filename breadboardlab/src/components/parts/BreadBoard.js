@@ -67,7 +67,7 @@ export default class BreadBoard extends React.Component {
                     let visited = {};
 
                     if (typeof this.props.movePart === "function") {
-                        this.props.movePart(event, this);
+                        this.props.movePart(event.dx, event.dy, this);
 
                         if (App.selectedTool._currentValue === "select_tool")
                             this.connectedParts.forEach((item, key) => {

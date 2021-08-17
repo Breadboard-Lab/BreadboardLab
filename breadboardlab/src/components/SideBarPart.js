@@ -57,6 +57,7 @@ class SideBarPart extends React.Component {
                         movePart: this.props.movePart,
                         moveLead: this.props.moveLead,
                         addLeadHistory: this.props.addLeadHistory,
+                        addMoveHistory: this.props.addMoveHistory,
                         getDimensions: getDimensions,
                         checkConnected: checkConnected,
                         handlePartSelect: this.props.handlePartSelect,

@@ -70,16 +70,20 @@ export default class Resistor extends React.Component {
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: event => {
+                start: () => {
                     this.dragged = true;
-
+                },
+                move: event => {
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
-                        this.props.movePart(event, this);
+                        this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
                         const {interaction} = event;
                         interaction.stop()
                         interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
                     }
+                },
+                end: (event) => {
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this);
                 }
             },
         })
