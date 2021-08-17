@@ -7421,7 +7421,7 @@ export default class BreadBoard extends React.Component {
     /** findCircuits
      *      Checks rows and columns for connected parts and if any parts form a complete circuit.
      *
-     *  @return {*[]} A list of complete circuits
+     *  @return {Graph} A list of complete circuits
      */
     findCircuits() {
         console.log("findCircuits() called.")
@@ -7433,6 +7433,8 @@ export default class BreadBoard extends React.Component {
             }
         }
         console.log("circuitsGraph", this.circuitsGraph.serialize())
+
+        return this.circuitsGraph
     }
 
     /** addToGraph

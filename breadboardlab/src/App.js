@@ -209,7 +209,7 @@ class App extends Component {
 
         App.listOfRefs._currentValue.forEach((element) => {
             if (element.state.type === "Breadboard") {
-                let circuits = element.findCircuits()
+                let circuitsGraph = element.findCircuits()
 
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
@@ -249,9 +249,6 @@ class App extends Component {
                      - Disable drawer open button.
                      - Reset all components to Off state.
                      */
-                    //console.log(element.connectedParts)
-                    // console.log(element.findCircuits())
-                    circuits = element.findCircuits()
 
                     /*for (let i = 0; i < circuits.length; i++) {
                         let current = 0
