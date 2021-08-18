@@ -7418,17 +7418,18 @@ export default class BreadBoard extends React.Component {
         )
     }
 
-    /** findCircuits
-     *      Checks rows and columns for connected parts and if any parts form a complete circuit.
+    /** getCircuits
+     *      Searches for a Battery and starts recursive Graph creation from Battery's power terminal.
      *
      *  @return {Graph} A list of complete circuits
      */
-    findCircuits() {
-        console.log("findCircuits() called.")
+    getCircuits() {
+        console.log("getCircuits() called.")
+        this.circuitsGraph = new Graph()
 
-        for (const [key, element] of this.connectedParts) { // Iterates over parts to find Battery
-            if (element.ref.state.type === 'Battery' && element.id === "power") {   // Finds battery
-                console.log("Power found at:", key)             // Terminal that battery power is at.
+        for (const [key, element] of this.connectedParts) {
+            if (element.ref.state.type === 'Battery' && element.id === "power") {
+                // console.log("Power found at:", key)
                 this.addToGraph(key, element.ref)
             }
         }
@@ -7446,7 +7447,7 @@ export default class BreadBoard extends React.Component {
      * @returns {number}            Breaks recursion if back at ground.
      */
     addToGraph(referenceTerminal, referenceComponent, previousTerminal = null) {
-        console.log("addToGraph() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        // console.log("addToGraph() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
 
         // Checks attachTo map for if connected component goes back to previous terminal group
         const findInMap = (map, val) => {
@@ -7503,7 +7504,7 @@ export default class BreadBoard extends React.Component {
      * @return {Array} Returns a list of components in the same terminal group as referenceComponent.
      */
     getConnectedComponents(referenceTerminal, referenceComponent) {
-        console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        // console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
         let connectedComponents = []
 
         let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id

@@ -209,7 +209,7 @@ class App extends Component {
 
         App.listOfRefs._currentValue.forEach((element) => {
             if (element.state.type === "Breadboard") {
-                let circuitsGraph = element.findCircuits()
+                let circuitsGraph = element.getCircuits()
 
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
