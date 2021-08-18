@@ -7442,24 +7442,55 @@ export default class BreadBoard extends React.Component {
      *
      * @param referenceTerminal
      * @param referenceComponent
+     * @param previousTerminal      Used for preventing backtracking.
      * @returns {number}            Breaks recursion if back at ground.
      */
-    addToGraph(referenceTerminal, referenceComponent) {
+    addToGraph(referenceTerminal, referenceComponent, previousTerminal = null) {
         console.log("addToGraph() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+
+        // Checks attachTo map for if connected component goes back to previous terminal group
+        const findInMap = (map, val) => {
+            // console.log("findInMap called", map, val)
+            if (previousTerminal !== null) {
+
+                let referenceTerminalGroup = document.getElementById(val).parentElement.id
+                for (const value of map.values()) {
+                    let currentTerminalGroup = document.getElementById(value.id).parentElement.id
+                    if (referenceTerminalGroup === currentTerminalGroup) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
+        // console.log(connectedComponents)
+
+        // Break check for if back at Ground/circuit makes a Cycle.
         if (referenceTerminal.toLowerCase().includes("ground")) {
-            let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
             for (let i = 0; i < connectedComponents.length; i++) {
-                if (connectedComponents[i].componentRef.state.type === "Battery") {
-                    this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i].componentRef._reactInternals.key)
+                if (connectedComponents[i].state.type === "Battery") {
+                    // If link already exists.
+                    if (!this.circuitsGraph.hasEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
+                        this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
+                    }
                     return 0
                 }
             }
         }
 
-        let connectedComponents = this.getConnectedComponents(referenceTerminal, referenceComponent)
         for (let i = 0; i < connectedComponents.length; i++) {
-            this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i].componentRef._reactInternals.key)
-            this.addToGraph(connectedComponents[i].terminalNode, connectedComponents[i].componentRef)
+            if (!findInMap(connectedComponents[i].attachTo, previousTerminal)) {    // Prevents backtracking.
+                if (!this.circuitsGraph.hasEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
+                    this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
+                }
+                for (const value of connectedComponents[i].attachTo.values()) {
+                    if (document.getElementById(value.id).parentElement.id !== document.getElementById(referenceTerminal).parentElement.id) {
+                        this.addToGraph(value.id, connectedComponents[i], referenceTerminal)
+                    }
+                }
+            }
         }
 
     }
@@ -7472,25 +7503,18 @@ export default class BreadBoard extends React.Component {
      * @return {Array} Returns a list of components in the same terminal group as referenceComponent.
      */
     getConnectedComponents(referenceTerminal, referenceComponent) {
-        // console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
+        console.log("getConnectedComponents() called at:", '\n\t', referenceTerminal, '\n\t', referenceComponent)
         let connectedComponents = []
 
+        let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
         for (const [terminalKey, component] of this.connectedParts) {
-            let referenceTerminalGroup = document.getElementById(referenceTerminal).parentElement.id
             let currentTerminalGroup = document.getElementById(terminalKey).parentElement.id
 
-            if (referenceTerminalGroup === currentTerminalGroup && !Object.is(component.ref, referenceComponent)) {
-                // console.log("Connected component found:", component.ref)
-                for (const [key, value] of component.ref.attachTo) {
-                    if (referenceTerminalGroup !== document.getElementById(value.id).parentElement.id) {
-                        connectedComponents.push({
-                            terminalNode: value.id,
-                            componentRef: component.ref
-                        })
-                    }
-                }
+            if (referenceTerminalGroup === currentTerminalGroup && !Object.is(component.ref, referenceComponent)) { // Finds items in same terminal group
+                connectedComponents.push(component.ref)
             }
         }
         return connectedComponents
     }
+
 }
