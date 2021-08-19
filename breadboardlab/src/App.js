@@ -3,7 +3,7 @@ import './App.css';
 import {
     AppBar,
     CssBaseline,
-    IconButton,
+    IconButton, Menu, MenuItem,
     Toolbar,
     Tooltip,
     Typography,
@@ -79,7 +79,9 @@ class App extends Component {
             theme: {...themeDark},
             hideProperties: true,
             partData: {},
-            isSimulating: false
+            isSimulating: false,
+            mouseX: null,
+            mouseY: null
         }
         this.movePart = this.movePart.bind(this);
         this.moveLead = this.moveLead.bind(this);
@@ -368,6 +370,49 @@ class App extends Component {
         this.current = this.tail;
     }
 
+    handleContextMenu = (event) => {
+        event.preventDefault();
+        this.setState({
+            mouseX: event.clientX - 2,
+            mouseY: event.clientY - 4,
+        });
+    };
+
+    handleContextMenuClose = (event) => {
+        console.log("handleContextMenuClose() called.")
+        let selectedContextMenuItem = event.currentTarget.innerText
+        console.log("selected part:", this.selectedPart)
+        console.log("selected menu item:", selectedContextMenuItem)
+        if (this.selectedPart) {
+            let pos = this.state.listOfParts.findIndex((part) => {
+                return part.key === this.selectedPart.ref._reactInternals.key
+            })
+            console.log("selected part index:", pos)
+            switch (selectedContextMenuItem) {
+                case "Send To Back":
+                    // TODO send Selected Part to beginning of array, update this.state.listOfParts and App.listOfRefs._currentValue
+                    break
+                case "Send Backward":
+                    // TODO move Selected Part to one index back (if not already at beginning), update this.state.listOfParts and App.listOfRefs._currentValue
+                    break
+                case "Bring Forward":
+                    // TODO move Selected Part to one index forward (if not already at end), update this.state.listOfParts and App.listOfRefs._currentValue
+                    break
+                case "Bring To Front":
+                    // TODO move Selected Part to end of array, update this.state.listOfParts and App.listOfRefs._currentValue
+                    break
+                default:
+                    console.log("No Context Menu option selected.")
+
+            }
+        }
+
+        this.setState({
+            mouseX: null,
+            mouseY: null,
+        });
+    };
+
     render() {
         const {classes} = this.props;
 
@@ -475,8 +520,25 @@ class App extends Component {
                     />
 
                     { /* Canvas */}
-                    <div className={classes.canvas}>
+                    <div className={classes.canvas} onContextMenu={this.handleContextMenu}
+                         style={{cursor: 'context-menu'}}>
                         <Canvas ref={this.canvasNode} listOfParts={this.state.listOfParts}/>
+                        <Menu
+                            keepMounted
+                            open={this.state.mouseY !== null}
+                            onClose={this.handleContextMenuClose}
+                            anchorReference="anchorPosition"
+                            anchorPosition={
+                                this.state.mouseY !== null && this.state.mouseX !== null
+                                    ? {top: this.state.mouseY, left: this.state.mouseX}
+                                    : undefined
+                            }
+                        >
+                            <MenuItem onClick={this.handleContextMenuClose}>Send To Back</MenuItem>
+                            <MenuItem onClick={this.handleContextMenuClose}>Send Backward</MenuItem>
+                            <MenuItem onClick={this.handleContextMenuClose}>Bring Forward</MenuItem>
+                            <MenuItem onClick={this.handleContextMenuClose}>Bring To Front</MenuItem>
+                        </Menu>
                     </div>
 
                 </div>
