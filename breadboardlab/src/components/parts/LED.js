@@ -25,7 +25,8 @@ export default class LED extends React.Component {
             rotation: 0,
             maxCurrent: 0.02,  // new for simulation (LED-specific)
             voltageDrop: 1.8,  // new for simulation
-            intensity: 0.0     // new for simulation
+            intensity: 0.0,     // new for simulation
+            forwardVoltage: 2.0
         }
         this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);

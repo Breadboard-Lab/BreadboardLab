@@ -14,7 +14,7 @@ export default class Battery extends React.Component {
         this.state = {
             type: "Battery",
             name: "Battery",
-            voltage: "9",
+            voltage: "5",
             isSelected: false,
             powerPoint: {x: 63, y: 31.887},
             groundPoint: {x: 63, y: 36.642},

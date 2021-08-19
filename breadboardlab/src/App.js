@@ -170,9 +170,9 @@ class App extends Component {
     handleUndo = () => {
         if (this.current.prev) {
             this.current = this.current.prev;
-            
+
             if (this.current.undoOptions) {
-                switch(this.current.undoOptions.actionType) {
+                switch (this.current.undoOptions.actionType) {
                     case "lead":
                         this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3]);
                         break;
@@ -191,7 +191,7 @@ class App extends Component {
             this.current = this.current.next;
 
             if (this.current.redoOptions) {
-                switch(this.current.redoOptions.actionType) {
+                switch (this.current.redoOptions.actionType) {
                     case "lead":
                         this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3]);
                         break;
@@ -233,29 +233,17 @@ class App extends Component {
 
                     let totalVoltage = circuitsGraph.getNode(firstNode).data.state.voltage
                     let totalResistance = 0
-                    circuitsGraph.forEachNode((node) =>{
+                    circuitsGraph.forEachNode((node) => {
                         console.log(node.id, node.data);
-                        if (node.data.state.type === "Resistor"){
+                        if (node.data.state.type === "Resistor") {
                             totalResistance += this.getResistance(node.data)
                         }
                     });
-
-                    let totalCurrent = totalVoltage / totalResistance
                     // console.log(totalCurrent, totalVoltage, totalResistance)
-
                     circuitsGraph.forEachNode((node) => {
                         // console.log(node.id, node.data);
-                        this.setCurrent(node.data, totalCurrent)
+                        this.setCurrent(node.data, totalVoltage, totalResistance)
                     });
-
-                    // let resistance = this.getResistance(foundCircuits, firstNode)
-
-                    /*for (let i = 0; i < circuits.length; i++) {
-                        let resistance = this.getResistance(circuits[i])
-                        // console.log("current", circuits[i][0].state.voltage, resistance)
-                        let current = circuits[i][0].state.voltage / resistance
-                        this.setCurrent(circuits[i], current)
-                    }*/
 
                     if (this.selectedPart) {
                         this.unselectPart()
@@ -275,10 +263,9 @@ class App extends Component {
                      - Reset all components to Off state.
                      */
 
-                    /*for (let i = 0; i < circuits.length; i++) {
-                        let current = 0
-                        this.setCurrent(circuits[i], current)
-                    }*/
+                    circuitsGraph.forEachNode((node) => {
+                        this.setCurrent(node.data, 0, 0)
+                    });
 
                     this.setState({
                         isSimulating: !this.state.isSimulating,
@@ -498,12 +485,11 @@ class App extends Component {
     }
 
     /** getResistance
-     *
-     *  Calculates total circuit resistance.
+     *      Returns the resistance of a resistor component.
      *
      * @param resistor
      *
-     * @returns {number}    The total resistance as found by any resistors in the closed circuit.
+     * @returns {number}    The resistance of the resistor.
      */
     getResistance(resistor) {
         let componentUnitPrefix = resistor.state.unit
@@ -525,15 +511,26 @@ class App extends Component {
 
     /** setCurrent
      *
-     * @param component   A list of components that form a closed circuit.
-     * @param current   The calculated current based on the resistance from getResistance
+     * @param component
+     * @param voltage
+     * @param resistance
      */
-    setCurrent(component, current) {
-        component.setState({current: current}, () => {
-            if (component.state.type === "LED") {
+    setCurrent(component, voltage, resistance) {
+        if (voltage === 0) {
+            component.setState({current: 0}, () => {
+                if (component.state.type === "LED") {
+                    component.setIntensity()
+                }
+            })
+        } else if (component.state.type === "LED") {
+            let current = (voltage - component.state.forwardVoltage) / resistance
+            component.setState({current: current}, () => {
                 component.setIntensity()
-            }
-        })
+            })
+        } else {
+            let current = voltage / resistance
+            component.setState({current: current})
+        }
     }
 }
 
