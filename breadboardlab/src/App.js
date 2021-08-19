@@ -20,6 +20,7 @@ import AppbarToolsCollapseMenu from "./components/appbars/AppbarToolsCollapseMen
 import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsCollapseMenu";
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
+import createGraph from "ngraph.graph";
 
 const drawerWidth = 240;
 const listOfRefs = React.createContext([]);
@@ -206,10 +207,15 @@ class App extends Component {
 
     handleSimulation = () => {
         console.log('handleSimulation clicked. isSimulating:', this.state.isSimulating)
+        // console.log(App.listOfRefs._currentValue)
 
         App.listOfRefs._currentValue.forEach((element) => {
             if (element.state.type === "Breadboard") {
-                let circuitsGraph = element.getCircuits()
+                let temp = element.getCircuits()
+                let circuitsGraph = temp[0]
+                let firstNode = temp[1]
+
+                console.log(firstNode, circuitsGraph)
 
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
@@ -222,8 +228,27 @@ class App extends Component {
                      - Disable drawer open button.
                      - Simulate.
                      */
-                    //console.log(element.connectedParts)
-                    // console.log(element.findCircuits())
+
+
+
+                    let totalVoltage = circuitsGraph.getNode(firstNode).data.state.voltage
+                    let totalResistance = 0
+                    circuitsGraph.forEachNode((node) =>{
+                        console.log(node.id, node.data);
+                        if (node.data.state.type === "Resistor"){
+                            totalResistance += this.getResistance(node.data)
+                        }
+                    });
+
+                    let totalCurrent = totalVoltage / totalResistance
+                    // console.log(totalCurrent, totalVoltage, totalResistance)
+
+                    circuitsGraph.forEachNode((node) => {
+                        // console.log(node.id, node.data);
+                        this.setCurrent(node.data, totalCurrent)
+                    });
+
+                    // let resistance = this.getResistance(foundCircuits, firstNode)
 
                     /*for (let i = 0; i < circuits.length; i++) {
                         let resistance = this.getResistance(circuits[i])
@@ -476,49 +501,39 @@ class App extends Component {
      *
      *  Calculates total circuit resistance.
      *
-     * @param circuit       A list of components that form a closed circuit.
+     * @param resistor
      *
      * @returns {number}    The total resistance as found by any resistors in the closed circuit.
      */
-    getResistance(circuit) {
-        // console.log(circuit)
-        let totalResistance = 0
-        for (let i = 0; i < circuit.length; i++) {
-            // console.log(circuit[i])
-            if ((circuit[i]).state.type === "Resistor") {
-                let componentUnitPrefix = circuit[i].state.unit
-                let componentResistance = circuit[i].state.resistance
+    getResistance(resistor) {
+        let componentUnitPrefix = resistor.state.unit
+        let componentResistance = resistor.state.resistance
 
-                switch (componentUnitPrefix) {
-                    case 'kΩ':
-                        componentResistance = (componentResistance * 1000)
-                        break
-                    case 'MΩ':
-                        componentResistance = (componentResistance * 1000000)
-                        break
-                    default:
-                        componentResistance = (componentResistance * 1)
-                }
-
-                totalResistance += componentResistance
-            }
+        switch (componentUnitPrefix) {
+            case 'kΩ':
+                componentResistance = (componentResistance * 1000)
+                break
+            case 'MΩ':
+                componentResistance = (componentResistance * 1000000)
+                break
+            default:
+                componentResistance = (componentResistance * 1)
         }
-        return totalResistance;
+
+        return componentResistance
     }
 
     /** setCurrent
      *
-     * @param circuit   A list of components that form a closed circuit.
+     * @param component   A list of components that form a closed circuit.
      * @param current   The calculated current based on the resistance from getResistance
      */
-    setCurrent(circuit, current) {
-        for (let i = 0; i < circuit.length; i++) {
-            circuit[i].setState({current: current}, () => {
-                if (circuit[i].state.type === "LED") {
-                    circuit[i].setIntensity()
-                }
-            })
-        }
+    setCurrent(component, current) {
+        component.setState({current: current}, () => {
+            if (component.state.type === "LED") {
+                component.setIntensity()
+            }
+        })
     }
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import interact from "interactjs";
 import Wire from "./Wire";
 import App from "../../App";
-import Graph from "graph-data-structure";
+import createGraph from "ngraph.graph";
 
 export default class BreadBoard extends React.Component {
     constructor(props) {
@@ -21,7 +21,7 @@ export default class BreadBoard extends React.Component {
         this.connectPart = this.connectPart.bind(this);
         this.disconnectPart = this.disconnectPart.bind(this);
         this.updateProp = this.updateProp.bind(this);
-        this.circuitsGraph = new Graph()
+        this.circuitsGraph = createGraph()
 
         this.scale = {x: 6, y: 6};
         this.offSet = {x: 0.45604399, y: 0};
@@ -7421,21 +7421,27 @@ export default class BreadBoard extends React.Component {
     /** getCircuits
      *      Searches for a Battery and starts recursive Graph creation from Battery's power terminal.
      *
-     *  @return {Graph} A list of complete circuits
+     *  @return {Array} Returns a list containing the circuits Graph and the key of the first node.
      */
     getCircuits() {
         console.log("getCircuits() called.")
-        this.circuitsGraph = new Graph()
+        this.circuitsGraph.clear()
 
+        let batteryKey = null
         for (const [key, element] of this.connectedParts) {
             if (element.ref.state.type === 'Battery' && element.id === "power") {
                 // console.log("Power found at:", key)
                 this.addToGraph(key, element.ref)
+                batteryKey = element.ref._reactInternals.key
             }
         }
-        console.log("circuitsGraph", this.circuitsGraph.serialize())
 
-        return this.circuitsGraph
+        console.log("circuitsGraph")
+        this.circuitsGraph.forEachNode(function (node) {
+            console.log(node);
+        });
+
+        return [this.circuitsGraph, batteryKey]
     }
 
     /** addToGraph
@@ -7473,8 +7479,10 @@ export default class BreadBoard extends React.Component {
             for (let i = 0; i < connectedComponents.length; i++) {
                 if (connectedComponents[i].state.type === "Battery") {
                     // If link already exists.
-                    if (!this.circuitsGraph.hasEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
-                        this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
+                    if (!this.circuitsGraph.hasLink(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
+                        this.circuitsGraph.addNode(referenceComponent._reactInternals.key, referenceComponent)
+                        this.circuitsGraph.addNode(connectedComponents[i]._reactInternals.key, connectedComponents[i])
+                        this.circuitsGraph.addLink(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
                     }
                     return 0
                 }
@@ -7483,8 +7491,10 @@ export default class BreadBoard extends React.Component {
 
         for (let i = 0; i < connectedComponents.length; i++) {
             if (!findInMap(connectedComponents[i].attachTo, previousTerminal)) {    // Prevents backtracking.
-                if (!this.circuitsGraph.hasEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
-                    this.circuitsGraph.addEdge(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
+                if (!this.circuitsGraph.hasLink(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)) {
+                    this.circuitsGraph.addNode(referenceComponent._reactInternals.key, referenceComponent)
+                    this.circuitsGraph.addNode(connectedComponents[i]._reactInternals.key, connectedComponents[i])
+                    this.circuitsGraph.addLink(referenceComponent._reactInternals.key, connectedComponents[i]._reactInternals.key)
                 }
                 for (const value of connectedComponents[i].attachTo.values()) {
                     if (document.getElementById(value.id).parentElement.id !== document.getElementById(referenceTerminal).parentElement.id) {
