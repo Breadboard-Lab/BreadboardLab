@@ -168,6 +168,10 @@ class App extends Component {
     handleKeyPress = (event) => {
         if (event.key === 'Delete') {
             this.handleDelete()
+        } else if (event.key === "z" && event.ctrlKey) {
+            this.handleUndo();
+        }else if (event.key === "y" && event.ctrlKey) {
+            this.handleRedo();
         }
     }
 
@@ -179,8 +183,9 @@ class App extends Component {
                 switch (this.current.undoOptions.actionType) {
                     case "lead":
                         this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3], () => {
+                            this.current.undoOptions.parameters[2].disconnect();
+
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                this.current.undoOptions.parameters[2].disconnect()
                                 this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
                                 this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
                             });
@@ -188,8 +193,9 @@ class App extends Component {
                         break;
                     case "move":
                         this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], () => {
+                            this.current.undoOptions.parameters[2].disconnect();
+
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                this.current.undoOptions.parameters[2].disconnect()
                                 this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
                                 this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
                             });
@@ -210,8 +216,9 @@ class App extends Component {
                 switch (this.current.redoOptions.actionType) {
                     case "lead":
                         this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3], () => {
+                            this.current.redoOptions.parameters[2].disconnect();
+
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                this.current.redoOptions.parameters[2].disconnect()
                                 this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
                                 this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
                             });
@@ -219,8 +226,9 @@ class App extends Component {
                         break;
                     case "move":
                         this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], () => {
+                            this.current.redoOptions.parameters[2].disconnect();
+
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                this.current.redoOptions.parameters[2].disconnect()
                                 this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
                                 this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
                             });
@@ -457,16 +465,15 @@ class App extends Component {
 
     addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {
         let newTail = new LinkedListNode();
-
         this.current.undoOptions.actionType = actionType;
         this.current.undoOptions.parameters = undoParameters;
-        this.current.undoOptions.connectedParts = connectedParts;
+        this.current.undoOptions.connectedParts = new Map(connectedParts);
         this.current.next = newTail;
 
         newTail.prev = this.current;
         newTail.redoOptions.actionType = actionType;
         newTail.redoOptions.parameters = redoParameters;
-        newTail.redoOptions.connectedParts = connectedParts;
+        newTail.redoOptions.connectedParts = new Map(connectedParts);
 
         this.tail = newTail;
         this.current = this.tail;

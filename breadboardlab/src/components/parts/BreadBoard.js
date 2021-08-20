@@ -156,11 +156,10 @@ export default class BreadBoard extends React.Component {
                     ondragenter: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (typeof ref.disconnect === "function")
-                            ref.disconnect(event, event.currentTarget.id);
-
                         if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                             (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
+                            if (typeof ref.disconnect === "function")
+                                ref.disconnect(event, event.currentTarget.id);
                             if (typeof ref.highlight === "function")
                                 ref.highlight(event, this);
                         }
@@ -169,11 +168,11 @@ export default class BreadBoard extends React.Component {
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (typeof ref.disconnect === "function")
-                            ref.disconnect(event, event.currentTarget.id);
 
                         if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                             (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
+                            if (typeof ref.disconnect === "function")
+                                ref.disconnect(event, event.currentTarget.id);
                             if (typeof ref.highlight === "function")
                                 ref.highlight(event, this);
                         }
