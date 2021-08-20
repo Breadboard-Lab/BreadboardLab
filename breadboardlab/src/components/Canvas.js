@@ -43,6 +43,7 @@ export default class Canvas extends React.Component {
                 height: window.innerHeight * this.scale
             }
         };
+        this.node = React.createRef();
         this.handleResize = this.handleResize.bind(this);
         this.setViewBox = this.setViewBox.bind(this);
         window.addEventListener("wheel", (e) => e.preventDefault(), { passive:false });
@@ -104,6 +105,7 @@ export default class Canvas extends React.Component {
     render() {
         return(
             <svg 
+                ref={this.node}
                 onWheel={e => this.handleOnWheel(e)}
                 viewBox={`${this.state.viewBox.x} ${this.state.viewBox.y} ${this.state.viewBox.width} ${this.state.viewBox.height}`}
                 scale={this.scale}

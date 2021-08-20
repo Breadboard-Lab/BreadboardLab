@@ -85,6 +85,7 @@ class App extends Component {
         }
         this.movePart = this.movePart.bind(this);
         this.moveLead = this.moveLead.bind(this);
+        this.checkConnected = this.checkConnected.bind(this);
         this.addLeadHistory = this.addLeadHistory.bind(this);
         this.addMoveHistory = this.addMoveHistory.bind(this);
         this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
@@ -176,10 +177,22 @@ class App extends Component {
             if (this.current.undoOptions) {
                 switch (this.current.undoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3]);
+                        this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3], () => {
+                            this.current.undoOptions.connectedParts.forEach((value, key) => {
+                                this.current.undoOptions.parameters[2].disconnect()
+                                this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
+                                this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                            });
+                        });
                         break;
                     case "move":
-                        this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2]);
+                        this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], () => {
+                            this.current.undoOptions.connectedParts.forEach((value, key) => {
+                                this.current.undoOptions.parameters[2].disconnect()
+                                this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
+                                this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                            });
+                        });
                         break;
                     default:
                         break;
@@ -195,10 +208,22 @@ class App extends Component {
             if (this.current.redoOptions) {
                 switch (this.current.redoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3]);
+                        this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3], () => {
+                            this.current.redoOptions.connectedParts.forEach((value, key) => {
+                                this.current.redoOptions.parameters[2].disconnect()
+                                this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
+                                this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                            });
+                        });
                         break;
                     case "move":
-                        this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2]);
+                        this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], () => {
+                            this.current.redoOptions.connectedParts.forEach((value, key) => {
+                                this.current.redoOptions.parameters[2].disconnect()
+                                this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
+                                this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                            });
+                        });
                         break;
                     default:
                         break;
@@ -312,7 +337,7 @@ class App extends Component {
         });
     }
 
-    movePart(dx, dy, ref) {
+    movePart(dx, dy, ref, callback) {
         const scale = this.canvasNode.current.scale;
 
         if (ref && App.selectedTool._currentValue === "select_tool") {
@@ -320,13 +345,13 @@ class App extends Component {
                 let xPos = ref.state.translation.x + dx * scale;
                 let yPos = ref.state.translation.y + dy * scale;
 
-                ref.setState({translation: {x: xPos, y: yPos}});
+                ref.setState({translation: {x: xPos, y: yPos}}, callback);
                 return {dx: dx * scale, dy: dy * scale}
             } else {
-                ref.setState({translation: {x: 0, y: 0}});
+                ref.setState({translation: {x: 0, y: 0}}, callback);
                 return {dx: 0, dy: 0}
             }
-        } else {
+        } else if (App.selectedTool._currentValue === "wire_tool") {
             let viewBox = {...this.canvasNode.current.state.viewBox};
             viewBox.x -= dx * scale;
             viewBox.y -= dy * scale;
@@ -335,7 +360,7 @@ class App extends Component {
         return {dx: 0, dy: 0}
     }
 
-    moveLead(dx, dy, ref, propertyName) {
+    moveLead(dx, dy, ref, propertyName, callback) {
         const scale = this.canvasNode.current.scale;
         let angle = ref.state.rotation * Math.PI / 180;
 
@@ -344,27 +369,103 @@ class App extends Component {
                 x: ref.state[propertyName].x + dx * scale / ref.scale.x * Math.cos(angle) + dy * scale / ref.scale.y * Math.sin(angle),
                 y: ref.state[propertyName].y + dy * scale / ref.scale.y * Math.cos(angle) + dx * scale / ref.scale.x * Math.sin(-angle)
             }
-        });
+        }, callback);
+    }
+    
+    getDimensions(element, angle) {
+        let t = angle || 0;
+        let point = this.canvasNode.current.node.current.createSVGPoint();
+        const matrix = element.getCTM();
+        
+        point.x = element.getBBox().x;
+        point.y = element.getBBox().y;
+        const XY = point.matrixTransform(matrix);
+
+        point.x = element.getBBox().x + element.getBBox().width;
+        point.y = element.getBBox().y + element.getBBox().height;
+        const RB = point.matrixTransform(matrix);
+
+        return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: Math.abs((RB.x - XY.x) * Math.cos(t) + (RB.y - XY.y) * Math.sin(t)), height: Math.abs((RB.y - XY.y) * Math.cos(t) + (RB.x - XY.x) * Math.sin(-t))}
+    }
+
+    checkConnected(ref, attachRef, connectorPosition) {
+        let elementID = [];
+        let connectors = Array.prototype.slice.call(attachRef.connectors);
+
+        if (connectors) {
+            for (let refData of ref.refArray) {
+                let element = (refData.ref.current.node) ? refData.ref.current.node : refData.ref.current;
+                let found = false;
+                
+                for (let connector of connectors) {
+                    let rect1 = element.getBoundingClientRect();
+                    let rect2 = connector.getBoundingClientRect();
+                    let overlap = !(rect1.right < rect2.left || rect1.left > rect2.right || rect1.bottom < rect2.top || rect1.top > rect2.bottom);
+
+                    if (overlap) {
+                        let t = attachRef.state.rotation * Math.PI / 180;
+                        let point = document.getElementById("AppSVG").createSVGPoint();
+                        let breadboardDim = this.getDimensions(connector, t);
+
+                        point.x = breadboardDim.x + breadboardDim.width / 2 * Math.cos(t) + breadboardDim.height / 2 * Math.sin(-t);
+                        point.y = breadboardDim.y + breadboardDim.width / 2 * Math.sin(t) + breadboardDim.height / 2 * Math.cos(t);
+                        const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+                        t = ref.state.rotation * Math.PI / 180;
+                        let connectorDim = this.getDimensions(element, t);
+
+                        switch(connectorPosition) {
+                            case "bottomCentre":
+                                point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height * Math.sin(-t);
+                                point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height * Math.cos(t);
+                                break;
+                            default:
+                                point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height / 2 * Math.sin(-t);
+                                point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height / 2 * Math.cos(t);
+                                break;
+                        }
+                        const svgConnector = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
+
+                        let radiusX = connector.getBBox().width / 2 * attachRef.scale.x;
+                        let radiusY = connector.getBBox().height / 2 * attachRef.scale.y;
+                        let ellispeArea = (svgConnector.x - svgBreadboard.x) * (svgConnector.x - svgBreadboard.x) / (radiusX * radiusX) + (svgConnector.y - svgBreadboard.y) * (svgConnector.y - svgBreadboard.y) / (radiusY * radiusY);
+
+                        if (ellispeArea <= 1) {
+                            if (attachRef.connectedParts && (attachRef.connectedParts.get(connector.id) === undefined || attachRef.connectedParts.get(connector.id).ref === ref)) {
+                                found = true;
+                                elementID.push(connector.id);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!found)
+                    elementID.push(undefined);
+            }
+        }
+        return elementID;
     }
 
     addLeadHistory(dx, dy, ref, propertyName) {
-        this.addtoHistory("lead", [dx, dy, ref, propertyName], [-dx, -dy, ref, propertyName]);
+        this.addtoHistory("lead", [dx, dy, ref, propertyName], [-dx, -dy, ref, propertyName], ref.attachTo);
     }
 
     addMoveHistory(dx, dy, ref) {
-        this.addtoHistory("move", [dx, dy, ref], [-dx, -dy, ref]);
+        this.addtoHistory("move", [dx, dy, ref], [-dx, -dy, ref], ref.attachTo);
     }
 
-    addtoHistory(actionType, undoParameters, redoParameters) {
+    addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {
         let newTail = new LinkedListNode();
 
         this.current.undoOptions.actionType = actionType;
         this.current.undoOptions.parameters = undoParameters;
+        this.current.undoOptions.connectedParts = connectedParts;
         this.current.next = newTail;
 
         newTail.prev = this.current;
         newTail.redoOptions.actionType = actionType;
         newTail.redoOptions.parameters = redoParameters;
+        newTail.redoOptions.connectedParts = connectedParts;
 
         this.tail = newTail;
         this.current = this.tail;
@@ -513,6 +614,7 @@ class App extends Component {
                         moveLead={this.moveLead}
                         addLeadHistory={this.addLeadHistory}
                         addMoveHistory={this.addMoveHistory}
+                        checkConnected={this.checkConnected}
                         handlePartSelect={this.handlePartSelect}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
@@ -597,9 +699,9 @@ class App extends Component {
 }
 
 class LinkedListNode {
-    constructor(actionType, undoParameters, redoParameters) {
-        this.undoOptions = {actionType: actionType, parameters: undoParameters}
-        this.redoOptions = {actionType: actionType, parameters: redoParameters}
+    constructor(actionType, undoParameters, redoParameters, connectedParts) {
+        this.undoOptions = {actionType: actionType, parameters: undoParameters, connectedParts: connectedParts}
+        this.redoOptions = {actionType: actionType, parameters: redoParameters, connectedParts: connectedParts}
         this.next = undefined;
         this.prev = undefined;
     }
