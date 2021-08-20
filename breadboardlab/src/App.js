@@ -85,6 +85,7 @@ class App extends Component {
         }
         this.movePart = this.movePart.bind(this);
         this.moveLead = this.moveLead.bind(this);
+        this.getDimensions = this.getDimensions.bind(this);
         this.checkConnected = this.checkConnected.bind(this);
         this.addLeadHistory = this.addLeadHistory.bind(this);
         this.addMoveHistory = this.addMoveHistory.bind(this);
@@ -615,6 +616,7 @@ class App extends Component {
                         addLeadHistory={this.addLeadHistory}
                         addMoveHistory={this.addMoveHistory}
                         checkConnected={this.checkConnected}
+                        getDimensions={this.getDimensions}
                         handlePartSelect={this.handlePartSelect}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}

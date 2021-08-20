@@ -85,7 +85,7 @@ export default class Switch extends React.Component {
     highlight(event, attachRef) {
         let elementID = this.props.checkConnected(this, attachRef, "bottomCentre");
 
-        if (elementID.length === 3) {
+        if (!elementID.includes(undefined)) {
             this.highlightID = {ids: elementID, ref: attachRef};
 
             for (let connectorID of this.highlightID.ids)

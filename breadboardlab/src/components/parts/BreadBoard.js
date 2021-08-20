@@ -73,7 +73,7 @@ export default class BreadBoard extends React.Component {
                             this.connectedParts.forEach((item, key) => {
                                 if (item && !visited[item.ref._reactInternals.key]) {
                                     visited[item.ref._reactInternals.key] = item;
-                                    this.props.movePart(event, item.ref);
+                                    this.props.movePart(event.dx, event.dy, item.ref);
                                 }
                             });
                     }

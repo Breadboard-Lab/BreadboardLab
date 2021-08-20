@@ -79,8 +79,8 @@ export default class Button extends React.Component {
 
     highlight(event, attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
-
-        if (elementID.length === 4) {
+        
+        if (!elementID.includes(undefined)) {
             this.highlightID = {ids: elementID, ref: attachRef};
 
             for (let connectorID of this.highlightID.ids)
@@ -123,7 +123,8 @@ export default class Button extends React.Component {
     disconnect() {
         if (this.highlightID)
             for (let id of this.highlightID.ids)
-                this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
+                if (id)
+                    this.highlightID.ref.node.current.querySelector("#" + id).setAttribute("filter", "");
 
         for (let refData of this.refArray) {
             if (this.attachTo.get(refData.id) && typeof this.attachTo.get(refData.id).ref.disconnectPart === "function") {
