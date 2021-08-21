@@ -78,6 +78,7 @@ class SideBarPart extends React.Component {
                     interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element)
                     App.listOfRefs._currentValue.push(this.node);
+                    this.props.addAddPartHistory(this.node, part);
                 }
                 break;
             }

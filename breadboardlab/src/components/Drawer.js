@@ -150,7 +150,7 @@ class Drawer extends Component {
                                     <SideBarPart key={index} ondrag={this.props.addPart} part={filteredPart.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                  name={filteredPart.name} description={filteredPart.description}
                                                  handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} checkConnected={this.props.checkConnected} getDimensions={this.props.getDimensions}
-                                                 addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
+                                                 addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory} addAddPartHistory={this.props.addAddPartHistory} addDeleteHistory={this.props.addDeleteHistory}/>
                                 ))
                             ) : ({
                                 'all':
@@ -158,21 +158,21 @@ class Drawer extends Component {
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
                                                      handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} checkConnected={this.props.checkConnected} getDimensions={this.props.getDimensions}
-                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory} addAddPartHistory={this.props.addAddPartHistory} addDeleteHistory={this.props.addDeleteHistory}/>
                                     )),
                                 'basics':
                                     partsList.basics.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
                                                      handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} checkConnected={this.props.checkConnected} getDimensions={this.props.getDimensions}
-                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory} addAddPartHistory={this.props.addAddPartHistory} addDeleteHistory={this.props.addDeleteHistory}/>
                                     )),
                                 'gates':
                                     partsList.gates.map((part, index) => (
                                         <SideBarPart key={index} ondrag={this.props.addPart} part={part.component} movePart={this.props.movePart} moveLead={this.props.moveLead}
                                                      name={part.name} description={part.description}
                                                      handlePartSelect={this.props.handlePartSelect} updatePropertiesPanel={this.props.updatePropertiesPanel} checkConnected={this.props.checkConnected} getDimensions={this.props.getDimensions}
-                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory}/>
+                                                     addLeadHistory={this.props.addLeadHistory} addMoveHistory={this.props.addMoveHistory} addAddPartHistory={this.props.addAddPartHistory} addDeleteHistory={this.props.addDeleteHistory}/>
                                     )),
                             }[this.state.selectedCategory])
                         }

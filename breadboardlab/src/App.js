@@ -90,6 +90,8 @@ class App extends Component {
         this.checkConnected = this.checkConnected.bind(this);
         this.addLeadHistory = this.addLeadHistory.bind(this);
         this.addMoveHistory = this.addMoveHistory.bind(this);
+        this.addAddPartHistory = this.addAddPartHistory.bind(this);
+        this.addDeletePartHistory = this.addDeletePartHistory.bind(this);
         this.updatePropertiesPanel = this.updatePropertiesPanel.bind(this);
         this.canvasNode = React.createRef();
 
@@ -202,6 +204,14 @@ class App extends Component {
                             });
                         });
                         break;
+                    case "add":
+                        if (typeof this.current.undoOptions.parameters[0].disconnect === "function")
+                            this.current.undoOptions.parameters[0].disconnect();
+                        
+                        let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.undoOptions.parameters[1].key);
+                        App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.undoOptions.parameters[0]._reactInternals.key));
+                        
+                        this.setState({listOfParts: newListOfParts});
                     default:
                         break;
                 }
@@ -233,6 +243,17 @@ class App extends Component {
                                 this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
                                 this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
                             });
+                        });
+                        break;
+                    case "add":
+                        let newListOfParts = [...this.state.listOfParts];
+                        let part = React.cloneElement(this.current.redoOptions.parameters[1], {key: this.current.redoOptions.parameters[1].key, ref: node => this.node = node});
+                        
+                        newListOfParts.splice(this.current.redoOptions.parameters[1].key, 0, part);
+                        this.setState({listOfParts: newListOfParts}, () => {   
+                            this.current.prev.undoOptions.parameters[0] = this.node;            
+                            App.listOfRefs._currentValue.splice(this.current.redoOptions.parameters[0]._reactInternals.key, 0, this.node);
+                            this.node.setState(this.current.redoOptions.parameters[0].state);
                         });
                         break;
                     default:
@@ -350,9 +371,8 @@ class App extends Component {
 
     movePart(dx, dy, ref, callback) {
         const scale = this.canvasNode.current.scale;
-
         if (ref && App.selectedTool._currentValue === "select_tool") {
-            if (ref.state.translation.x && ref.state.translation.y) {
+            if (ref.state.translation.x !== undefined && ref.state.translation.y !== undefined) {
                 let xPos = ref.state.translation.x + dx * scale;
                 let yPos = ref.state.translation.y + dy * scale;
 
@@ -463,6 +483,14 @@ class App extends Component {
 
     addMoveHistory(dx, dy, ref) {
         this.addtoHistory("move", [dx, dy, ref], [-dx, -dy, ref], ref.attachTo);
+    }
+
+    addAddPartHistory(ref, reactElement) {
+        this.addtoHistory("add", [ref, reactElement], [ref, reactElement], ref.attachTo)
+    }
+
+    addDeletePartHistory(ref) {
+        this.addtoHistory("delete", [ref], [ref], ref.attachTo);
     }
 
     addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {
@@ -624,6 +652,8 @@ class App extends Component {
                         moveLead={this.moveLead}
                         addLeadHistory={this.addLeadHistory}
                         addMoveHistory={this.addMoveHistory}
+                        addAddPartHistory={this.addAddPartHistory}
+                        addDeletePartHistory={this.addDeletePartHistory}
                         checkConnected={this.checkConnected}
                         getDimensions={this.getDimensions}
                         handlePartSelect={this.handlePartSelect}

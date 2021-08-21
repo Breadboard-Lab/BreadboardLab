@@ -168,7 +168,6 @@ export default class BreadBoard extends React.Component {
                     ondropmove: event => {
                         let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-
                         if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                             (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
                             if (typeof ref.disconnect === "function")

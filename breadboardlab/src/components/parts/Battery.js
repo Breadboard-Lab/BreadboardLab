@@ -148,7 +148,6 @@ export default class Battery extends React.Component {
                 }
             }
         }
-
     }
 
     disconnect(event) {
