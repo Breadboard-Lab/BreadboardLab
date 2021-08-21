@@ -21,6 +21,7 @@ import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsColla
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
 import createGraph from "ngraph.graph";
+import {findCycles} from "./utils/findCycles";
 
 const drawerWidth = 240;
 const listOfRefs = React.createContext([]);
@@ -249,9 +250,10 @@ class App extends Component {
             if (element.state.type === "Breadboard") {
                 let temp = element.getCircuits()
                 let circuitsGraph = temp[0]
-                let firstNode = temp[1]
+                let rootNode = temp[1]
 
-                console.log(firstNode, circuitsGraph)
+                // console.log(firstNode, circuitsGraph)
+                console.log(findCycles(circuitsGraph, rootNode))
 
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
@@ -267,10 +269,10 @@ class App extends Component {
 
 
 
-                    let totalVoltage = circuitsGraph.getNode(firstNode).data.state.voltage
+                    let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
                     let totalResistance = 0
                     circuitsGraph.forEachNode((node) => {
-                        console.log(node.id, node.data);
+                        // console.log(node.id, node.data);
                         if (node.data.state.type === "Resistor") {
                             totalResistance += this.getResistance(node.data)
                         }

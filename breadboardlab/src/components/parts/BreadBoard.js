@@ -7435,10 +7435,10 @@ export default class BreadBoard extends React.Component {
             }
         }
 
-        console.log("circuitsGraph")
+        /*console.log("circuitsGraph")
         this.circuitsGraph.forEachNode(function (node) {
             console.log(node);
-        });
+        });*/
 
         return [this.circuitsGraph, batteryKey]
     }
