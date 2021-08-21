@@ -21,7 +21,7 @@ import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsColla
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
 import createGraph from "ngraph.graph";
-import {findCycles} from "./utils/findCycles";
+import {getPaths} from "./utils/getPaths";
 
 const drawerWidth = 240;
 const listOfRefs = React.createContext([]);
@@ -253,7 +253,7 @@ class App extends Component {
                 let rootNode = temp[1]
 
                 // console.log(firstNode, circuitsGraph)
-                console.log(findCycles(circuitsGraph, rootNode))
+                console.log("getPaths() returned:", getPaths(circuitsGraph, rootNode))
 
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
