@@ -99,12 +99,12 @@ class App extends Component {
         this.current = this.tail;
     }
 
-    unselectPart() {
+    unselectPart(callback) {
         this.setState({
             hideProperties: true,
             partData: {},
         });
-        this.selectedPart.ref.setState({isSelected: false});
+        this.selectedPart.ref.setState({isSelected: false}, callback);
         this.selectedPart = undefined;
     }
 
@@ -154,6 +154,8 @@ class App extends Component {
             if (typeof this.selectedPart.ref.disconnect === "function")
                 this.selectedPart.ref.disconnect();
 
+            this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key));
+
             let newListOfParts = this.state.listOfParts.filter(part => {
                 return part.key !== this.selectedPart.ref._reactInternals.key
             });
@@ -164,7 +166,7 @@ class App extends Component {
             this.setState({listOfParts: newListOfParts});
 
             // Unselects deleted part
-            this.unselectPart()
+            this.unselectPart();
         }
     };
 
@@ -205,13 +207,37 @@ class App extends Component {
                         });
                         break;
                     case "add":
-                        if (typeof this.current.undoOptions.parameters[0].disconnect === "function")
+                        if (typeof this.current.undoOptions.parameters[0].disconnect === "function") {}
                             this.current.undoOptions.parameters[0].disconnect();
                         
-                        let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.undoOptions.parameters[1].key);
-                        App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.undoOptions.parameters[0]._reactInternals.key));
+                        let updatePartsLists = () => {
+                            let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.undoOptions.parameters[1].key);
+                            App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.undoOptions.parameters[0]._reactInternals.key));
+                            
+                            this.setState({listOfParts: newListOfParts});
+                        }
                         
-                        this.setState({listOfParts: newListOfParts});
+                        if (this.selectedPart && this.selectedPart.ref === this.current.undoOptions.parameters[0]) {
+                            this.unselectPart(() => {
+                               updatePartsLists();
+                            });
+                        } else {
+                            updatePartsLists();
+                        }
+                        break;
+                    case "delete":
+                        let newListOfParts = [...this.state.listOfParts];
+                        let part = React.cloneElement(this.current.undoOptions.parameters[1], {key: this.current.undoOptions.parameters[1].key, ref: node => this.node = node});
+                        
+                        newListOfParts.splice(this.current.undoOptions.parameters[1].key, 0, part);
+                        this.setState({listOfParts: newListOfParts}, () => {
+                            this.current.next.redoOptions.parameters[0] = this.node;
+                            App.listOfRefs._currentValue.splice(this.current.undoOptions.parameters[0]._reactInternals.key, 0, this.node);
+                            this.node.setState(this.current.undoOptions.parameters[0].state);
+                            this.node.setState({isSelected: false});
+                            this.current.undoOptions.parameters[0] = this.node;
+                        });
+                        break;
                     default:
                         break;
                 }
@@ -250,11 +276,32 @@ class App extends Component {
                         let part = React.cloneElement(this.current.redoOptions.parameters[1], {key: this.current.redoOptions.parameters[1].key, ref: node => this.node = node});
                         
                         newListOfParts.splice(this.current.redoOptions.parameters[1].key, 0, part);
-                        this.setState({listOfParts: newListOfParts}, () => {   
-                            this.current.prev.undoOptions.parameters[0] = this.node;            
+                        this.setState({listOfParts: newListOfParts}, () => {
+                            this.current.prev.undoOptions.parameters[0] = this.node;
                             App.listOfRefs._currentValue.splice(this.current.redoOptions.parameters[0]._reactInternals.key, 0, this.node);
                             this.node.setState(this.current.redoOptions.parameters[0].state);
+                            this.node.setState({isSelected: false});            
+                            this.current.redoOptions.parameters[0] = this.node;
                         });
+                        break;
+                    case "delete":
+                        if (typeof this.current.redoOptions.parameters[0].disconnect === "function") {}
+                            this.current.redoOptions.parameters[0].disconnect();
+                        
+                        let updatePartsLists = () => {
+                            let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.redoOptions.parameters[1].key);
+                            App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.redoOptions.parameters[0]._reactInternals.key));
+                            
+                            this.setState({listOfParts: newListOfParts});
+                        }
+                        
+                        if (this.selectedPart && this.selectedPart.ref === this.current.redoOptions.parameters[0]) {
+                            this.unselectPart(() => {
+                               updatePartsLists();
+                            });
+                        } else {
+                            updatePartsLists();
+                        }
                         break;
                     default:
                         break;
@@ -489,8 +536,8 @@ class App extends Component {
         this.addtoHistory("add", [ref, reactElement], [ref, reactElement], ref.attachTo)
     }
 
-    addDeletePartHistory(ref) {
-        this.addtoHistory("delete", [ref], [ref], ref.attachTo);
+    addDeletePartHistory(ref, reactElement) {
+        this.addtoHistory("delete", [ref, reactElement], [ref, reactElement], ref.attachTo);
     }
 
     addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {

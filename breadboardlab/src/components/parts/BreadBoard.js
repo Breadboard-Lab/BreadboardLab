@@ -116,80 +116,80 @@ export default class BreadBoard extends React.Component {
                     }
                 }
             })
-                .on("move", (event) => {
-                    const {interaction} = event;
+            .on("move", (event) => {
+                const {interaction} = event;
 
-                    if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown && App.selectedTool._currentValue === "wire_tool") {
-                        let startPoint = {
-                            x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x,
-                            y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y
-                        };
+                if (interaction.pointerIsDown && !interaction.interacting() && this.mousedown && App.selectedTool._currentValue === "wire_tool") {
+                    let startPoint = {
+                        x: (Number(event.currentTarget.getAttribute("cx")) + this.offSet.x) * this.scale.x,
+                        y: (Number(event.currentTarget.getAttribute("cy")) + this.offSet.y) * this.scale.y
+                    };
 
-                        if (this.connectedParts.get(event.currentTarget.id) === undefined) {
-                            let wire = React.cloneElement(
-                                <Wire/>,
-                                {
-                                    ref: node => this.wire = node,
-                                    startPoint: startPoint,
-                                    endPoint: startPoint,
-                                    translation: {x: this.state.translation.x, y: this.state.translation.y},
-                                    rotation: this.state.rotation,
-                                    handlePartSelect: this.props.handlePartSelect,
-                                    updatePropertiesPanel: this.props.updatePropertiesPanel,
-                                    checkConnected: this.props.checkConnected,
-                                    key: App.partKey._currentValue
-                                }
-                            );
-                            this.props.addPart(wire);
-                            interaction.start({name: "drag"}, event.interactable, this.wire.endPoint.current.node);
-                            App.listOfRefs._currentValue.push(this.wire);
-                            App.partKey._currentValue++;
+                    if (this.connectedParts.get(event.currentTarget.id) === undefined) {
+                        let wire = React.cloneElement(
+                            <Wire/>,
+                            {
+                                ref: node => this.wire = node,
+                                startPoint: startPoint,
+                                endPoint: startPoint,
+                                translation: {x: this.state.translation.x, y: this.state.translation.y},
+                                rotation: this.state.rotation,
+                                handlePartSelect: this.props.handlePartSelect,
+                                updatePropertiesPanel: this.props.updatePropertiesPanel,
+                                checkConnected: this.props.checkConnected,
+                                key: App.partKey._currentValue
+                            }
+                        );
+                        this.props.addPart(wire);
+                        interaction.start({name: "drag"}, event.interactable, this.wire.endPoint.current.node);
+                        App.listOfRefs._currentValue.push(this.wire);
+                        App.partKey._currentValue++;
 
-                            this.connectPart(event.currentTarget.id, "start", this.wire);
-                            this.wire.attachTo.set("start", {id: event.currentTarget.id, ref: this});
-                        }
+                        this.connectPart(event.currentTarget.id, "start", this.wire);
+                        this.wire.attachTo.set("start", {id: event.currentTarget.id, ref: this});
                     }
-                })
-                .dropzone({
-                    accept: ".connector",
-                    overlap: 0.0001,
-                    ondragenter: event => {
-                        let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
+                }
+            })
+            .dropzone({
+                accept: ".connector",
+                overlap: 0.0001,
+                ondragenter: event => {
+                    let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
-                            if (typeof ref.disconnect === "function")
-                                ref.disconnect(event, event.currentTarget.id);
-                            if (typeof ref.highlight === "function")
-                                ref.highlight(event, this);
-                        }
-
-                    },
-                    ondropmove: event => {
-                        let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-
-                        if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
-                            if (typeof ref.disconnect === "function")
-                                ref.disconnect(event, event.currentTarget.id);
-                            if (typeof ref.highlight === "function")
-                                ref.highlight(event, this);
-                        }
-                    },
-                    ondrop: event => {
-                        let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-
-                        if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
-                            ref.connect(event.relatedTarget, event.currentTarget, this);
-                    },
-                    ondragleave: event => {
-                        let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
-
-                        if (this.connectedParts.get(event.currentTarget.id) && this.connectedParts.get(event.currentTarget.id).ref === ref && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
-                            (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
+                    if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                        (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
+                        if (typeof ref.disconnect === "function")
                             ref.disconnect(event, event.currentTarget.id);
+                        if (typeof ref.highlight === "function")
+                            ref.highlight(event, this);
                     }
-                });
+
+                },
+                ondropmove: event => {
+                    let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
+
+                    if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                        (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
+                        if (typeof ref.disconnect === "function")
+                            ref.disconnect(event, event.currentTarget.id);
+                        if (typeof ref.highlight === "function")
+                            ref.highlight(event, this);
+                    }
+                },
+                ondrop: event => {
+                    let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
+
+                    if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
+                        ref.connect(event.relatedTarget, event.currentTarget, this);
+                },
+                ondragleave: event => {
+                    let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
+
+                    if (this.connectedParts.get(event.currentTarget.id) && this.connectedParts.get(event.currentTarget.id).ref === ref && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                        (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector")))))
+                        ref.disconnect(event, event.currentTarget.id);
+                }
+            });
         }
     }
 

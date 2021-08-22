@@ -205,9 +205,9 @@ export default class Resistor extends React.Component {
 
     updateProp(propName, value) {
         if (propName.toLowerCase() === "type") {
-            this.setState({type: value}, this.props.updatePropertiesPanel);
+            this.setState({type: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "name") {
-            this.setState({name: value}, this.props.updatePropertiesPanel);
+            this.setState({name: value}, () => this.props.updatePropertiesPanel(this.getProps()));
         } else if (propName.toLowerCase() === "resistance") {
             if (isNaN(value)) {
                 this.setState({unit: value}, () => {
