@@ -354,6 +354,8 @@ class App extends Component {
                 // console.log(firstNode, circuitsGraph)
                 console.log("getPaths() returned:", getPaths(circuitsGraph, rootNode))
 
+                let cycles = getPaths(circuitsGraph, rootNode)
+
                 if (!this.state.isSimulating) {
                     console.log("Starting simulation...")
                     /**
@@ -366,9 +368,25 @@ class App extends Component {
                      - Simulate.
                      */
 
+                    for (const cycle of cycles) {
+                        let totalResistance = 0
+                        let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
+                        // Calculates Resistance
+                        for (const node of cycle){
+                            if (node.data.state.type === "Resistor") {
+                                totalResistance += this.getResistance(node.data)
+                            }
+
+                        }
+                        // Applies current
+                        for (const node of cycle){
+                            this.setCurrent(node.data, totalVoltage, totalResistance)
+                        }
+                    }
 
 
-                    let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
+
+                    /*let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
                     let totalResistance = 0
                     circuitsGraph.forEachNode((node) => {
                         // console.log(node.id, node.data);
@@ -380,7 +398,7 @@ class App extends Component {
                     circuitsGraph.forEachNode((node) => {
                         // console.log(node.id, node.data);
                         this.setCurrent(node.data, totalVoltage, totalResistance)
-                    });
+                    });*/
 
                     if (this.selectedPart) {
                         this.unselectPart()
