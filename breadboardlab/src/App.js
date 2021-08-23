@@ -151,10 +151,10 @@ class App extends Component {
             the part then filter remove part from listOfParts and listOfRefs.
          */
         if (this.selectedPart) {
+            this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key));
+
             if (typeof this.selectedPart.ref.disconnect === "function")
                 this.selectedPart.ref.disconnect();
-
-            this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key));
 
             let newListOfParts = this.state.listOfParts.filter(part => {
                 return part.key !== this.selectedPart.ref._reactInternals.key
@@ -185,24 +185,26 @@ class App extends Component {
             this.current = this.current.prev;
 
             if (this.current.undoOptions) {
+                let ref = App.listOfRefs._currentValue[Number(this.current.undoOptions.parameters[2])];
+
                 switch (this.current.undoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], this.current.undoOptions.parameters[3], () => {
-                            this.current.undoOptions.parameters[2].disconnect();
+                        this.moveLead(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], ref, this.current.undoOptions.parameters[3], () => {
+                            ref.disconnect();
 
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
-                                this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                                ref.highlight(value.ref);
+                                ref.connect(value.ref);
                             });
                         });
                         break;
                     case "move":
-                        this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], this.current.undoOptions.parameters[2], () => {
-                            this.current.undoOptions.parameters[2].disconnect();
+                        this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], ref, () => {
+                            ref.disconnect();
 
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                this.current.undoOptions.parameters[2].highlight(undefined, value.ref);
-                                this.current.undoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                                ref.highlight(value.ref);
+                                ref.connect(value.ref);
                             });
                         });
                         break;
@@ -228,12 +230,17 @@ class App extends Component {
                     case "delete":
                         let newListOfParts = [...this.state.listOfParts];
                         let part = React.cloneElement(this.current.undoOptions.parameters[1], {key: this.current.undoOptions.parameters[1].key, ref: node => this.node = node});
-                        
                         newListOfParts.splice(this.current.undoOptions.parameters[1].key, 0, part);
+
                         this.setState({listOfParts: newListOfParts}, () => {
                             this.current.next.redoOptions.parameters[0] = this.node;
                             App.listOfRefs._currentValue.splice(this.current.undoOptions.parameters[0]._reactInternals.key, 0, this.node);
-                            this.node.setState(this.current.undoOptions.parameters[0].state);
+                            this.node.setState(this.current.undoOptions.parameters[0].state, () => {
+                                this.current.undoOptions.connectedParts.forEach((value, key) => {
+                                    this.node.highlight(value.ref);
+                                    this.node.connect(value.ref);
+                                });
+                            });
                             this.node.setState({isSelected: false});
                             this.current.undoOptions.parameters[0] = this.node;
                         });
@@ -250,36 +257,42 @@ class App extends Component {
             this.current = this.current.next;
 
             if (this.current.redoOptions) {
+                let ref = App.listOfRefs._currentValue[Number(this.current.redoOptions.parameters[2])];
                 switch (this.current.redoOptions.actionType) {
                     case "lead":
-                        this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], this.current.redoOptions.parameters[3], () => {
-                            this.current.redoOptions.parameters[2].disconnect();
+                        this.moveLead(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], ref, this.current.redoOptions.parameters[3], () => {
+                            ref.disconnect();
 
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
-                                this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                                ref.highlight(value.ref);
+                                ref.connect(value.ref);
                             });
                         });
                         break;
                     case "move":
-                        this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], this.current.redoOptions.parameters[2], () => {
-                            this.current.redoOptions.parameters[2].disconnect();
+                        this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], ref, () => {
+                            ref.disconnect();
 
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                this.current.redoOptions.parameters[2].highlight(undefined, value.ref);
-                                this.current.redoOptions.parameters[2].connect(undefined, undefined, value.ref);
+                                ref.highlight(value.ref);
+                                ref.connect(value.ref);
                             });
                         });
                         break;
                     case "add":
                         let newListOfParts = [...this.state.listOfParts];
                         let part = React.cloneElement(this.current.redoOptions.parameters[1], {key: this.current.redoOptions.parameters[1].key, ref: node => this.node = node});
-                        
                         newListOfParts.splice(this.current.redoOptions.parameters[1].key, 0, part);
+
                         this.setState({listOfParts: newListOfParts}, () => {
                             this.current.prev.undoOptions.parameters[0] = this.node;
                             App.listOfRefs._currentValue.splice(this.current.redoOptions.parameters[0]._reactInternals.key, 0, this.node);
-                            this.node.setState(this.current.redoOptions.parameters[0].state);
+                            this.node.setState(this.current.redoOptions.parameters[0].state, () => {
+                                this.current.redoOptions.connectedParts.forEach((value, key) => {
+                                    this.node.highlight(value.ref);
+                                    this.node.connect(value.ref);
+                                });
+                            });
                             this.node.setState({isSelected: false});            
                             this.current.redoOptions.parameters[0] = this.node;
                         });
@@ -524,12 +537,16 @@ class App extends Component {
         return elementID;
     }
 
-    addLeadHistory(dx, dy, ref, propertyName) {
-        this.addtoHistory("lead", [dx, dy, ref, propertyName], [-dx, -dy, ref, propertyName], ref.attachTo);
+    addLeadHistory(dx, dy, key, propertyName) {
+        let ref = App.listOfRefs._currentValue[Number(key)];
+
+        this.addtoHistory("lead", [dx, dy, key, propertyName], [-dx, -dy, key, propertyName], ref.attachTo);
     }
 
-    addMoveHistory(dx, dy, ref) {
-        this.addtoHistory("move", [dx, dy, ref], [-dx, -dy, ref], ref.attachTo);
+    addMoveHistory(dx, dy, key) {
+        let ref = App.listOfRefs._currentValue[Number(key)];
+        
+        this.addtoHistory("move", [dx, dy, key], [-dx, -dy, key], ref.attachTo);
     }
 
     addAddPartHistory(ref, reactElement) {

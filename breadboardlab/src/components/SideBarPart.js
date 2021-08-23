@@ -49,7 +49,7 @@ class SideBarPart extends React.Component {
 
         while (element) {
             if (element === svg) {
-                let part = React.cloneElement(
+                this.part = React.cloneElement(
                     this.props.part,
                     {
                         ref: (node) => this.node = node,
@@ -68,7 +68,7 @@ class SideBarPart extends React.Component {
                 window.removeEventListener("mousemove", this.mousemove);
                 window.removeEventListener("touchmove", this.mousemove);
 
-                this.props.ondrag(part);
+                this.props.ondrag(this.part);
                 this.listening = false;
                 this.added = true;
                 let element = this.node.node.current;
@@ -78,7 +78,6 @@ class SideBarPart extends React.Component {
                     interaction.stop();
                     interaction.start({name: "drag"}, event.interactable, element)
                     App.listOfRefs._currentValue.push(this.node);
-                    this.props.addAddPartHistory(this.node, part);
                 }
                 break;
             }
@@ -111,6 +110,7 @@ class SideBarPart extends React.Component {
             end: () => {
                 this.mousedown = false;
                 this.added = false;
+                this.props.addAddPartHistory(this.node, this.part);
             }
         },
         // modifiers: [

@@ -35,9 +35,10 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: event => {
+                start: event => {
                     this.dragged = true;
-
+                },
+                move: event => {
                     if ((event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -45,6 +46,9 @@ export default class Button extends React.Component {
                         interaction.stop();
                         interaction.start({name: "drag"}, event.interactable, this.topLeftConnector.current)
                     }
+                },
+                end: (event) => {
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this);
                 }
             },
         })
@@ -77,7 +81,7 @@ export default class Button extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
         
         if (!elementID.includes(undefined)) {
@@ -88,7 +92,7 @@ export default class Button extends React.Component {
         }
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
+    connect(attachRef) {
         if (this.highlightID && this.highlightID.ids.length === 4) {
             let point = document.getElementById("AppSVG").createSVGPoint();
             let t = attachRef.state.rotation * Math.PI / 180;

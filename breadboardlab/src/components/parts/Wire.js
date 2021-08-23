@@ -118,7 +118,7 @@ export default class Wire extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
         this.highlightID = {ids: elementID, ref: attachRef};
 
@@ -127,7 +127,7 @@ export default class Wire extends React.Component {
                 attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
+    connect(attachRef) {
 		if (this.highlightID) {
             for (let i = 0; i < this.refArray.length; i++) {
                 if (this.highlightID.ids[i]) {

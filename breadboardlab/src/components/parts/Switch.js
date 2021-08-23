@@ -82,7 +82,7 @@ export default class Switch extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef, "bottomCentre");
 
         if (!elementID.includes(undefined)) {
@@ -93,7 +93,7 @@ export default class Switch extends React.Component {
         }
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
+    connect(attachRef) {
         if (this.highlightID && this.highlightID.ids.length === 3) {
             let point = document.getElementById("AppSVG").createSVGPoint();
             let t = attachRef.state.rotation * Math.PI / 180;

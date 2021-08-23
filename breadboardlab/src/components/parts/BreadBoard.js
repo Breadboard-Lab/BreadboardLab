@@ -156,31 +156,33 @@ export default class BreadBoard extends React.Component {
                 ondragenter: event => {
                     let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                    if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                    if ((!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && 
+                        ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                         (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
                         if (typeof ref.disconnect === "function")
-                            ref.disconnect(event, event.currentTarget.id);
+                            ref.disconnect(event);
                         if (typeof ref.highlight === "function")
-                            ref.highlight(event, this);
+                            ref.highlight(this);
                     }
 
                 },
                 ondropmove: event => {
                     let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                    if (!this.connectedParts.get(event.currentTarget.id) && ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
+                    if ((!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref) && 
+                        ((ref && typeof ref.highlight === "function" && App.selectedTool._currentValue === "select_tool") ||
                         (App.selectedTool._currentValue === "wire_tool" && (ref.state.name === "Wire" || event.relatedTarget.classList.contains("connector"))))) {
                         if (typeof ref.disconnect === "function")
-                            ref.disconnect(event, event.currentTarget.id);
+                            ref.disconnect(event);
                         if (typeof ref.highlight === "function")
-                            ref.highlight(event, this);
+                            ref.highlight(this);
                     }
                 },
                 ondrop: event => {
                     let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));
 
-                    if (ref && typeof ref.connect === "function" && !this.connectedParts.get(event.currentTarget.id))
-                        ref.connect(event.relatedTarget, event.currentTarget, this);
+                    if (ref && typeof ref.connect === "function" && (!this.connectedParts.get(event.currentTarget.id) || this.connectedParts.get(event.currentTarget.id).ref === ref))
+                        ref.connect(this);
                 },
                 ondragleave: event => {
                     let ref = App.listOfRefs._currentValue.find(ref => ref.node.current.contains(event.relatedTarget));

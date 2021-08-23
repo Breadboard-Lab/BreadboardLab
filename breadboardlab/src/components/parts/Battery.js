@@ -35,44 +35,37 @@ export default class Battery extends React.Component {
 
     draggableOptionsPower = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
+            start: () => {
                 this.dragged = true;
-
-                this.setState({
-                    powerPoint: {
-                        x: this.state.powerPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.powerPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "powerPoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "powerPoint");
             }
         }
     }
 
     draggableOptionsGround = {
-        listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
-                this.dragged = true;
-
-                this.setState({
-                    groundPoint: {
-                        x: this.state.groundPoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.groundPoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
-            }
+        start: () => {
+            this.dragged = true;
+        },
+        move: (event) => {
+            this.props.moveLead(event.delta.x, event.delta.y, this, "groundPoint");
+        },
+        end: (event) => {
+            this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "groundPoint");
         }
     }
 
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: event => {
+                start: () => {
                     this.dragged = true;
-
+                },
+                move: event => {
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -80,6 +73,9 @@ export default class Battery extends React.Component {
                         interaction.stop()
                         interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
                     }
+                },
+                end: (event) => {
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
                 }
             },
         })
@@ -123,7 +119,7 @@ export default class Battery extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
         this.highlightID = {ids: elementID, ref: attachRef};
 
@@ -132,7 +128,7 @@ export default class Battery extends React.Component {
                 attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
+    connect(attachRef) {
         if (this.highlightID) {
             for (let i = 0; i < this.refArray.length; i++) {
                 if (this.highlightID.ids[i]) {

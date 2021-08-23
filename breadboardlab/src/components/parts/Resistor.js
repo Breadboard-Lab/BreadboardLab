@@ -48,7 +48,7 @@ export default class Resistor extends React.Component {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "leftPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this, "leftPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "leftPoint");
             }
         }
     }
@@ -62,7 +62,7 @@ export default class Resistor extends React.Component {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "rightPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this, "rightPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "rightPoint");
             }
         }
     }
@@ -83,7 +83,7 @@ export default class Resistor extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
                 }
             },
         })
@@ -251,7 +251,7 @@ export default class Resistor extends React.Component {
         )
     }
 
-    highlight(event, attachRef) {
+    highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
         this.highlightID = {ids: elementID, ref: attachRef};
 
@@ -260,7 +260,7 @@ export default class Resistor extends React.Component {
                 attachRef.node.current.querySelector("#" + connectorID).setAttribute("filter", "url(#f3)")
     }
 
-    connect(relatedTarget, currentTarget, attachRef) {
+    connect(attachRef) {
         if (this.highlightID) {
             for (let i = 0; i < this.refArray.length; i++) {
                 if (this.highlightID.ids[i]) {
