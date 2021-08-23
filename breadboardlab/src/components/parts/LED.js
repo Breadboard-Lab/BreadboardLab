@@ -45,34 +45,28 @@ export default class LED extends React.Component {
 
     draggableOptionsCathode = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
+            start: () => {
                 this.dragged = true;
-
-                this.setState({
-                    cathodePoint: {
-                        x: this.state.cathodePoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.cathodePoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "cathodePoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "cathodePoint");
             }
         }
     }
 
     draggableOptionsAnode = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let angle = this.state.rotation * Math.PI / 180;
+            start: () => {
                 this.dragged = true;
-
-                this.setState({
-                    anodePoint: {
-                        x: this.state.anodePoint.x + event.delta.x * scale / this.scale.x * Math.cos(angle) + event.delta.y * scale / this.scale.y * Math.sin(angle),
-                        y: this.state.anodePoint.y + event.delta.y * scale / this.scale.y * Math.cos(angle) + event.delta.x * scale / this.scale.x * Math.sin(-angle)
-                    }
-                });
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "anodePoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "anodePoint");
             }
         }
     }
@@ -80,9 +74,10 @@ export default class LED extends React.Component {
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: event => {
+                start: () => {
                     this.dragged = true;
-
+                },
+                move: event => {
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
                         this.props.movePart(event.dx, event.dy, this);
                     } else if (App.selectedTool._currentValue === "select_tool") {
@@ -90,6 +85,9 @@ export default class LED extends React.Component {
                         interaction.stop()
                         interaction.start({name: "drag"}, event.interactable, this.connectorContainer.current);
                     }
+                },
+                end: (event) => {
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
                 }
             },
         })

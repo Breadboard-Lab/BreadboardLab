@@ -193,8 +193,11 @@ class App extends Component {
                             ref.disconnect();
 
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                ref.highlight(value.ref);
-                                ref.connect(value.ref);
+                                if (value) {
+                                    let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                    ref.highlight(connectedRef);
+                                    ref.connect(connectedRef);
+                                }
                             });
                         });
                         break;
@@ -203,8 +206,11 @@ class App extends Component {
                             ref.disconnect();
 
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                ref.highlight(value.ref);
-                                ref.connect(value.ref);
+                                if (value) {
+                                    let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                    ref.highlight(connectedRef);
+                                    ref.connect(connectedRef);
+                                }
                             });
                         });
                         break;
@@ -237,8 +243,11 @@ class App extends Component {
                             App.listOfRefs._currentValue.splice(this.current.undoOptions.parameters[0]._reactInternals.key, 0, this.node);
                             this.node.setState(this.current.undoOptions.parameters[0].state, () => {
                                 this.current.undoOptions.connectedParts.forEach((value, key) => {
-                                    this.node.highlight(value.ref);
-                                    this.node.connect(value.ref);
+                                    if (value) {
+                                        let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                        this.node.highlight(connectedRef);
+                                        this.node.connect(connectedRef);
+                                    }
                                 });
                             });
                             this.node.setState({isSelected: false});
@@ -264,8 +273,11 @@ class App extends Component {
                             ref.disconnect();
 
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                ref.highlight(value.ref);
-                                ref.connect(value.ref);
+                                if (value) {
+                                    let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                    ref.highlight(connectedRef);
+                                    ref.connect(connectedRef);
+                                }
                             });
                         });
                         break;
@@ -274,8 +286,11 @@ class App extends Component {
                             ref.disconnect();
 
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                ref.highlight(value.ref);
-                                ref.connect(value.ref);
+                                if (value) {
+                                    let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                    ref.highlight(connectedRef);
+                                    ref.connect(connectedRef);
+                                }
                             });
                         });
                         break;
@@ -289,8 +304,11 @@ class App extends Component {
                             App.listOfRefs._currentValue.splice(this.current.redoOptions.parameters[0]._reactInternals.key, 0, this.node);
                             this.node.setState(this.current.redoOptions.parameters[0].state, () => {
                                 this.current.redoOptions.connectedParts.forEach((value, key) => {
-                                    this.node.highlight(value.ref);
-                                    this.node.connect(value.ref);
+                                    if (value) {
+                                        let connectedRef = App.listOfRefs._currentValue[Number(value.ref._reactInternals.key)];
+                                        this.node.highlight(connectedRef);
+                                        this.node.connect(connectedRef);
+                                    }
                                 });
                             });
                             this.node.setState({isSelected: false});            
@@ -453,12 +471,13 @@ class App extends Component {
 
     moveLead(dx, dy, ref, propertyName, callback) {
         const scale = this.canvasNode.current.scale;
+        const refScale = ref.scale || {x: 1, y: 1};
         let angle = ref.state.rotation * Math.PI / 180;
 
         ref.setState({
             [propertyName]: {
-                x: ref.state[propertyName].x + dx * scale / ref.scale.x * Math.cos(angle) + dy * scale / ref.scale.y * Math.sin(angle),
-                y: ref.state[propertyName].y + dy * scale / ref.scale.y * Math.cos(angle) + dx * scale / ref.scale.x * Math.sin(-angle)
+                x: ref.state[propertyName].x + dx * scale / refScale.x * Math.cos(angle) + dy * scale / refScale.y * Math.sin(angle),
+                y: ref.state[propertyName].y + dy * scale / refScale.y * Math.cos(angle) + dx * scale / refScale.x * Math.sin(-angle)
             }
         }, callback);
     }

@@ -34,26 +34,28 @@ export default class Wire extends React.Component {
 
     draggableOptionsStartPoint = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let endPoint = this.endPoint.current.node;
+            start: () => {
                 this.dragged = true;
-
-                this.setPoints({x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale},
-                               {x: Number(endPoint.getAttribute("cx")), y: Number(endPoint.getAttribute("cy"))});
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "startPoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "startPoint");
             }
         }
     }
 
     draggableOptionsEndPoint = {
         listeners: {
-            move: (event) => {
-                let scale = document.getElementById("AppSVG").getAttribute("scale");
-                let startPoint = this.startPoint.current.node;
+            start: () => {
                 this.dragged = true;
-
-                this.setPoints({x: Number(startPoint.getAttribute("cx")), y: Number(startPoint.getAttribute("cy"))},
-                               {x: Number(event.currentTarget.getAttribute("cx")) + event.delta.x * scale, y: Number(event.currentTarget.getAttribute("cy")) + event.delta.y * scale});
+            },
+            move: (event) => {
+                this.props.moveLead(event.delta.x, event.delta.y, this, "endPoint");
+            },
+            end: (event) => {
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "endPoint");
             }
         }
     }

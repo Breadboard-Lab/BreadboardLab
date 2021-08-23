@@ -48,7 +48,7 @@ export default class Button extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
                 }
             },
         })

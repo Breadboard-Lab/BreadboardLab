@@ -62,8 +62,10 @@ export default class BreadBoard extends React.Component {
 
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                move: event => {
+                start: () => {
                     this.dragged = true;
+                },
+                move: event => {
                     let visited = {};
 
                     if (typeof this.props.movePart === "function") {
@@ -77,8 +79,11 @@ export default class BreadBoard extends React.Component {
                                 }
                             });
                     }
+                },
+                end: (event) => {
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
                 }
-            },
+            }
         })
 
         for (let i = 0; i < this.connectors.length; i++) {
@@ -134,6 +139,8 @@ export default class BreadBoard extends React.Component {
                                 endPoint: startPoint,
                                 translation: {x: this.state.translation.x, y: this.state.translation.y},
                                 rotation: this.state.rotation,
+                                moveLead: this.props.moveLead,
+                                addLeadHistory: this.props.addLeadHistory,
                                 handlePartSelect: this.props.handlePartSelect,
                                 updatePropertiesPanel: this.props.updatePropertiesPanel,
                                 checkConnected: this.props.checkConnected,
