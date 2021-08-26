@@ -16,9 +16,11 @@ export default class Button extends React.Component {
             name: "Momentary Button",
             isSelected: false,
             translation: {x: 0, y: 0},
-            rotation: 0
+            rotation: 0,
+            isPressed: false,
         }
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.onMouseDown = this.onMouseDown.bind(this)
         this.updateProp = this.updateProp.bind(this);
 
         this.scale = {x: 50, y: 50};
@@ -57,6 +59,21 @@ export default class Button extends React.Component {
     onMouseUp() {
         if (!this.dragged) {
             this.props.handlePartSelect(this.getProps());
+            this.setState({isPressed: !this.state.isPressed}, () => {
+                // console.log("isPressed", this.state.isPressed)
+                this.props.handlePartDown(this.getProps())
+            })
+        }
+        this.dragged = false;
+    }
+
+    onMouseDown() {
+        // console.log("onMouseDown")
+        if (!this.dragged) {
+            this.setState({isPressed: !this.state.isPressed}, () => {
+                // console.log("isPressed", this.state.isPressed)
+                this.props.handlePartDown(this.getProps())
+            })
         }
         this.dragged = false;
     }
@@ -83,7 +100,7 @@ export default class Button extends React.Component {
 
     highlight(attachRef) {
         let elementID = this.props.checkConnected(this, attachRef);
-        
+
         if (!elementID.includes(undefined)) {
             this.highlightID = {ids: elementID, ref: attachRef};
 
@@ -164,7 +181,7 @@ export default class Button extends React.Component {
         }
 
         return (
-            <g ref={this.node} onMouseUp={this.onMouseUp}
+            <g ref={this.node} onMouseUp={this.onMouseUp} onMouseDown={this.onMouseDown}
                transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `translate(30,33),scale(90,90)` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <rect x="-0.3" y="-0.3" width="0.6" height="0.6" rx=".1" fill="#202020"/>

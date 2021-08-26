@@ -187,7 +187,8 @@ class Drawer extends Component {
                                                      addMoveHistory={this.props.addMoveHistory}
                                                      addAddPartHistory={this.props.addAddPartHistory}
                                                      addDeleteHistory={this.props.addDeleteHistory}
-                                                     handlePartToggle={this.props.handlePartToggle}/>
+                                                     handlePartToggle={this.props.handlePartToggle}
+                                                     handlePartDown={this.props.handlePartDown}/>
                                     )),
                                 'gates':
                                     partsList.gates.map((part, index) => (

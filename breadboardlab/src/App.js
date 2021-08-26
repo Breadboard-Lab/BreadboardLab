@@ -405,6 +405,9 @@ class App extends Component {
                 if (node.data.state.isToggled === true){
                     buttonPass = false
                 }
+                if (node.data.state.isPressed === false){
+                    buttonPass = false
+                }
             }
             // Applies current
             for (const node of cycle) {
@@ -461,7 +464,14 @@ class App extends Component {
 
     handlePartToggle = (childData) => {
         if (this.state.isSimulating) {
-            console.log(childData.ref)
+            // console.log(childData.ref)
+            this.startSim()
+        }
+    }
+
+    handlePartDown = (childData) => {
+        if (this.state.isSimulating) {
+            // console.log(childData.ref)
             this.startSim()
         }
     }
@@ -776,6 +786,7 @@ class App extends Component {
                         getDimensions={this.getDimensions}
                         handlePartSelect={this.handlePartSelect}
                         handlePartToggle={this.handlePartToggle}
+                        handlePartDown={this.handlePartDown}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
                         partData={this.state.partData}
