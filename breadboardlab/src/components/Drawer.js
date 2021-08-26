@@ -157,7 +157,9 @@ class Drawer extends Component {
                                                  addLeadHistory={this.props.addLeadHistory}
                                                  addMoveHistory={this.props.addMoveHistory}
                                                  addAddPartHistory={this.props.addAddPartHistory}
-                                                 addDeleteHistory={this.props.addDeleteHistory}/>
+                                                 addDeleteHistory={this.props.addDeleteHistory}
+                                                 handlePartToggle={this.props.handlePartToggle}
+                                                 handlePartDown={this.props.handlePartDown}/>
                                 ))
                             ) : ({
                                 'all':
@@ -172,7 +174,9 @@ class Drawer extends Component {
                                                      addLeadHistory={this.props.addLeadHistory}
                                                      addMoveHistory={this.props.addMoveHistory}
                                                      addAddPartHistory={this.props.addAddPartHistory}
-                                                     addDeleteHistory={this.props.addDeleteHistory}/>
+                                                     addDeleteHistory={this.props.addDeleteHistory}
+                                                     handlePartToggle={this.props.handlePartToggle}
+                                                     handlePartDown={this.props.handlePartDown}/>
                                     )),
                                 'basics':
                                     partsList.basics.map((part, index) => (
