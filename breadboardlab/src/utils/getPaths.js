@@ -47,7 +47,7 @@ function getPaths(graph, rootNodeID) {
     return array;
 }
 
-function dfs(graph, startNodeID, visitor) {
+/*function dfs(graph, startNodeID, visitor) {
     console.log("dfs called at ID", startNodeID)
 
     graph.forEachLinkedNode(startNodeID, function (otherNode) {
@@ -56,7 +56,7 @@ function dfs(graph, startNodeID, visitor) {
             dfs(graph, otherNode.id, visitor);
         }
     });
-}
+}*/
 
 export {getPaths}
 

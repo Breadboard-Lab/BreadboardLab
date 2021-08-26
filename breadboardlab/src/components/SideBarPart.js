@@ -61,6 +61,7 @@ class SideBarPart extends React.Component {
                         checkConnected: this.props.checkConnected,
                         getDimensions: this.props.getDimensions,
                         handlePartSelect: this.props.handlePartSelect,
+                        handlePartToggle: this.props.handlePartToggle,
                         updatePropertiesPanel: this.props.updatePropertiesPanel,
                         key: App.partKey._currentValue,
                     }

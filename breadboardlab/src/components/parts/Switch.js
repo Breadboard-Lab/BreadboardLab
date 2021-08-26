@@ -20,6 +20,7 @@ export default class Switch extends React.Component {
         }
         this.onMouseUp = this.onMouseUp.bind(this);
         this.updateProp = this.updateProp.bind(this);
+        this.onDoubleClick = this.onDoubleClick.bind(this);
 
         this.scale = {x: 0.65, y: 0.65};
         this.offSet = {x: -0.5, y: -15.441};
@@ -59,9 +60,12 @@ export default class Switch extends React.Component {
             this.props.handlePartSelect(this.getProps());
         }
         this.dragged = false;
+    }
 
-        //For testing purposes:
-        this.setState({isToggled: !this.state.isToggled})
+    onDoubleClick() {
+        this.setState({isToggled: !this.state.isToggled}, () => {
+            this.props.handlePartToggle(this.getProps())
+        })
     }
 
     updateProp(propName, value) {
@@ -169,7 +173,7 @@ export default class Switch extends React.Component {
         }
 
         return (
-            <g ref={this.node} onMouseUp={this.onMouseUp}
+            <g ref={this.node} onMouseUp={this.onMouseUp} onDoubleClick={this.onDoubleClick}
                transform={`translate(${this.state.translation.x} ${this.state.translation.y})`}>
                 <g transform={this.props.icon ? `` : `scale(${this.scale.x} ${this.scale.y}) rotate(${this.state.rotation} ${rotatePointX} ${rotatePointY}) translate(${this.offSet.x} ${this.offSet.y})`}>
                     <path ref={this.leftConnector} className="connector" id="pin1" fill="#606161" d="M10.023,47.095c0,0.81-0.657,1.465-1.465,1.465l0,0c-0.809,0-1.465-0.655-1.465-1.465

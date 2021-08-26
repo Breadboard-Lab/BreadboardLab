@@ -20,8 +20,8 @@ import AppbarToolsCollapseMenu from "./components/appbars/AppbarToolsCollapseMen
 import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsCollapseMenu";
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
-import createGraph from "ngraph.graph";
 import {getPaths} from "./utils/getPaths";
+import createGraph from "ngraph.graph";
 
 const drawerWidth = 240;
 const listOfRefs = React.createContext([]);
@@ -82,7 +82,10 @@ class App extends Component {
             partData: {},
             isSimulating: false,
             mouseX: null,
-            mouseY: null
+            mouseY: null,
+            circuitsGraph: createGraph(),
+            cycles: [],
+            rootNode: null
         }
         this.movePart = this.movePart.bind(this);
         this.moveLead = this.moveLead.bind(this);
@@ -175,7 +178,7 @@ class App extends Component {
             this.handleDelete()
         } else if (event.key === "z" && event.ctrlKey) {
             this.handleUndo();
-        }else if (event.key === "y" && event.ctrlKey) {
+        } else if (event.key === "y" && event.ctrlKey) {
             this.handleRedo();
         }
     }
@@ -215,19 +218,20 @@ class App extends Component {
                         });
                         break;
                     case "add":
-                        if (typeof this.current.undoOptions.parameters[0].disconnect === "function") {}
-                            this.current.undoOptions.parameters[0].disconnect();
-                        
+                        if (typeof this.current.undoOptions.parameters[0].disconnect === "function") {
+                        }
+                        this.current.undoOptions.parameters[0].disconnect();
+
                         let updatePartsLists = () => {
                             let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.undoOptions.parameters[1].key);
                             App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.undoOptions.parameters[0]._reactInternals.key));
-                            
+
                             this.setState({listOfParts: newListOfParts});
                         }
-                        
+
                         if (this.selectedPart && this.selectedPart.ref === this.current.undoOptions.parameters[0]) {
                             this.unselectPart(() => {
-                               updatePartsLists();
+                                updatePartsLists();
                             });
                         } else {
                             updatePartsLists();
@@ -235,7 +239,10 @@ class App extends Component {
                         break;
                     case "delete":
                         let newListOfParts = [...this.state.listOfParts];
-                        let part = React.cloneElement(this.current.undoOptions.parameters[1], {key: this.current.undoOptions.parameters[1].key, ref: node => this.node = node});
+                        let part = React.cloneElement(this.current.undoOptions.parameters[1], {
+                            key: this.current.undoOptions.parameters[1].key,
+                            ref: node => this.node = node
+                        });
                         newListOfParts.splice(this.current.undoOptions.parameters[1].key, 0, part);
 
                         this.setState({listOfParts: newListOfParts}, () => {
@@ -296,7 +303,10 @@ class App extends Component {
                         break;
                     case "add":
                         let newListOfParts = [...this.state.listOfParts];
-                        let part = React.cloneElement(this.current.redoOptions.parameters[1], {key: this.current.redoOptions.parameters[1].key, ref: node => this.node = node});
+                        let part = React.cloneElement(this.current.redoOptions.parameters[1], {
+                            key: this.current.redoOptions.parameters[1].key,
+                            ref: node => this.node = node
+                        });
                         newListOfParts.splice(this.current.redoOptions.parameters[1].key, 0, part);
 
                         this.setState({listOfParts: newListOfParts}, () => {
@@ -311,24 +321,25 @@ class App extends Component {
                                     }
                                 });
                             });
-                            this.node.setState({isSelected: false});            
+                            this.node.setState({isSelected: false});
                             this.current.redoOptions.parameters[0] = this.node;
                         });
                         break;
                     case "delete":
-                        if (typeof this.current.redoOptions.parameters[0].disconnect === "function") {}
-                            this.current.redoOptions.parameters[0].disconnect();
-                        
+                        if (typeof this.current.redoOptions.parameters[0].disconnect === "function") {
+                        }
+                        this.current.redoOptions.parameters[0].disconnect();
+
                         let updatePartsLists = () => {
                             let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.redoOptions.parameters[1].key);
                             App.listOfRefs._currentValue = App.listOfRefs._currentValue.filter(ref => Number(ref._reactInternals.key) !== Number(this.current.redoOptions.parameters[0]._reactInternals.key));
-                            
+
                             this.setState({listOfParts: newListOfParts});
                         }
-                        
+
                         if (this.selectedPart && this.selectedPart.ref === this.current.redoOptions.parameters[0]) {
                             this.unselectPart(() => {
-                               updatePartsLists();
+                                updatePartsLists();
                             });
                         } else {
                             updatePartsLists();
@@ -342,98 +353,88 @@ class App extends Component {
     };
 
     handleSimulation = () => {
-        console.log('handleSimulation clicked. isSimulating:', this.state.isSimulating)
-        // console.log(App.listOfRefs._currentValue)
-
-        App.listOfRefs._currentValue.forEach((element) => {
-            if (element.state.type === "Breadboard") {
-                let temp = element.getCircuits()
-                let circuitsGraph = temp[0]
-                let rootNode = temp[1]
-
-                // console.log(firstNode, circuitsGraph)
-                console.log("getPaths() returned:", getPaths(circuitsGraph, rootNode))
-
-                let cycles = getPaths(circuitsGraph, rootNode)
-
-                if (!this.state.isSimulating) {
-                    console.log("Starting simulation...")
-                    /**
-                     If element.findCircuits() is not empty:
-                     - Unselects any selected parts.
-                     - Disable most buttons.
-                     - Replace Start button with Stop button.
-                     - Hide drawer.
-                     - Disable drawer open button.
-                     - Simulate.
-                     */
-
-                    for (const cycle of cycles) {
-                        let totalResistance = 0
-                        let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
-                        // Calculates Resistance
-                        for (const node of cycle){
-                            if (node.data.state.type === "Resistor") {
-                                totalResistance += this.getResistance(node.data)
-                            }
-
-                        }
-                        // Applies current
-                        for (const node of cycle){
-                            this.setCurrent(node.data, totalVoltage, totalResistance)
-                        }
-                    }
-
-
-
-                    /*let totalVoltage = circuitsGraph.getNode(rootNode).data.state.voltage
-                    let totalResistance = 0
-                    circuitsGraph.forEachNode((node) => {
-                        // console.log(node.id, node.data);
-                        if (node.data.state.type === "Resistor") {
-                            totalResistance += this.getResistance(node.data)
-                        }
-                    });
-                    // console.log(totalCurrent, totalVoltage, totalResistance)
-                    circuitsGraph.forEachNode((node) => {
-                        // console.log(node.id, node.data);
-                        this.setCurrent(node.data, totalVoltage, totalResistance)
-                    });*/
-
-                    if (this.selectedPart) {
-                        this.unselectPart()
-                    }
-                    this.setState({
-                        isSimulating: !this.state.isSimulating,
-                        openDrawer: false
-                    })
-                } else {
-                    console.log("Stopping simulation...")
-                    /**
-                     If done simulating:
-                     - Re-enable most buttons.
-                     - Replace Stop button with Start button.
-                     - Unhide drawer.
-                     - Disable drawer open button.
-                     - Reset all components to Off state.
-                     */
-
-                    circuitsGraph.forEachNode((node) => {
-                        this.setCurrent(node.data, 0, 0)
-                    });
-
-                    this.setState({
-                        isSimulating: !this.state.isSimulating,
-                        openDrawer: true
-                    })
-
-
-                }
-            }
+        console.log('handleSimulation clicked.')
+        this.setState({
+            isSimulating: !this.state.isSimulating,
+            openDrawer: !this.state.openDrawer
         })
+        // console.log(App.listOfRefs._currentValue)
+        try {
+            App.listOfRefs._currentValue.forEach((element) => {
+                if (element.state.type === "Breadboard") {
+                    let temp = element.getCircuits()
+                    this.setState({
+                        circuitsGraph: temp.graph,
+                        rootNode: temp.batteryKey,
+                        cycles: getPaths(temp.graph, temp.batteryKey)
+                    }, () => {
 
+                        if (this.state.isSimulating) {
+                            this.startSim()
+                        } else {
+                            this.stopSim()
+                        }
+                    })
+                }
+            })
+        } catch (err) {
+            console.log(err)
+        }
 
     };
+
+    /** startSim
+     *      - Unselects any selected parts.
+     *      - Disable most buttons.
+     *      - Replace Start button with Stop button.
+     *      - Hide drawer.
+     *      - Disable drawer open button.
+     *      - Simulate.
+     */
+    startSim = () => {
+        console.log("Starting simulation...")
+        let totalVoltage = this.state.circuitsGraph.getNode(this.state.rootNode).data.state.voltage
+        for (const cycle of this.state.cycles) {
+            let totalResistance = 0
+            let buttonPass = true
+            // Calculates Resistance and checks for any buttons
+            for (const node of cycle) {
+                if (node.data.state.type === "Resistor") {
+                    totalResistance += this.getResistance(node.data)
+                }
+                if (node.data.state.isToggled === true){
+                    buttonPass = false
+                }
+            }
+            // Applies current
+            for (const node of cycle) {
+                if(buttonPass){
+                    this.setCurrent(node.data, totalVoltage, totalResistance)
+                }
+                else {
+                    this.setCurrent(node.data, 0, 0)
+                }
+            }
+        }
+
+        if (this.selectedPart) {
+            this.unselectPart()
+        }
+    }
+
+    /** stopSim
+     *      - Re-enable most buttons.
+     *      - Replace Stop button with Start button.
+     *      - Unhide drawer.
+     *      - Disable drawer open button.
+     *      - Reset all components to Off state.
+     */
+    stopSim = () => {
+        this.state.circuitsGraph.forEachNode((node) => {
+            this.setCurrent(node.data, 0, 0)
+        });
+        console.log("Stopping simulation...")
+    }
 
     handleShare = () => {
         // TODO handle Share
@@ -455,6 +456,13 @@ class App extends Component {
             });
         } else {
             this.unselectPart();
+        }
+    }
+
+    handlePartToggle = (childData) => {
+        if (this.state.isSimulating) {
+            console.log(childData.ref)
+            this.startSim()
         }
     }
 
@@ -499,12 +507,12 @@ class App extends Component {
             }
         }, callback);
     }
-    
+
     getDimensions(element, angle) {
         let t = angle || 0;
         let point = this.canvasNode.current.node.current.createSVGPoint();
         const matrix = element.getCTM();
-        
+
         point.x = element.getBBox().x;
         point.y = element.getBBox().y;
         const XY = point.matrixTransform(matrix);
@@ -513,7 +521,16 @@ class App extends Component {
         point.y = element.getBBox().y + element.getBBox().height;
         const RB = point.matrixTransform(matrix);
 
-        return {x: XY.x, y: XY.y, left: XY.x, right: RB.x, top: XY.y, bottom: RB.y, width: Math.abs((RB.x - XY.x) * Math.cos(t) + (RB.y - XY.y) * Math.sin(t)), height: Math.abs((RB.y - XY.y) * Math.cos(t) + (RB.x - XY.x) * Math.sin(-t))}
+        return {
+            x: XY.x,
+            y: XY.y,
+            left: XY.x,
+            right: RB.x,
+            top: XY.y,
+            bottom: RB.y,
+            width: Math.abs((RB.x - XY.x) * Math.cos(t) + (RB.y - XY.y) * Math.sin(t)),
+            height: Math.abs((RB.y - XY.y) * Math.cos(t) + (RB.x - XY.x) * Math.sin(-t))
+        }
     }
 
     checkConnected(ref, attachRef, connectorPosition) {
@@ -524,7 +541,7 @@ class App extends Component {
             for (let refData of ref.refArray) {
                 let element = (refData.ref.current.node) ? refData.ref.current.node : refData.ref.current;
                 let found = false;
-                
+
                 for (let connector of connectors) {
                     let rect1 = element.getBoundingClientRect();
                     let rect2 = connector.getBoundingClientRect();
@@ -542,7 +559,7 @@ class App extends Component {
                         t = ref.state.rotation * Math.PI / 180;
                         let connectorDim = this.getDimensions(element, t);
 
-                        switch(connectorPosition) {
+                        switch (connectorPosition) {
                             case "bottomCentre":
                                 point.x = connectorDim.x + connectorDim.width / 2 * Math.cos(t) + connectorDim.height * Math.sin(-t);
                                 point.y = connectorDim.y + connectorDim.width / 2 * Math.sin(t) + connectorDim.height * Math.cos(t);
@@ -582,7 +599,7 @@ class App extends Component {
 
     addMoveHistory(dx, dy, key) {
         let ref = App.listOfRefs._currentValue[Number(key)];
-        
+
         this.addtoHistory("move", [dx, dy, key], [-dx, -dy, key], ref.attachTo);
     }
 
@@ -758,16 +775,18 @@ class App extends Component {
                         checkConnected={this.checkConnected}
                         getDimensions={this.getDimensions}
                         handlePartSelect={this.handlePartSelect}
+                        handlePartToggle={this.handlePartToggle}
                         updatePropertiesPanel={this.updatePropertiesPanel}
                         hideProperties={this.state.hideProperties}
                         partData={this.state.partData}
                     />
 
                     { /* Canvas */}
-                    <div className={classes.canvas} onContextMenu={this.handleContextMenu}
-                         style={{cursor: 'context-menu'}}>
+                    <div className={classes.canvas}>
+                        {/*onContextMenu={this.handleContextMenu}
+                         style={{cursor: 'context-menu'}}*/}
                         <Canvas ref={this.canvasNode} listOfParts={this.state.listOfParts}/>
-                        <Menu
+                        {/*<Menu
                             keepMounted
                             open={this.state.mouseY !== null}
                             onClose={this.handleContextMenuClose}
@@ -782,7 +801,7 @@ class App extends Component {
                             <MenuItem onClick={this.handleContextMenuClose}>Send Backward</MenuItem>
                             <MenuItem onClick={this.handleContextMenuClose}>Bring Forward</MenuItem>
                             <MenuItem onClick={this.handleContextMenuClose}>Bring To Front</MenuItem>
-                        </Menu>
+                        </Menu>*/}
                     </div>
 
                 </div>

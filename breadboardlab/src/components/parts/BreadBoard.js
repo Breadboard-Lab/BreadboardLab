@@ -7428,7 +7428,7 @@ export default class BreadBoard extends React.Component {
     /** getCircuits
      *      Searches for a Battery and starts recursive Graph creation from Battery's power terminal.
      *
-     *  @return {Array} Returns a list containing the circuits Graph and the key of the first node.
+     *  @return {{batteryKey: null, graph: Graph<any, any> & EventedType}} Returns a list containing the circuits Graph and the key of the first node.
      */
     getCircuits() {
         console.log("getCircuits() called.")
@@ -7448,7 +7448,8 @@ export default class BreadBoard extends React.Component {
             console.log(node);
         });*/
 
-        return [this.circuitsGraph, batteryKey]
+        let graph = this.circuitsGraph
+        return {graph, batteryKey}
     }
 
     /** addToGraph
