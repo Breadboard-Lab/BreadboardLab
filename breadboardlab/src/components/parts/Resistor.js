@@ -43,12 +43,13 @@ export default class Resistor extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "leftPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "leftPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "leftPoint", this.attachedParts);
             }
         }
     }
@@ -57,12 +58,13 @@ export default class Resistor extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "rightPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "rightPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "rightPoint", this.attachedParts);
             }
         }
     }
@@ -72,6 +74,7 @@ export default class Resistor extends React.Component {
             listeners: {
                 start: () => {
                     this.dragged = true;
+                    this.attachedParts = new Map(this.attachTo);
                 },
                 move: event => {
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
@@ -83,7 +86,7 @@ export default class Resistor extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, this.attachedParts);
                 }
             },
         })

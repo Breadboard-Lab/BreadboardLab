@@ -38,6 +38,7 @@ export default class Switch extends React.Component {
             listeners: {
                 start: ()=> {
                     this.dragged = true;
+                    this.attachedParts = new Map(this.attachTo);
                 },
                 move: event => {
                     if ((event.currentTarget === this.leftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
@@ -49,7 +50,7 @@ export default class Switch extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, this.attachedParts);
                 }
             },
         })
@@ -151,7 +152,7 @@ export default class Switch extends React.Component {
     rotate(attahRef) {
         this.setState({rotation: this.state.rotation + 15}, () => {
             if (attahRef) {
-                this.connect(this.leftConnector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("left").id), attahRef);
+                this.connect(attahRef);
             } else {
                 this.disconnect();
             }

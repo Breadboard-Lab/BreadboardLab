@@ -47,12 +47,13 @@ export default class LED extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "cathodePoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "cathodePoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "cathodePoint", this.attachedParts);
             }
         }
     }
@@ -61,12 +62,13 @@ export default class LED extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "anodePoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "anodePoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "anodePoint", this.attachedParts);
             }
         }
     }
@@ -76,6 +78,7 @@ export default class LED extends React.Component {
             listeners: {
                 start: () => {
                     this.dragged = true;
+                    this.attachedParts = new Map(this.attachTo);
                 },
                 move: event => {
                     if ((event.currentTarget === this.connectorContainer.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
@@ -87,7 +90,7 @@ export default class LED extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, this.attachedParts);
                 }
             },
         })
@@ -233,7 +236,7 @@ export default class LED extends React.Component {
 
         this.setState({rotation: this.state.rotation + 15}, () => {
             if (attahRef) {
-                this.connect(undefined, undefined, attahRef);
+                this.connect(attahRef);
             } else {
                 this.disconnect();
             }

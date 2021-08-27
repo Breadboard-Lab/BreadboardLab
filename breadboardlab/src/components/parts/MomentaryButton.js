@@ -37,8 +37,9 @@ export default class Button extends React.Component {
     componentDidMount() {
         interact(this.node.current).styleCursor(false).draggable({
             listeners: {
-                start: event => {
+                start: () => {
                     this.dragged = true;
+                    this.attachedParts = new Map(this.attachTo);
                 },
                 move: event => {
                     if ((event.currentTarget === this.topLeftConnector.current && typeof this.props.movePart === "function") || App.selectedTool._currentValue === "wire_tool") {
@@ -50,7 +51,7 @@ export default class Button extends React.Component {
                     }
                 },
                 end: (event) => {
-                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key);
+                    this.props.addMoveHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, this.attachedParts);
                 }
             },
         })
@@ -159,7 +160,7 @@ export default class Button extends React.Component {
     rotate(attahRef) {
         this.setState({rotation: this.state.rotation + 15}, () => {
             if (attahRef) {
-                this.connect(this.topLeftConnector.current, attahRef.node.current.querySelector("#" + this.attachTo.get("topLeft").id), attahRef);
+                this.connect(attahRef);
             } else {
                 this.disconnect();
             }

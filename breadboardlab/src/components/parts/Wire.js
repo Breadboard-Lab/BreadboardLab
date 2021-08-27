@@ -36,12 +36,13 @@ export default class Wire extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "startPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "startPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "startPoint", this.attachedParts);
             }
         }
     }
@@ -50,12 +51,13 @@ export default class Wire extends React.Component {
         listeners: {
             start: () => {
                 this.dragged = true;
+                this.attachedParts = new Map(this.attachTo);
             },
             move: (event) => {
                 this.props.moveLead(event.delta.x, event.delta.y, this, "endPoint");
             },
             end: (event) => {
-                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "endPoint");
+                this.props.addLeadHistory(event.clientX0 - event.client.x, event.clientY0 - event.client.y, this._reactInternals.key, "endPoint", this.attachedParts);
             }
         }
     }
