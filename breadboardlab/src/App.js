@@ -219,8 +219,8 @@ class App extends Component {
                         break;
                     case "add":
                         if (typeof this.current.undoOptions.parameters[0].disconnect === "function") {
+                            this.current.undoOptions.parameters[0].disconnect();
                         }
-                        this.current.undoOptions.parameters[0].disconnect();
 
                         let updatePartsLists = () => {
                             let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.undoOptions.parameters[1].key);
@@ -327,8 +327,8 @@ class App extends Component {
                         break;
                     case "delete":
                         if (typeof this.current.redoOptions.parameters[0].disconnect === "function") {
+                            this.current.redoOptions.parameters[0].disconnect();
                         }
-                        this.current.redoOptions.parameters[0].disconnect();
 
                         let updatePartsLists = () => {
                             let newListOfParts = this.state.listOfParts.filter(part => part.key !== this.current.redoOptions.parameters[1].key);
@@ -601,24 +601,20 @@ class App extends Component {
         return elementID;
     }
 
-    addLeadHistory(dx, dy, key, propertyName) {
-        let ref = App.listOfRefs._currentValue[Number(key)];
-
-        this.addtoHistory("lead", [dx, dy, key, propertyName], [-dx, -dy, key, propertyName], ref.attachTo);
+    addLeadHistory(dx, dy, key, propertyName, attachedParts, connectedParts) {
+        this.addtoHistory("lead", [dx, dy, key, propertyName], [-dx, -dy, key, propertyName], attachedParts);
     }
 
-    addMoveHistory(dx, dy, key) {
-        let ref = App.listOfRefs._currentValue[Number(key)];
-
-        this.addtoHistory("move", [dx, dy, key], [-dx, -dy, key], ref.attachTo);
+    addMoveHistory(dx, dy, key, attachedParts, connectedParts) {
+        this.addtoHistory("move", [dx, dy, key], [-dx, -dy, key], attachedParts);
     }
 
-    addAddPartHistory(ref, reactElement) {
-        this.addtoHistory("add", [ref, reactElement], [ref, reactElement], ref.attachTo)
+    addAddPartHistory(ref, reactElement, attachedParts, connectedParts) {
+        this.addtoHistory("add", [ref, reactElement], [ref, reactElement], attachedParts)
     }
 
-    addDeletePartHistory(ref, reactElement) {
-        this.addtoHistory("delete", [ref, reactElement], [ref, reactElement], ref.attachTo);
+    addDeletePartHistory(ref, reactElement, attachedParts, connectedParts) {
+        this.addtoHistory("delete", [ref, reactElement], [ref, reactElement], attachedParts);
     }
 
     addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {

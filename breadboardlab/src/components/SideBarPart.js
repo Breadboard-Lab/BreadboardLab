@@ -112,7 +112,7 @@ class SideBarPart extends React.Component {
             end: () => {
                 this.mousedown = false;
                 this.added = false;
-                this.props.addAddPartHistory(this.node, this.part);
+                this.props.addAddPartHistory(this.node, this.part, new Map(this.node.attachTo));
             }
         },
         // modifiers: [
