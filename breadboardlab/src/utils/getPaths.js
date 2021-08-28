@@ -7,19 +7,19 @@ import * as PathFinder from "ngraph.path"
  * @returns {*[]}   The matrix of paths/cycles.
  */
 function getPaths(graph, rootNodeID) {
+    /*console.log("links")
+    graph.forEachLink(function(link){
+        console.log(link)
+    })*/
+
     let pathFinder = PathFinder.aStar(graph, {
         oriented: true
     });
-
     let rootNode = graph.getNode(rootNodeID)
     const getOutgoingLinks = (node) => node.links.filter(link => node.id === link.fromId)
     const getOutGoingLinksID = getOutgoingLinks(rootNode).map(link => link.toId)
     // console.log(getOutGoingLinksID)
 
-    // DFS implementation (unused)
-    let visitedNodes = [];
-    dfs(graph, rootNode, visitedNodes);
-    console.log("dfsArray", visitedNodes)
 
     let array = []
     for (const id of getOutGoingLinksID){
@@ -29,10 +29,10 @@ function getPaths(graph, rootNodeID) {
         }
     }
 
-    /*console.log("links")
-    graph.forEachLink(function(link){
-        console.log(link)
-    })*/
+    // DFS implementation (unused)
+    /*let visitedNodes = [];
+    dfs(graph, rootNode, visitedNodes);
+    console.log("dfsArray", visitedNodes)*/
 
     return array;
 }
