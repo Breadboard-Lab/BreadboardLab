@@ -16,25 +16,10 @@ function getPaths(graph, rootNodeID) {
     const getOutGoingLinksID = getOutgoingLinks(rootNode).map(link => link.toId)
     // console.log(getOutGoingLinksID)
 
-    /*let visitedNodes = new Map();
-    let array = [];
-    console.log(rootNode)
-    visitedNodes.set(rootNode.id, 0);
-    array.push(rootNode.id);
-
-    dfs(graph, rootNode.id, otherNode => {
-        /!** visitor
-         *      Checks if node has been visited before.
-         * @returns {boolean} Whether to continue traversal.
-         *!/
-        if (visitedNodes.has(otherNode.id)) {
-            return false;
-        } else {
-            array.push(otherNode.id);
-            visitedNodes.set(otherNode.id, 0);
-            return true;
-        }
-    });*/
+    // DFS implementation (unused)
+    let visitedNodes = [];
+    dfs(graph, rootNode, visitedNodes);
+    console.log("dfsArray", visitedNodes)
 
     let array = []
     for (const id of getOutGoingLinksID){
@@ -44,19 +29,25 @@ function getPaths(graph, rootNodeID) {
         }
     }
 
+    /*console.log("links")
+    graph.forEachLink(function(link){
+        console.log(link)
+    })*/
+
     return array;
 }
 
-/*function dfs(graph, startNodeID, visitor) {
-    console.log("dfs called at ID", startNodeID)
+function dfs(graph, currentNode, visitedNodes) {
+    // console.log("dfs called at ID", currentNode.id)
+    visitedNodes.push(currentNode.id)
 
-    graph.forEachLinkedNode(startNodeID, function (otherNode) {
-        console.log("otherNodeID", otherNode.id, "startNodeID", startNodeID)
-        if (visitor(otherNode)) {
-            dfs(graph, otherNode.id, visitor);
+    graph.forEachLinkedNode(currentNode.id, function (otherNode) {
+        // console.log("otherNodeID", otherNode.id, "startNodeID", currentNode.id)
+        if (!visitedNodes.includes(otherNode.id)) {
+            dfs(graph, otherNode, visitedNodes);
         }
-    });
-}*/
+    }, true);
+}
 
 export {getPaths}
 
