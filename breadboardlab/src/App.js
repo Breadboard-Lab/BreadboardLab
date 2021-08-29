@@ -20,7 +20,7 @@ import AppbarToolsCollapseMenu from "./components/appbars/AppbarToolsCollapseMen
 import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsCollapseMenu";
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
-import {getPaths} from "./utils/getPaths";
+import {getPaths, dfs} from "./utils/getPaths";
 import createGraph from "ngraph.graph";
 
 const drawerWidth = 240;
@@ -154,7 +154,7 @@ class App extends Component {
             the part then filter remove part from listOfParts and listOfRefs.
          */
         if (this.selectedPart) {
-            this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key));
+            this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key), this.selectedPart.ref.attachTo, this.selectedPart.ref.connectedParts);
 
             if (typeof this.selectedPart.ref.disconnect === "function")
                 this.selectedPart.ref.disconnect();
@@ -206,7 +206,12 @@ class App extends Component {
                         break;
                     case "move":
                         this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], ref, () => {
-                            ref.disconnect();
+                            if (!ref.connectedParts)
+                                ref.disconnect();
+                            else 
+                                ref.connectedParts.forEach((value, key) => {
+                                    this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], value.ref)
+                                });
 
                             this.current.undoOptions.connectedParts.forEach((value, key) => {
                                 if (value) {
@@ -290,7 +295,12 @@ class App extends Component {
                         break;
                     case "move":
                         this.movePart(this.current.redoOptions.parameters[0], this.current.redoOptions.parameters[1], ref, () => {
-                            ref.disconnect();
+                            if (!ref.connectedParts)
+                                ref.disconnect();
+                            else
+                                ref.connectedParts.forEach((value, key) => {
+                                    this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], value.ref);
+                                });
 
                             this.current.redoOptions.connectedParts.forEach((value, key) => {
                                 if (value) {
@@ -359,24 +369,54 @@ class App extends Component {
             openDrawer: !this.state.openDrawer
         })
         // console.log(App.listOfRefs._currentValue)
+        let circuit = createGraph();
+        let batteryKey;
+
         try {
             App.listOfRefs._currentValue.forEach((element) => {
-                if (element.state.type === "Breadboard") {
-                    let temp = element.getCircuits()
-                    this.setState({
-                        circuitsGraph: temp.graph,
-                        rootNode: temp.batteryKey,
-                        cycles: getPaths(temp.graph, temp.batteryKey)
-                    }, () => {
-
-                        if (this.state.isSimulating) {
-                            this.startSim()
-                        } else {
-                            this.stopSim()
-                        }
-                    })
+                if (!circuit.getNode(element._reactInternals.key)) {
+                    circuit.addNode(element._reactInternals.key, element);
                 }
-            })
+
+                if (element.state.type === "Battery") {
+                    batteryKey = element._reactInternals.key;
+                }
+
+                if (element.attachTo) {
+                    element.attachTo.forEach((attachedPart) => {
+                        if (!attachedPart.ref.state.type === "Breadboard") {
+                            if (!circuit.getNode(attachedPart.ref._reactInternals.key))
+                                circuit.addNode(attachedPart.ref._reactInternals.key, attachedPart.ref);
+                            circuit.addLink(element._reactInternals.key, attachedPart.ref._reactInternals.key);
+                        } else {
+                            attachedPart.ref.getConnectedComponents(attachedPart.id, attachedPart.ref).forEach((connectedPart) => {
+                                if (!circuit.getNode(connectedPart._reactInternals.key))
+                                    circuit.addNode(connectedPart._reactInternals.key, connectedPart);
+                                circuit.addLink(element._reactInternals.key, connectedPart._reactInternals.key);
+                            })
+                        }
+                    });
+                } 
+                console.log(element)
+
+                
+                // if (element.state.type === "Breadboard") {
+                //     let temp = element.getCircuits()
+                //     this.setState({
+                //         circuitsGraph: temp.graph,
+                //         rootNode: temp.batteryKey,
+                //         cycles: getPaths(temp.graph, temp.batteryKey)
+                //     }, () => {
+
+                //         if (this.state.isSimulating) {
+                //             this.startSim()
+                //         } else {
+                //             this.stopSim()
+                //         }
+                //     })
+                // }
+            });
+            dfs(circuit, circuit.getNode(batteryKey), [])
         } catch (err) {
             console.log(err)
         }
