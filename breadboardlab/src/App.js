@@ -370,57 +370,78 @@ class App extends Component {
         })
         // console.log(App.listOfRefs._currentValue)
         let circuit = createGraph();
+        let listOfBatteries = [];
+        let visitedComponents = [];
         let batteryKey;
 
         try {
+            // App.listOfRefs._currentValue.forEach((element) => {
+            //     if (element.state.type === "Breadboard") {
+            //         let temp = element.getCircuits()
+            //         this.setState({
+            //             circuitsGraph: temp.graph,
+            //             rootNode: temp.batteryKey,
+            //             cycles: getPaths(temp.graph, temp.batteryKey)
+            //         }, () => {
+
+            //             if (this.state.isSimulating) {
+            //                 this.startSim()
+            //             } else {
+            //                 this.stopSim()
+            //             }
+            //         })
+            //     }
+            // });
             App.listOfRefs._currentValue.forEach((element) => {
-                if (!circuit.getNode(element._reactInternals.key)) {
-                    circuit.addNode(element._reactInternals.key, element);
-                }
-
-                if (element.state.type === "Battery") {
-                    batteryKey = element._reactInternals.key;
-                }
-
-                if (element.attachTo) {
-                    element.attachTo.forEach((attachedPart) => {
-                        if (!attachedPart.ref.state.type === "Breadboard") {
-                            if (!circuit.getNode(attachedPart.ref._reactInternals.key))
-                                circuit.addNode(attachedPart.ref._reactInternals.key, attachedPart.ref);
-                            circuit.addLink(element._reactInternals.key, attachedPart.ref._reactInternals.key);
-                        } else {
-                            attachedPart.ref.getConnectedComponents(attachedPart.id, attachedPart.ref).forEach((connectedPart) => {
-                                if (!circuit.getNode(connectedPart._reactInternals.key))
-                                    circuit.addNode(connectedPart._reactInternals.key, connectedPart);
-                                circuit.addLink(element._reactInternals.key, connectedPart._reactInternals.key);
-                            })
-                        }
-                    });
-                } 
-                console.log(element)
-
-                
-                // if (element.state.type === "Breadboard") {
-                //     let temp = element.getCircuits()
-                //     this.setState({
-                //         circuitsGraph: temp.graph,
-                //         rootNode: temp.batteryKey,
-                //         cycles: getPaths(temp.graph, temp.batteryKey)
-                //     }, () => {
-
-                //         if (this.state.isSimulating) {
-                //             this.startSim()
-                //         } else {
-                //             this.stopSim()
-                //         }
-                //     })
-                // }
+                if (element.state.type === "Battery")
+                    listOfBatteries.push(element);
             });
-            dfs(circuit, circuit.getNode(batteryKey), [])
+
+            if (listOfBatteries.length > 0) {
+                visitedComponents.push(listOfBatteries[0]);
+                let attachedPart = listOfBatteries[0].attachTo.get("power");
+                circuit.addNode(listOfBatteries[0]._reactInternals.key, listOfBatteries[0]);
+                let connectedComponents;
+
+                if (attachedPart.ref.state.type === "Breadboard")
+                    connectedComponents = attachedPart.ref.getConnectedComponents(attachedPart.id, listOfBatteries[0]);
+                else
+                    connectedComponents = [attachedPart.ref];
+                
+                attachedPart = listOfBatteries[0];
+                while (connectedComponents.length !== 0) {
+                    let addComponents = [];
+
+                    for (let component of connectedComponents) {
+                        if (!visitedComponents.includes(component)) {
+                            visitedComponents.push(component);
+                            circuit.addNode(component._reactInternals.key, component);
+                            circuit.addNode(attachedPart._reactInternals.key, attachedPart);
+                            circuit.addLink(attachedPart._reactInternals.key, component._reactInternals.key);
+
+                            component.attachTo.forEach((part) => {
+                                if (part.ref.state.type === "Breadboard") {
+                                    for (let p of part.ref.getConnectedComponents(part.id, component))
+                                        if (!visitedComponents.includes(p)) {
+                                            addComponents.push(p);
+                                        }
+                                } else if (!visitedComponents.includes(part)) {
+                                    addComponents.push(part);
+                                }
+                            });
+
+                            if (connectedComponents.indexOf(component) === connectedComponents.length - 1) {
+                                attachedPart = component;
+                            }
+                        }
+                    }
+                    connectedComponents = addComponents;
+                }
+            }
         } catch (err) {
             console.log(err)
         }
-
+       dfs(circuit, circuit.getNode(listOfBatteries[0]._reactInternals.key), [])
     };
 
     /** startSim

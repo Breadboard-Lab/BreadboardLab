@@ -18,7 +18,7 @@ function getPaths(graph, rootNodeID) {
     let rootNode = graph.getNode(rootNodeID)
     const getOutgoingLinks = (node) => node.links.filter(link => node.id === link.fromId)
     const getOutGoingLinksID = getOutgoingLinks(rootNode).map(link => link.toId)
-    // console.log(getOutGoingLinksID)
+    console.log(getOutGoingLinksID)
 
 
     let array = []
@@ -33,7 +33,7 @@ function getPaths(graph, rootNodeID) {
     /*let visitedNodes = [];
     dfs(graph, rootNode, visitedNodes);
     console.log("dfsArray", visitedNodes)*/
-
+    dfs(graph, rootNode, [])
     return array;
 }
 
@@ -41,6 +41,7 @@ function dfs(graph, currentNode, visitedNodes) {
     // console.log("dfs called at ID", currentNode.id)
     visitedNodes.push(currentNode.id)
 
+    console.log(currentNode.data.node.current)
     graph.forEachLinkedNode(currentNode.id, function (otherNode) {
         // console.log("otherNodeID", otherNode.id, "startNodeID", currentNode.id)
         if (!visitedNodes.includes(otherNode.id)) {
@@ -49,5 +50,5 @@ function dfs(graph, currentNode, visitedNodes) {
     }, true);
 }
 
-export {getPaths}
+export {getPaths, dfs}
 
