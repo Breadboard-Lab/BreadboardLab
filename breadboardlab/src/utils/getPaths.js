@@ -49,14 +49,16 @@ function getCircuits(circuit, listOfBatteries) {
 
 function checkGround(node) {
     for (let [, component] of node.data.attachTo) {
-        if (component.ref.state.type === "Breadboard") {
-            for (let c of component.ref.getConnectedComponents(component.id, node.data)) {
-                if (c.id === "ground") {
-                    return true;
+        if (component) {
+            if (component.ref.state.type === "Breadboard") {
+                for (let c of component.ref.getConnectedComponents(component.id, node.data)) {
+                    if (c.id === "ground") {
+                        return true;
+                    }
                 }
+            } else if (component.id === "ground") {
+                return true;
             }
-        } else if (component.id === "ground") {
-            return true;
         }
     }
     return false;

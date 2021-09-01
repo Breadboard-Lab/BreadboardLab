@@ -405,18 +405,20 @@ class App extends Component {
         
                     if (element.attachTo) {
                         element.attachTo.forEach((attachedPart, key) => {
-                            if (attachedPart.ref.state.type === "Breadboard") {
-                                attachedPart.ref.getConnectedComponents(attachedPart.id, element).forEach((connectedPart) => {
-                                    if (!(connectedPart.id === "ground" || key === "ground")) {
-                                        if (!circuit.getNode(connectedPart.ref._reactInternals.key))
-                                            circuit.addNode(connectedPart.ref._reactInternals.key, connectedPart.ref);
-                                        circuit.addLink(element._reactInternals.key, connectedPart.ref._reactInternals.key);
-                                    }
-                                })
-                            } else if (!(attachedPart.id === "ground" || key === "ground")) {
-                                if (!circuit.getNode(attachedPart.ref._reactInternals.key))
-                                    circuit.addNode(attachedPart.ref._reactInternals.key, attachedPart.ref);
-                                circuit.addLink(element._reactInternals.key, attachedPart.ref._reactInternals.key);
+                            if (attachedPart) {
+                                if (attachedPart.ref.state.type === "Breadboard") {
+                                    attachedPart.ref.getConnectedComponents(attachedPart.id, element).forEach((connectedPart) => {
+                                        if (!(connectedPart.id === "ground" || key === "ground")) {
+                                            if (!circuit.getNode(connectedPart.ref._reactInternals.key))
+                                                circuit.addNode(connectedPart.ref._reactInternals.key, connectedPart.ref);
+                                            circuit.addLink(element._reactInternals.key, connectedPart.ref._reactInternals.key);
+                                        }
+                                    })
+                                } else if (!(attachedPart.id === "ground" || key === "ground")) {
+                                    if (!circuit.getNode(attachedPart.ref._reactInternals.key))
+                                        circuit.addNode(attachedPart.ref._reactInternals.key, attachedPart.ref);
+                                    circuit.addLink(element._reactInternals.key, attachedPart.ref._reactInternals.key);
+                                }
                             }
                         });
                     }
