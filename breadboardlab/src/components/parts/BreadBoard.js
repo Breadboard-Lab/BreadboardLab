@@ -7541,7 +7541,7 @@ export default class BreadBoard extends React.Component {
             let currentTerminalGroup = document.getElementById(terminalKey).parentElement.id
 
             if (referenceTerminalGroup === currentTerminalGroup && !Object.is(component.ref, referenceComponent)) { // Finds items in same terminal group
-                connectedComponents.push(component.ref)
+                connectedComponents.push(component)
             }
         }
         return connectedComponents

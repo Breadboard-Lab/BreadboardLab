@@ -20,7 +20,7 @@ import AppbarToolsCollapseMenu from "./components/appbars/AppbarToolsCollapseMen
 import AppbarSettingsCollapseMenu from "./components/appbars/AppbarSettingsCollapseMenu";
 import AppbarToolsMenu from "./components/appbars/AppbarToolsMenu";
 import AppbarSettingsMenu from "./components/appbars/AppbarSettingsMenu";
-import {getPaths, dfs} from "./utils/getPaths";
+import {getCircuits} from "./utils/getPaths";
 import createGraph from "ngraph.graph";
 
 const drawerWidth = 240;
@@ -364,84 +364,74 @@ class App extends Component {
 
     handleSimulation = () => {
         console.log('handleSimulation clicked.')
+
+        // try {
+        //     App.listOfRefs._currentValue.forEach((element) => {
+        //         if (element.state.type === "Breadboard") {
+        //             let temp = element.getCircuits()
+        //             this.setState({
+        //                 circuitsGraph: temp.graph,
+        //                 rootNode: temp.batteryKey,
+        //                 cycles: getPaths(temp.graph, temp.batteryKey)
+        //             }, () => {
+
+        //                 if (this.state.isSimulating) {
+        //                     this.startSim()
+        //                 } else {
+        //                     this.stopSim()
+        //                 }
+        //             })
+        //         }
+        //     });
+        // } catch (err) {
+        //     console.log(err)
+        // }
+
         this.setState({
             isSimulating: !this.state.isSimulating,
             openDrawer: !this.state.openDrawer
-        })
-        // console.log(App.listOfRefs._currentValue)
-        let circuit = createGraph();
-        let listOfBatteries = [];
-        let visitedComponents = [];
-        let batteryKey;
-
-        try {
-            // App.listOfRefs._currentValue.forEach((element) => {
-            //     if (element.state.type === "Breadboard") {
-            //         let temp = element.getCircuits()
-            //         this.setState({
-            //             circuitsGraph: temp.graph,
-            //             rootNode: temp.batteryKey,
-            //             cycles: getPaths(temp.graph, temp.batteryKey)
-            //         }, () => {
-
-            //             if (this.state.isSimulating) {
-            //                 this.startSim()
-            //             } else {
-            //                 this.stopSim()
-            //             }
-            //         })
-            //     }
-            // });
-            App.listOfRefs._currentValue.forEach((element) => {
-                if (element.state.type === "Battery")
-                    listOfBatteries.push(element);
-            });
-
-            if (listOfBatteries.length > 0) {
-                visitedComponents.push(listOfBatteries[0]);
-                let attachedPart = listOfBatteries[0].attachTo.get("power");
-                circuit.addNode(listOfBatteries[0]._reactInternals.key, listOfBatteries[0]);
-                let connectedComponents;
-
-                if (attachedPart.ref.state.type === "Breadboard")
-                    connectedComponents = attachedPart.ref.getConnectedComponents(attachedPart.id, listOfBatteries[0]);
-                else
-                    connectedComponents = [attachedPart.ref];
-                
-                attachedPart = listOfBatteries[0];
-                while (connectedComponents.length !== 0) {
-                    let addComponents = [];
-
-                    for (let component of connectedComponents) {
-                        if (!visitedComponents.includes(component)) {
-                            visitedComponents.push(component);
-                            circuit.addNode(component._reactInternals.key, component);
-                            circuit.addNode(attachedPart._reactInternals.key, attachedPart);
-                            circuit.addLink(attachedPart._reactInternals.key, component._reactInternals.key);
-
-                            component.attachTo.forEach((part) => {
-                                if (part.ref.state.type === "Breadboard") {
-                                    for (let p of part.ref.getConnectedComponents(part.id, component))
-                                        if (!visitedComponents.includes(p)) {
-                                            addComponents.push(p);
-                                        }
-                                } else if (!visitedComponents.includes(part)) {
-                                    addComponents.push(part);
-                                }
-                            });
-
-                            if (connectedComponents.indexOf(component) === connectedComponents.length - 1) {
-                                attachedPart = component;
-                            }
-                        }
+        }, () => {
+            if (this.state.isSimulating) {
+                let circuit = createGraph();
+                let listOfBatteries = [];
+                App.listOfRefs._currentValue.forEach((element, index) => {
+                    if (!circuit.getNode(element._reactInternals.key)) {
+                        circuit.addNode(element._reactInternals.key, element);
                     }
-                    connectedComponents = addComponents;
-                }
+        
+                    if (element.state.type === "Battery") {
+                        listOfBatteries.push(circuit.getNode(element._reactInternals.key));
+                    }
+        
+                    if (element.attachTo) {
+                        element.attachTo.forEach((attachedPart, key) => {
+                            if (attachedPart.ref.state.type === "Breadboard") {
+                                attachedPart.ref.getConnectedComponents(attachedPart.id, element).forEach((connectedPart) => {
+                                    if (!(connectedPart.id === "ground" || key === "ground")) {
+                                        if (!circuit.getNode(connectedPart.ref._reactInternals.key))
+                                            circuit.addNode(connectedPart.ref._reactInternals.key, connectedPart.ref);
+                                        circuit.addLink(element._reactInternals.key, connectedPart.ref._reactInternals.key);
+                                    }
+                                })
+                            } else if (!(attachedPart.id === "ground" || key === "ground")) {
+                                if (!circuit.getNode(attachedPart.ref._reactInternals.key))
+                                    circuit.addNode(attachedPart.ref._reactInternals.key, attachedPart.ref);
+                                circuit.addLink(element._reactInternals.key, attachedPart.ref._reactInternals.key);
+                            }
+                        });
+                    }
+                });
+                
+                this.setState({
+                    circuit: circuit,
+                    cycles: getCircuits(circuit, listOfBatteries)
+                }, () => {
+                    this.startSim();
+                })
+            } else {
+                this.stopSim();
             }
-        } catch (err) {
-            console.log(err)
-        }
-       dfs(circuit, circuit.getNode(listOfBatteries[0]._reactInternals.key), [])
+        })
     };
 
     /** startSim
@@ -453,36 +443,28 @@ class App extends Component {
      *      - Simulate.
      */
     startSim = () => {
-        console.log("Starting simulation...")
-        let totalVoltage = this.state.circuitsGraph.getNode(this.state.rootNode).data.state.voltage
-        for (const cycle of this.state.cycles) {
-            let totalResistance = 0
-            let buttonPass = true
-            // Calculates Resistance and checks for any buttons
-            for (const node of cycle) {
-                if (node.data.state.type === "Resistor") {
-                    totalResistance += this.getResistance(node.data)
-                }
-                if (node.data.state.isToggled === true){
-                    buttonPass = false
-                }
-                if (node.data.state.isPressed === false){
-                    buttonPass = false
-                }
-            }
-            // Applies current
-            for (const node of cycle) {
-                if(buttonPass){
-                    this.setCurrent(node.data, totalVoltage, totalResistance)
-                }
-                else {
-                    this.setCurrent(node.data, 0, 0)
-                }
-            }
-        }
-
+        console.log("Starting simulation...");
+        
         if (this.selectedPart) {
             this.unselectPart()
+        }
+        
+        for (let cycle of this.state.cycles) {
+            let voltage = this.state.circuit.getNode(cycle[0]).data.state.voltage;
+            let totalResistance = 0;
+
+            for (let i = 1; i < cycle.length; i++) {
+                let node = this.state.circuit.getNode(cycle[i]);
+
+                if (node.data.state.type === "Resistor") {
+                    totalResistance += this.getResistance(node.data);
+                }
+            }
+
+            for (let i = 1; i < cycle.length; i++) {
+                let node = this.state.circuit.getNode(cycle[i]);
+                this.setCurrent(node.data, voltage, totalResistance);
+            }
         }
     }
 
@@ -494,7 +476,7 @@ class App extends Component {
      *      - Reset all components to Off state.
      */
     stopSim = () => {
-        this.state.circuitsGraph.forEachNode((node) => {
+        this.state.circuit.forEachNode((node) => {
             this.setCurrent(node.data, 0, 0)
         });
         console.log("Stopping simulation...")

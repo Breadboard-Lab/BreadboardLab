@@ -33,22 +33,72 @@ function getPaths(graph, rootNodeID) {
     /*let visitedNodes = [];
     dfs(graph, rootNode, visitedNodes);
     console.log("dfsArray", visitedNodes)*/
-    dfs(graph, rootNode, [])
     return array;
 }
 
-function dfs(graph, currentNode, visitedNodes) {
-    // console.log("dfs called at ID", currentNode.id)
-    visitedNodes.push(currentNode.id)
+let masterList = [];
 
-    console.log(currentNode.data.node.current)
-    graph.forEachLinkedNode(currentNode.id, function (otherNode) {
-        // console.log("otherNodeID", otherNode.id, "startNodeID", currentNode.id)
-        if (!visitedNodes.includes(otherNode.id)) {
-            dfs(graph, otherNode, visitedNodes);
-        }
-    }, true);
+function getCircuits(circuit, listOfBatteries) {
+    masterList = [];
+
+    for (let battery of listOfBatteries) {
+        getCycles(circuit, battery, [], [])
+    }
+    return masterList;
 }
 
-export {getPaths, dfs}
+function checkGround(node) {
+    for (let [, component] of node.data.attachTo) {
+        if (component.ref.state.type === "Breadboard") {
+            for (let c of component.ref.getConnectedComponents(component.id, node.data)) {
+                if (c.id === "ground") {
+                    return true;
+                }
+            }
+        } else if (component.id === "ground") {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getCycles(graph, currentNode, visitedNodes, ignoredNodes) {
+    let outBoundNodes = [];
+
+    if (checkGround(currentNode)) {
+        visitedNodes.push(currentNode.id);
+        masterList.push(visitedNodes);
+        return masterList;
+    }
+
+    graph.forEachLinkedNode(currentNode.id, function (otherNode) {
+        if (!(visitedNodes.includes(otherNode.id) || ignoredNodes.includes(otherNode.id))) {
+            outBoundNodes.push(otherNode);
+        }
+    }, true);
+
+    if (!(visitedNodes.includes(currentNode.id) || ignoredNodes.includes(currentNode.id)))
+        visitedNodes.push(currentNode.id);
+        
+    if (outBoundNodes.length > 1) {
+        for (let node of outBoundNodes) {
+            let i = outBoundNodes.filter((n) => n !== node).map((n) => n.id).concat(ignoredNodes);
+            
+            if (!(visitedNodes.includes(node.id) || i.includes(node.id))) {
+                visitedNodes.push(node.id);
+                getCycles(graph, node,  [...visitedNodes].filter((node) => !i.includes(node)), i);
+            }
+        }
+    } else if (outBoundNodes.length === 1) {
+        getCycles(graph, outBoundNodes[0], [...visitedNodes], ignoredNodes);
+    } else {
+        if (checkGround(currentNode)) {
+            masterList.push(visitedNodes);
+            return;
+        }
+    }
+    return masterList;
+}
+
+export {getCircuits}
 
