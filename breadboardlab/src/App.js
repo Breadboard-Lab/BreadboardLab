@@ -102,6 +102,12 @@ class App extends Component {
         this.current = this.tail;
     }
 
+    /**
+     * Unselects part and hides the properties panel 
+     * 
+     * @callback callback - Function to callback when unselecting part
+     * @param {callback} 
+     */
     unselectPart(callback) {
         this.setState({
             hideProperties: true,
@@ -115,22 +121,39 @@ class App extends Component {
         document.addEventListener("keydown", this.handleKeyPress, false);
     }
 
+    /**
+     * Switches between dark theme and light theme.
+     */
     handleThemeChange = () => {
-        // Switches between dark theme and light theme.
         this.setState(state => ({themeState: !state.themeState}));
         this.setState(state => ({theme: state.themeState ? {...themeDark} : {...themeLight}}))
     };
 
+    /**
+     * Switches between drawer opened or closed.
+     */
     handleDrawer = () => {
-        // Switches between drawer opened or closed.
         this.setState(state => ({openDrawer: !state.openDrawer}));
     };
 
+    /**
+     * Adds part to the canvas
+     * 
+     * @param {React.ReactElement} part - Part to be added
+     */
     addPart = (part) => {
         this.state.listOfParts.push(part)
         this.setState(state => ({listOfParts: [...state.listOfParts]}));
     };
 
+    /**
+     * Selects tool:
+     * - Wire tool: Places only wires
+     * - Select tool: Adds/move parts 
+     * 
+     * @param {Event} event - Event fired
+     * @param {string} newTool - Tool to be selected
+     */
     handleTool = (event, newTool) => {
         this.setState({selectedTool: newTool});
 
@@ -142,17 +165,19 @@ class App extends Component {
         App.selectedTool._currentValue = newTool
     };
 
+    /**
+     *  Increments the selected part's rotate state by 15 degrees.
+     */
     handleRotate = () => {
-        // Increments selectedPart's rotate state by 15 degrees.
         if (this.selectedPart && typeof this.selectedPart.ref.rotate === "function")
             this.selectedPart.ref.rotate()
     };
 
+    /**
+     * If a part is selected, disconnect & unmount anything important from
+     * the part then filter remove part from listOfParts and listOfRefs.
+     */
     handleDelete = () => {
-        /*
-            If a part is selected, disconnect & unmount anything important from
-            the part then filter remove part from listOfParts and listOfRefs.
-         */
         if (this.selectedPart) {
             this.addDeletePartHistory(this.selectedPart.ref, this.state.listOfParts.find(part => part.key === this.selectedPart.ref._reactInternals.key), this.selectedPart.ref.attachTo, this.selectedPart.ref.connectedParts);
 
@@ -173,6 +198,11 @@ class App extends Component {
         }
     };
 
+    /**
+     * Fires different commands based on keyboard input
+     * 
+     * @param {Event} event - Event fired
+     */
     handleKeyPress = (event) => {
         if (event.key === 'Delete') {
             this.handleDelete()
@@ -183,6 +213,15 @@ class App extends Component {
         }
     }
 
+    /**
+     * Undoes the most recent action
+     * 
+     * Valid actions:
+     * - Lead movements
+     * - Part movements
+     * - Adding parts
+     * - Deleting parts
+     */
     handleUndo = () => {
         if (this.current.prev) {
             this.current = this.current.prev;
@@ -273,6 +312,15 @@ class App extends Component {
         }
     };
 
+    /**
+     * Redoes the most recent action
+     * 
+     * Valid actions:
+     * - Lead movements
+     * - Part movements
+     * - Adding parts
+     * - Deleting parts
+     */
     handleRedo = () => {
         if (this.current.next) {
             this.current = this.current.next;
@@ -362,6 +410,11 @@ class App extends Component {
         }
     };
 
+    /**
+     * Handles the on/off simulation
+     * When turned on, a undirected graph will be produced and will detect any cycles that starts with a battery (power) and ends with a battery (ground).
+     * If a cycle has been detected, the voltage, resistace and current will be calculated and "turn on" all the components in the cycle
+     */
     handleSimulation = () => {
         console.log('handleSimulation clicked.')
 
@@ -436,13 +489,8 @@ class App extends Component {
         })
     };
 
-    /** startSim
-     *      - Unselects any selected parts.
-     *      - Disable most buttons.
-     *      - Replace Start button with Stop button.
-     *      - Hide drawer.
-     *      - Disable drawer open button.
-     *      - Simulate.
+    /** 
+     * Iterates through the cycles and calculates the voltage, resistance and current
      */
     startSim = () => {
         console.log("Starting simulation...");
@@ -470,12 +518,8 @@ class App extends Component {
         }
     }
 
-    /** stopSim
-     *      - Re-enable most buttons.
-     *      - Replace Stop button with Start button.
-     *      - Unhide drawer.
-     *      - Disable drawer open button.
-     *      - Reset all components to Off state.
+    /** 
+     * Transveres the graph and sets the current to zero for all components
      */
     stopSim = () => {
         this.state.circuit.forEachNode((node) => {
@@ -489,6 +533,11 @@ class App extends Component {
         console.log('Share clicked')
     };
 
+    /**
+     * Selects and highlights the part and displays the part's relevant information in the properties panel
+     * 
+     * @param {Object} childData - Object containing the part's data
+     */
     handlePartSelect = (childData) => {
         if (!childData.ref.state.isSelected) {
             this.setState({
@@ -521,6 +570,11 @@ class App extends Component {
         }
     }
 
+    /**
+     * Updates the properties panel based on the Object given
+     * 
+     * @param {Object} childData - Object containing the part's data
+     */
     updatePropertiesPanel(childData) {
         this.setState({
             hideProperties: false,
@@ -528,6 +582,18 @@ class App extends Component {
         });
     }
 
+    /**
+     * Moves part based on dx and dy. Scaling is applied to the distance to be moved.
+     * 
+     * @param {Number} dx - Distance to move on the x-axis
+     * @param {Number} dy - Distance to move on the y-axis
+     * @param {React.RefObject} ref - Ref to the react element
+     * 
+     * @returns {Object} Distance moved on the x-axis and y-axis with canvas scaling applied
+     * 
+     * @callback callback - Callback function when moving part
+     * @param {callback}
+     */
     movePart(dx, dy, ref, callback) {
         const scale = this.canvasNode.current.scale;
         if (ref && App.selectedTool._currentValue === "select_tool") {
@@ -550,6 +616,17 @@ class App extends Component {
         return {dx: 0, dy: 0}
     }
 
+    /**
+     * Moves lead based on dx and dy. Scaling is applied to the distance to be moved.
+     * 
+     * @param {Number} dx - Distance to move on the x-axis
+     * @param {Number} dy - Distance to move on the y-axis
+     * @param {React.RefObject} ref - Ref to the react element
+     * @param {string} propertyName - The name of the lead
+     * 
+     * @callback callback - Callback function when moving lead
+     * @param {callback}
+     */
     moveLead(dx, dy, ref, propertyName, callback) {
         const scale = this.canvasNode.current.scale;
         const refScale = ref.scale || {x: 1, y: 1};
@@ -563,6 +640,14 @@ class App extends Component {
         }, callback);
     }
 
+    /**
+     * Determines the bounding box based on SVG coordinates. The width/height is the actual width/height of the element, not the bounding box
+     * 
+     * @param {object} element - The SVG element to act on
+     * @param {Number} angle - Angle of rotation the element is in
+     * 
+     * @returns {object} Returns the dimensions of the element
+     */
     getDimensions(element, angle) {
         let t = angle || 0;
         let point = this.canvasNode.current.node.current.createSVGPoint();
@@ -588,6 +673,15 @@ class App extends Component {
         }
     }
 
+    /**
+     * Checks if a component can be attached or not
+     * 
+     * @param {React.RefObject} ref - Ref to the react element to check if it can be attached to the component
+     * @param {React.RefObject} attachRef - Ref to the react element to check if it can be connected to
+     * @param {string} connectorPosition - If given, it will check where to take the coordinate of the connectors/leads. Default is the center of the connectors/leads
+     * 
+     * @returns {object[]} A list of ids to each of the connectors/leads that can be attached to the component
+     */
     checkConnected(ref, attachRef, connectorPosition) {
         let elementID = [];
         let connectors = Array.prototype.slice.call(attachRef.connectors);
@@ -646,22 +740,65 @@ class App extends Component {
         return elementID;
     }
 
+    /**
+     * Adds to history when a lead has been moved
+     * 
+     * @param {Number} dx - Distance moved on the x-axis
+     * @param {Number} dy - Distance moved on the y-axis
+     * @param {string} key - Key of the react element
+     * @param {string} propertyName - The name of the lead
+     * @param {Map} attachedParts - Parts that have been attached initially
+     * @param {Map} connectedParts - Parts that have been connected initially
+     */
     addLeadHistory(dx, dy, key, propertyName, attachedParts, connectedParts) {
         this.addtoHistory("lead", [dx, dy, key, propertyName], [-dx, -dy, key, propertyName], attachedParts);
     }
 
+    /**
+     * Adds to history when a part has been moved
+     * 
+     * @param {Number} dx - Distance moved on the x-axis
+     * @param {Number} dy - Distance moved on the y-axis
+     * @param {string} key - Key of the react element
+     * @param {Map} attachedParts - Parts that have been attached initially
+     * @param {Map} connectedParts - Parts that have been connected initially
+     */
     addMoveHistory(dx, dy, key, attachedParts, connectedParts) {
         this.addtoHistory("move", [dx, dy, key], [-dx, -dy, key], attachedParts);
     }
 
+    /**
+     * Adds to history when a part has been added to the canvas
+     * 
+     * @param {React.RefObject} ref - Ref to the react element
+     * @param {React.ReactElement} reactElement - React element that have been added
+     * @param {Map} attachedParts - Parts that have been attached
+     * @param {Map} connectedParts - Parts that have been connected
+     */
     addAddPartHistory(ref, reactElement, attachedParts, connectedParts) {
         this.addtoHistory("add", [ref, reactElement], [ref, reactElement], attachedParts)
     }
 
+    /**
+     * Adds to history when a part has been deleted to the canvas
+     * 
+     * @param {React.RefObject} ref - Ref to the react element
+     * @param {React.ReactElement} reactElement - React element that have been added
+     * @param {Map} attachedParts - Parts that have been attached
+     * @param {Map} connectedParts - Parts that have been connected
+     */
     addDeletePartHistory(ref, reactElement, attachedParts, connectedParts) {
         this.addtoHistory("delete", [ref, reactElement], [ref, reactElement], attachedParts);
     }
 
+    /**
+     * Utilizes a link list to preserve history of the canvas. Every action is contained in two nodes (undo node located right behind the redo node)
+     * 
+     * @param {string} actionType - The type of the action
+     * @param {*[]} undoParameters - Parameters for undo
+     * @param {*[]} redoParameters - Parameters for redo
+     * @param {*} connectedParts - Parts to consider when reattaching/reconnecting
+     */
     addtoHistory(actionType, undoParameters, redoParameters, connectedParts) {
         let newTail = new LinkedListNode();
         this.current.undoOptions.actionType = actionType;
