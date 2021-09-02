@@ -103,10 +103,10 @@ class App extends Component {
     }
 
     /**
-     * Unselects part and hides the properties panel 
-     * 
+     * Unselects part and hides the properties panel
+     *
      * @callback callback - Function to callback when unselecting part
-     * @param {callback} 
+     * @param {callback}
      */
     unselectPart(callback) {
         this.setState({
@@ -138,7 +138,7 @@ class App extends Component {
 
     /**
      * Adds part to the canvas
-     * 
+     *
      * @param {React.ReactElement} part - Part to be added
      */
     addPart = (part) => {
@@ -149,8 +149,8 @@ class App extends Component {
     /**
      * Selects tool:
      * - Wire tool: Places only wires
-     * - Select tool: Adds/move parts 
-     * 
+     * - Select tool: Adds/move parts
+     *
      * @param {Event} event - Event fired
      * @param {string} newTool - Tool to be selected
      */
@@ -200,7 +200,7 @@ class App extends Component {
 
     /**
      * Fires different commands based on keyboard input
-     * 
+     *
      * @param {Event} event - Event fired
      */
     handleKeyPress = (event) => {
@@ -215,7 +215,7 @@ class App extends Component {
 
     /**
      * Undoes the most recent action
-     * 
+     *
      * Valid actions:
      * - Lead movements
      * - Part movements
@@ -247,7 +247,7 @@ class App extends Component {
                         this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], ref, () => {
                             if (!ref.connectedParts)
                                 ref.disconnect();
-                            else 
+                            else
                                 ref.connectedParts.forEach((value, key) => {
                                     this.movePart(this.current.undoOptions.parameters[0], this.current.undoOptions.parameters[1], value.ref)
                                 });
@@ -314,7 +314,7 @@ class App extends Component {
 
     /**
      * Redoes the most recent action
-     * 
+     *
      * Valid actions:
      * - Lead movements
      * - Part movements
@@ -451,11 +451,11 @@ class App extends Component {
                     if (!circuit.getNode(element._reactInternals.key)) {
                         circuit.addNode(element._reactInternals.key, element);
                     }
-        
+
                     if (element.state.type === "Battery") {
                         listOfBatteries.push(circuit.getNode(element._reactInternals.key));
                     }
-        
+
                     if (element.attachTo) {
                         element.attachTo.forEach((attachedPart, key) => {
                             if (attachedPart) {
@@ -476,7 +476,7 @@ class App extends Component {
                         });
                     }
                 });
-                
+
                 this.setState({
                     circuit: circuit,
                     cycles: getCircuits(circuit, listOfBatteries)
@@ -489,19 +489,20 @@ class App extends Component {
         })
     };
 
-    /** 
+    /**
      * Iterates through the cycles and calculates the voltage, resistance and current
      */
     startSim = () => {
         console.log("Starting simulation...");
-        
+
         if (this.selectedPart) {
             this.unselectPart()
         }
-        
+
         for (let cycle of this.state.cycles) {
             let voltage = this.state.circuit.getNode(cycle[0]).data.state.voltage;
             let totalResistance = 0;
+            let buttonPass = true
 
             for (let i = 1; i < cycle.length; i++) {
                 let node = this.state.circuit.getNode(cycle[i]);
@@ -509,16 +510,27 @@ class App extends Component {
                 if (node.data.state.type === "Resistor") {
                     totalResistance += this.getResistance(node.data);
                 }
+                if (node.data.state.isToggled === true) {
+                    buttonPass = false
+                }
+                if (node.data.state.isPressed === false) {
+                    buttonPass = false
+                }
             }
 
             for (let i = 1; i < cycle.length; i++) {
                 let node = this.state.circuit.getNode(cycle[i]);
-                this.setCurrent(node.data, voltage, totalResistance);
+                if (buttonPass) {
+                    this.setCurrent(node.data, voltage, totalResistance);
+                } else {
+                    this.setCurrent(node.data, 0, 0);
+                }
             }
+            console.log(cycle)
         }
     }
 
-    /** 
+    /**
      * Transveres the graph and sets the current to zero for all components
      */
     stopSim = () => {
@@ -535,7 +547,7 @@ class App extends Component {
 
     /**
      * Selects and highlights the part and displays the part's relevant information in the properties panel
-     * 
+     *
      * @param {Object} childData - Object containing the part's data
      */
     handlePartSelect = (childData) => {
@@ -572,7 +584,7 @@ class App extends Component {
 
     /**
      * Updates the properties panel based on the Object given
-     * 
+     *
      * @param {Object} childData - Object containing the part's data
      */
     updatePropertiesPanel(childData) {
@@ -584,13 +596,13 @@ class App extends Component {
 
     /**
      * Moves part based on dx and dy. Scaling is applied to the distance to be moved.
-     * 
+     *
      * @param {Number} dx - Distance to move on the x-axis
      * @param {Number} dy - Distance to move on the y-axis
      * @param {React.RefObject} ref - Ref to the react element
-     * 
+     *
      * @returns {Object} Distance moved on the x-axis and y-axis with canvas scaling applied
-     * 
+     *
      * @callback callback - Callback function when moving part
      * @param {callback}
      */
@@ -618,12 +630,12 @@ class App extends Component {
 
     /**
      * Moves lead based on dx and dy. Scaling is applied to the distance to be moved.
-     * 
+     *
      * @param {Number} dx - Distance to move on the x-axis
      * @param {Number} dy - Distance to move on the y-axis
      * @param {React.RefObject} ref - Ref to the react element
      * @param {string} propertyName - The name of the lead
-     * 
+     *
      * @callback callback - Callback function when moving lead
      * @param {callback}
      */
@@ -642,10 +654,10 @@ class App extends Component {
 
     /**
      * Determines the bounding box based on SVG coordinates. The width/height is the actual width/height of the element, not the bounding box
-     * 
+     *
      * @param {object} element - The SVG element to act on
      * @param {Number} angle - Angle of rotation the element is in
-     * 
+     *
      * @returns {object} Returns the dimensions of the element
      */
     getDimensions(element, angle) {
@@ -675,11 +687,11 @@ class App extends Component {
 
     /**
      * Checks if a component can be attached or not
-     * 
+     *
      * @param {React.RefObject} ref - Ref to the react element to check if it can be attached to the component
      * @param {React.RefObject} attachRef - Ref to the react element to check if it can be connected to
      * @param {string} connectorPosition - If given, it will check where to take the coordinate of the connectors/leads. Default is the center of the connectors/leads
-     * 
+     *
      * @returns {object[]} A list of ids to each of the connectors/leads that can be attached to the component
      */
     checkConnected(ref, attachRef, connectorPosition) {
@@ -742,7 +754,7 @@ class App extends Component {
 
     /**
      * Adds to history when a lead has been moved
-     * 
+     *
      * @param {Number} dx - Distance moved on the x-axis
      * @param {Number} dy - Distance moved on the y-axis
      * @param {string} key - Key of the react element
@@ -756,7 +768,7 @@ class App extends Component {
 
     /**
      * Adds to history when a part has been moved
-     * 
+     *
      * @param {Number} dx - Distance moved on the x-axis
      * @param {Number} dy - Distance moved on the y-axis
      * @param {string} key - Key of the react element
@@ -769,7 +781,7 @@ class App extends Component {
 
     /**
      * Adds to history when a part has been added to the canvas
-     * 
+     *
      * @param {React.RefObject} ref - Ref to the react element
      * @param {React.ReactElement} reactElement - React element that have been added
      * @param {Map} attachedParts - Parts that have been attached
@@ -781,7 +793,7 @@ class App extends Component {
 
     /**
      * Adds to history when a part has been deleted to the canvas
-     * 
+     *
      * @param {React.RefObject} ref - Ref to the react element
      * @param {React.ReactElement} reactElement - React element that have been added
      * @param {Map} attachedParts - Parts that have been attached
@@ -793,7 +805,7 @@ class App extends Component {
 
     /**
      * Utilizes a link list to preserve history of the canvas. Every action is contained in two nodes (undo node located right behind the redo node)
-     * 
+     *
      * @param {string} actionType - The type of the action
      * @param {*[]} undoParameters - Parameters for undo
      * @param {*[]} redoParameters - Parameters for redo
