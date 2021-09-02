@@ -3041,7 +3041,7 @@ export default class BreadBoard extends React.Component {
                             rx="0.75"
                             ry="0.75"/>
                     </g>
-                    <g id="column51top">
+                    <g id="column50top">
                         <ellipse
                             fill="#000000"
                             id="A50"
@@ -4077,7 +4077,7 @@ export default class BreadBoard extends React.Component {
                             rx="0.75"
                             ry="0.75"/>
                     </g>
-                    <g id="column13bottom">
+                    <g id="column14bottom">
                         <ellipse
                             fill="#000000"
                             id="F14"
