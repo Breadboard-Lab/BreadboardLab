@@ -92,10 +92,12 @@ function checkGround(node) {
 function getCycles(graph, currentNode, visitedNodes, ignoredNodes) {
     let outBoundNodes = [];
 
+    // Push the current node to the visited nodes
+    if (!(visitedNodes.includes(currentNode.id) || ignoredNodes.includes(currentNode.id)))
+        visitedNodes.push(currentNode.id);
+
     // Checks if the current node is connected to ground. If connected, push all the visited nodes to the master list.
     if (checkGround(currentNode)) {
-        if (!(visitedNodes.includes(currentNode.id) || ignoredNodes.includes(currentNode.id)))
-            visitedNodes.push(currentNode.id);
         masterList.push(visitedNodes);
         return masterList;
     }
@@ -107,28 +109,20 @@ function getCycles(graph, currentNode, visitedNodes, ignoredNodes) {
         }
     }, true);
 
-    // Push the current node to the visited nodes
-    if (!(visitedNodes.includes(currentNode.id) || ignoredNodes.includes(currentNode.id)))
-        visitedNodes.push(currentNode.id);
-    
     // If encounter multiple nodes, iterate all the nodes and ignore all nodes except the chosen one.
     // If encounter one node, continue through the path.
     // If encounter no nodes, check if connected to ground. If connected, push all the visited nodes to the master list.
     if (outBoundNodes.length > 1) {
         for (let node of outBoundNodes) {
             let i = outBoundNodes.filter((n) => n !== node).map((n) => n.id).concat(ignoredNodes);
-            
-            if (!(visitedNodes.includes(node.id) || i.includes(node.id))) {
-                visitedNodes.push(node.id);
-                getCycles(graph, node,  [...visitedNodes].filter((node) => !i.includes(node)), i);
-            }
+            getCycles(graph, node,  [...visitedNodes].filter((node) => !i.includes(node)), i);
         }
     } else if (outBoundNodes.length === 1) {
         getCycles(graph, outBoundNodes[0], [...visitedNodes], ignoredNodes);
     } else {
         if (checkGround(currentNode)) {
             masterList.push(visitedNodes);
-            return;
+            return masterList;
         }
     }
     return masterList;
