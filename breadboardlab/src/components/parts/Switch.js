@@ -106,14 +106,14 @@ export default class Switch extends React.Component {
         if (this.highlightID && this.highlightID.ids.length === 3) {
             let point = document.getElementById("AppSVG").createSVGPoint();
             let t = attachRef.state.rotation * Math.PI / 180;
-            let breadboardDim = this.props.getDimensions(attachRef.node.current.querySelector("#" + this.highlightID.ids[0]), t);
+            let breadboardDim = this.props.getDimensions(attachRef.node.current.querySelector("#" + this.highlightID.ids[1]), t);
 
             point.x = breadboardDim.x + breadboardDim.width / 2 * Math.cos(t) + breadboardDim.height / 2 * Math.sin(-t);
             point.y = breadboardDim.y + breadboardDim.width / 2 * Math.sin(t) + breadboardDim.height / 2 * Math.cos(t);
             const svgBreadboard = point.matrixTransform(document.getElementById("AppSVG").getScreenCTM().inverse());
 
             t = this.state.rotation * Math.PI / 180;
-            let connectorDim = this.props.getDimensions(this.leftConnector.current, t);
+            let connectorDim = this.props.getDimensions(this.middleConnector.current, t);
 
             point.x = connectorDim.right - connectorDim.width / 2 * Math.cos(t);
             point.y = connectorDim.bottom - connectorDim.width / 2 * Math.sin(t);
@@ -128,8 +128,8 @@ export default class Switch extends React.Component {
 
             this.setState({
                 translation: {
-                    x: this.state.translation.x + svgBreadboard.x - svgConnector.x + 0.4 * Math.cos(t),
-                    y: this.state.translation.y + svgBreadboard.y - svgConnector.y + 0.4 * Math.sin(t)
+                    x: this.state.translation.x + svgBreadboard.x - svgConnector.x,
+                    y: this.state.translation.y + svgBreadboard.y - svgConnector.y
                 }
             });
         }

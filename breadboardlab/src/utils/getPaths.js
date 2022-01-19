@@ -115,7 +115,7 @@ function getCycles(graph, currentNode, visitedNodes, ignoredNodes) {
     if (outBoundNodes.length > 1) {
         for (let node of outBoundNodes) {
             let i = outBoundNodes.filter((n) => n !== node).map((n) => n.id).concat(ignoredNodes);
-            getCycles(graph, node,  [...visitedNodes].filter((node) => !i.includes(node)), i);
+            getCycles(graph, node,  [...visitedNodes], i);
         }
     } else if (outBoundNodes.length === 1) {
         getCycles(graph, outBoundNodes[0], [...visitedNodes], ignoredNodes);
